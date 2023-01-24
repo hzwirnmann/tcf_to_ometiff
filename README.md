@@ -1,2 +1,2 @@
-# tcf_to_ometiff
-Python tool to parse Tomocube TCF files to OME-TIFF format
+# TCF to OME-TIFF Parser
+Python tool to parse Tomocube TCF (Tomocube Common File) files to OME-TIFF format.
