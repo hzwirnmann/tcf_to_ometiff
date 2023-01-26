@@ -12,7 +12,9 @@ The config file provides values for different meta data such as details about th
 
 ## Requirements
 h5py
+
 ome_types
+
 aicsimageio
   
 ## ToDos
