@@ -1,0 +1,17 @@
+exper_id,Experimenter:1
+exper_email,henning.zwirnmann@tum.de
+exper_inst,Technical University of Munich (TUM)
+exper_firstn,Henning
+exper_lastn,Zwirnmann
+exper_usern,hz
+exp_desc,Some experiment description
+proj_id,Project:1
+proj_name,Some project name
+proj_desc,Some project description
+mic_id,Microscope:1
+lot,2020-01-01
+det_id,Detector:1
+obj_id,Objective:1
+light_source_id,LightSource:1
+instr_id,Instrument:1
+channel_id,Channel:1
