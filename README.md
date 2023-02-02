@@ -15,6 +15,25 @@ _python tcf_to_ometiff/cli.py parse \<folder\> \<config file path\>_
 Parse multiple files that reside in subfolders of folder _top\_folder_, each one having the same name as the subfolder and the extension .TCF:
 _python tcf_to_ometiff/cli.py parse-multiple \<top_folder\> \<config file path\>_
 
+Programmatically:
+For a single file:
+_import tcf_to_ometiff
+
+config_file_path = "./config.txt"
+folder = "20220112.120017.467.Default-001"
+overall_md = tcf_to_ometiff.create_overall_config(config_file_path)
+tcf_to_ometiff.transform_tcf(folder, overall_md)
+_
+
+For multiple files, each coming in one folder that resides in a top folder:
+_import tcf_to_ometiff
+
+config_file_path = "./config.txt"
+top_folder = "20220112.120017.467.Default-001"
+tcf_to_ometiff.transform_folder(top_folder, config_file_path)
+_
+
+
 ## Config File
 The config file provides values for different meta data such as details about the experimenter and the project. An exemplary config file with all possible values is provided as config.txt.
 
