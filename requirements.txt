@@ -1,3 +1,5 @@
-h5py
-ome_types
-aicsimageio
+aicsimageio==4.9.4
+h5py==3.8.0
+numpy==1.23.1
+ome-types==0.3.3
+typer==0.7.0
