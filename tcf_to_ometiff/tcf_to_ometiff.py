@@ -364,7 +364,7 @@ def transform_tcf(folder, overall_md):
     file.
 
     :param folder: Relative or absolute file path to folder containing image
-    :param overall_md: Metadata dict
+    :param overall_md: Overall metadata dict
 
     """
 
@@ -460,7 +460,7 @@ def transform_folder(top_folder, overall_config_path):
     in the respective subfolders.
 
     :param folder: Relative or absolute file path to folder containing image
-    :param config_file_path: Relative or absolute file path to csv file with further OMERO metadata
+    :param overall_config_path: Relative or absolute file path to csv file with overall metadata
 
     """
     overall_md = create_overall_config(overall_config_path)
