@@ -10,14 +10,15 @@ Holotomography is a microscopy technique to produce label-free 3D images of cell
 ## Usage
 Via CLI:
 Parse a single file that resides in folder _folder_ with the same name as the folder and the extension .TCF:
-`python tcf_to_ometiff/cli.py parse \<folder\> \<config file path\>`
+`python tcf_to_ometiff/cli.py parse <folder> <config file path>`
 
 Parse multiple files that reside in subfolders of folder _top\_folder_, each one having the same name as the subfolder and the extension .TCF:
-`python tcf_to_ometiff/cli.py parse-multiple \<top_folder\> \<config file path\>`
+`python tcf_to_ometiff/cli.py parse-multiple <top_folder> <config file path>`
 
 Programmatically:
 For a single file:
-```import tcf_to_ometiff
+```
+import tcf_to_ometiff
 
 config_file_path = "./config.txt"
 folder = "20220112.120017.467.Default-001"
@@ -26,18 +27,18 @@ tcf_to_ometiff.transform_tcf(folder, overall_md)
 ```
 
 For multiple files, each coming in one folder that resides in a top folder:
-```import tcf_to_ometiff
+```
+import tcf_to_ometiff
 
 config_file_path = "./config.txt"
 top_folder = "20220112.120017.467.Default-001"
 tcf_to_ometiff.transform_folder(top_folder, config_file_path)
 ```
 
-
 ## Config File
 The config file provides values for different meta data such as details about the experimenter and the project. An exemplary config file with all possible values is provided as config.txt.
 
-## OME-XML Validation
+## OME-TIFF Validation
 The validation of the correct format of an OME-TIFF XML header is described [here](https://docs.openmicroscopy.org/bio-formats/6.0.1/users/comlinetools/xml-validation.html).
 
 ## Requirements
@@ -47,8 +48,7 @@ numpy==1.23.1
 ome-types==0.3.3  
 typer==0.7.0
 
-## ToDos
+## Open Tasks
 - Metadata treatment for brightfield (BF) images
 - Metadata treatment for 2D and 3D fluorescence (FL) images
 - Get correspondence between HT and FL image coordinates right
-- Docstrings

@@ -16,6 +16,12 @@ logging.basicConfig(
 
 
 def def_mic(mic_id, sn, lot=None):
+    """Create ome-types microscope for use in OME-XML
+
+    :param mic_id: str: ID of the microscope
+    :param sn: str: serial number of the microscope
+    :return: ome-types microscope
+    """
     return model.Microscope(
         id=mic_id,
         manufacturer="Tomocube Inc.",
@@ -27,16 +33,34 @@ def def_mic(mic_id, sn, lot=None):
 
 
 def def_det(det_id):
+    """Create ome-types detector for use in OME-XML
+
+    :param det_id: str: ID of the detector
+    :return: ome-types detector
+    """
     return model.Detector(id=det_id, type="CCD")
 
 
-def def_obj(obj_id, lens_na, lens_magn, immersion):
+def def_obj(obj_id, lens_na, lens_magn):
+    """Create ome-types objective for use in OME-XML
+
+    :param obj_id: str: ID of the objective
+    :param lens_na: float: numerical aperture
+    :param lens_magn: float: magnification
+    :return: ome-types objective
+    """
     return model.Objective(
         id=obj_id, lens_na=lens_na, nominal_magnification=lens_magn, immersion="Water"
     )
 
 
 def def_light_source(light_source_id):
+    """Create ome-types light source (HT laser) for use in OME-XML
+
+    :param light_source_id: str: ID of the light source
+    :return: ome-types laser
+    """
+
     return model.Laser(
         id=light_source_id,
         power=0.05,
@@ -47,6 +71,15 @@ def def_light_source(light_source_id):
 
 
 def def_instr(instr_id, microscope, detectors, light_sources):
+    """Create ome-types instrument for use in OME-XML
+
+    :param instr_id: str: ID of the instrument
+    :param microscope: ome_types.model.microscope
+    :param detectors: list of ome_types.model.detector
+    :param light_sources: list of ome_types.model.light_source
+    :return: ome-types instrument
+    """
+
     return model.Instrument(
         id=instr_id,
         microscope=microscope,
@@ -56,6 +89,12 @@ def def_instr(instr_id, microscope, detectors, light_sources):
 
 
 def def_channel(chan_id, ls_id):
+    """Create ome-types channel for use in OME-XML
+
+    :param chan_id: str: ID of the channel
+    :param ls_id: id of light source used
+    :return: ome-types channel with "Phase" as contrast method
+    """
     return model.Channel(
         id=chan_id,
         acquisition_mode="Other",
@@ -68,6 +107,16 @@ def def_channel(chan_id, ls_id):
 
 
 def def_experimenter(exper_id, email, inst, first_name, last_name, user_name):
+    """Create ome-types experimenter for use in OME-XML
+
+    :param exper_id: str: ID of the experimenter
+    :param email: str: email address of the experimenter
+    :param inst: str: institution of the experimenter
+    :param first_name: str: first name of the experimenter
+    :param last_name: str: last name of the experimenter
+    :param user_name: str: user name of the experimenter
+    :return: ome-types experimenter
+    """
     return model.Experimenter(
         id=exper_id,
         email=email,
@@ -79,10 +128,23 @@ def def_experimenter(exper_id, email, inst, first_name, last_name, user_name):
 
 
 def def_experiment(desc, exper):
+    """Create ome-types experiment for use in OME-XML
+
+    :param desc: str: experiment description
+    :param exper: ome-types.model.experimenter
+    :return: ome-types experiment
+    """
     return model.Experiment(description=desc, experimenter=exper)
 
 
 def def_project(proj_id, proj_name, desc):
+    """Create ome-types project for use in OME-XML
+
+    :param proj_id: str: ID of the project
+    :param proj_name: str: name of the project
+    :param desc: str: description of the project
+    :return: ome-types project
+    """
     return model.Project(id=proj_id, name=proj_name, description=desc)
 
 
@@ -97,6 +159,20 @@ def build_ome_xml(
     instrument,
     data_type,
 ):
+    """Create OME-XML file from given ome-types metadata
+
+    :param data_use:
+    :param offset: int: plane offset
+    :param channels: ome-types channels used in image
+    :param timestamp: str: timestamp in YYYY-MM-DD format the image was acquired at
+    :param description: ome-types description of the image
+    :param experiment: ome-types experiment the image was part of
+    :param experimenter: ome-types experimenter who took the image
+    :param instrument: ome-types instrument the image was taken with
+    :param data_type: Python data type of the image data
+    :return: ome-types image with relevant metadata
+    :return: int to give the image plane offset for the next image in a multidimensional array (with t and channel components)
+    """
     try:
         len_z = data_use.attrs["SizeZ"][0]
         physical_size_z = round(data_use.attrs["ResolutionZ"][0], 2)
@@ -143,7 +219,12 @@ def build_ome_xml(
 
 
 def read_overall_config(filepath):
-    # Read own config (perspective: get from LIMS or other system)
+    """Read user-created file with metadata needed to create the OME-TIFF.
+
+    :param filepath: Path of csv file with metadata
+    :return: Dict containing the overall metadata
+    """
+
     logging.info("Reading overall config from {}".format(filepath))
     with open(filepath) as f:
         config_dat = f.readlines()
@@ -153,6 +234,14 @@ def read_overall_config(filepath):
 
 
 def def_omero_overall_md(config_dict):
+    """Create experimenter, experiment and project metadata dictionaries needed to
+create the OME-TIFF from user-provided metadata.
+
+    :param config_dict: Dict of user-created metadata
+    :return: Dict containing metadata needed for OME-TIFF
+
+    """
+
     overall_metadata = {}
     overall_metadata["exper"] = def_experimenter(
         config_dict["exper_id"],
@@ -172,6 +261,14 @@ def def_omero_overall_md(config_dict):
 
 
 def create_overall_config(overall_config_path):
+    """Create dict with overall metadata that contains both the raw metadata read
+from the user-provided file as well as metadata created from it that is needed
+to create the OME-TIFF.
+
+    :param overall_config_path: Path of csv file with metadata
+    :return: Dict containing the overall metadata that can be used for all folders in one top folder
+
+    """
     overall_config_dict = read_overall_config(overall_config_path)
     omero_overall_md = def_omero_overall_md(overall_config_dict)
     overall_md = dict(overall_config_dict, **omero_overall_md)
@@ -179,6 +276,12 @@ def create_overall_config(overall_config_path):
 
 
 def read_image_config(folder):
+    """Read file with config data from image folder and return dict.
+
+    :param folder: Folder name as string
+    :return: Dict containing the per-image metadata
+    """
+
     with open(join(folder, "config.dat")) as f:
         exp_config_dat = f.readlines()
 
@@ -194,6 +297,14 @@ def read_image_config(folder):
 
 
 def define_image_metadata(config_dict, exp_config_dict):
+    """Integrate project and image metadata to obtain comprehensive metadata dict
+used to create the OME-TIFF.
+
+    :param config_dict: Metadata dict with metadata given by the user
+    :param exp_config_dict: Metadata dict with metadata extracted config file in image folder
+    :returns: dict containing all metadata to create the OME-TIFF.
+
+    """
     img_metadata = {}
     img_metadata["mic"] = def_mic(
         config_dict["mic_id"], exp_config_dict["Serial"], config_dict["lot"]
@@ -202,8 +313,7 @@ def define_image_metadata(config_dict, exp_config_dict):
     img_metadata["obj"] = def_obj(
         config_dict["obj_id"],
         exp_config_dict["NA"],
-        exp_config_dict["M"],
-        exp_config_dict["NA"],
+        exp_config_dict["M"]
     )
     img_metadata["light_source"] = def_light_source(config_dict["light_source_id"])
     img_metadata["instr"] = def_instr(
@@ -246,7 +356,7 @@ def get_img_timestamp(folder):
 
 
 def transform_tcf(folder, overall_md):
-    """Function to parse an image in a folder that has the same name as the folder
+    """Parse an image in a folder that has the same name as the folder
     and additionally ends with .TCF. The parsed OME-TIFF image is stored in the
     same folder. It loops over all imaging modalities contained in the TCF H5F
     file and transforms them into suitable numpy arrays. Relevant metadata is
@@ -254,8 +364,7 @@ def transform_tcf(folder, overall_md):
     file.
 
     :param folder: Relative or absolute file path to folder containing image
-    :param overall_config_dict: dict that contains relevant project metatadata for OMERO
-    :param overall_md: dict that contains relevant project metatadata for OMERO UPDATEXXX
+    :param overall_md: Metadata dict
 
     """
 
@@ -310,23 +419,26 @@ def transform_tcf(folder, overall_md):
         # print("No valid data type in {}: {}".format(folder, name))
         # sys.exit(-1)
 
-    xml, plane_offset = build_ome_xml(
-        data_use,
-        plane_offset,
-        channels,
-        timestamp,
-        description,
-        overall_md["exp"],
-        overall_md["exper"],
-        img_md["instr"],
-        data_type,
-    )
+        try:
+            xml, plane_offset = build_ome_xml(
+                data_use,
+                plane_offset,
+                channels,
+                timestamp,
+                description,
+                overall_md["exp"],
+                overall_md["exper"],
+                img_md["instr"],
+                data_type,
+            )
+        except Exception as e:
+            raise Exception("Exception during xml building: {}".format(e))
 
-    img_ome_xmls.append(xml)
-    imgs.append(img_formatted)
+        img_ome_xmls.append(xml)
+        imgs.append(img_formatted)
 
     ome_xmls = model.OME(
-        creator="TCFtoOME by Henning Zwirnmann v0.1",
+        creator="tcf_to_ome by Henning Zwirnmann v0.1",
         images=img_ome_xmls,
         experiments=[overall_md["exp"]],
         experimenters=[overall_md["exper"]],
@@ -342,11 +454,14 @@ def transform_tcf(folder, overall_md):
 
 
 def transform_folder(top_folder, overall_config_path):
-    """
-    Function to parse images stored in subfolders of a top folder. This is the standard TomoStudio case when on each date a new top folder is created that has one subfolder for each snapshot. The parsed OME-TIFF images are stored in the respective sub folders.
+    """Parse images stored in subfolders of a top folder. This is the
+    standard TomoStudio case when on each date a new top folder is created that
+    has one subfolder for each snapshot. The parsed OME-TIFF images are stored
+    in the respective subfolders.
 
     :param folder: Relative or absolute file path to folder containing image
     :param config_file_path: Relative or absolute file path to csv file with further OMERO metadata
+
     """
     overall_md = create_overall_config(overall_config_path)
 
