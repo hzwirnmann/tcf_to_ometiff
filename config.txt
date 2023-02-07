@@ -14,4 +14,6 @@ det_id,Detector:1
 obj_id,Objective:1
 light_source_id,LightSource:1
 instr_id,Instrument:1
-channel_id,Channel:1
+channel_id_ht3d,Channel:ht3d
+channel_id_ht2d,Channel:ht2d
+channel_id_htphase,Channel:htphase

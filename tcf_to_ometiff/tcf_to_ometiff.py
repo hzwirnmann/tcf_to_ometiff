@@ -88,11 +88,12 @@ def def_instr(instr_id, microscope, detectors, light_sources):
     )
 
 
-def def_channel(chan_id, ls_id):
+def def_channel(chan_id, ls_id, chan_name):
     """Create ome-types channel for use in OME-XML
 
     :param chan_id: str: ID of the channel
     :param ls_id: id of light source used
+    :param chan_name: str: channel name
     :return: ome-types channel with "Phase" as contrast method
     """
     return model.Channel(
@@ -100,7 +101,7 @@ def def_channel(chan_id, ls_id):
         acquisition_mode="Other",
         contrast_method="Phase",
         illumination_type="Other",
-        name="Holotomography",
+        name=chan_name,
         light_source_settings=model.LightSourceSettings(id=ls_id),
         samples_per_pixel=1,
     )
@@ -205,7 +206,6 @@ def build_ome_xml(
     )
 
     image = model.Image(
-        # id='Image:2',
         pixels=pixels,
         acquisition_date=timestamp,
         name=description,
@@ -322,8 +322,14 @@ used to create the OME-TIFF.
         [img_metadata["det"]],
         [img_metadata["light_source"]],
     )
-    img_metadata["channel_ht"] = def_channel(
-        config_dict["channel_id"], config_dict["light_source_id"]
+    img_metadata["channel_ht_3d"] = def_channel(
+        config_dict["channel_id_ht3d"], config_dict["light_source_id"], "3D HT"
+    )
+    img_metadata["channel_ht_2d"] = def_channel(
+        config_dict["channel_id_ht2d"], config_dict["light_source_id"], "2D MIP HT"
+    )
+    img_metadata["channel_ht_phase"] = def_channel(
+        config_dict["channel_id_htphase"], config_dict["light_source_id"], "2D Phase"
     )
 
     return img_metadata
@@ -389,14 +395,14 @@ def transform_tcf(folder, overall_md):
         data_use = dat["Data"][name]
         logging.info("Working on {}".format(name))
         if name == "2DMIP":
-            channels = [img_md["channel_ht"]]
+            channels = [img_md["channel_ht_2d"]]
             description = "2D Holotomography Maximum Intensity Projection"
             data_type = "uint16"
             img_formatted = np.array(
                 [data_use[item][()][np.newaxis] for item in data_use]
             )[np.newaxis]
         elif name == "2D":
-            channels = [img_md["channel_ht"]]
+            channels = [img_md["channel_ht_phase"]]
             description = "2D Phasemap"
             data_type = "float"
             img_formatted = np.array([data_use[item][()] for item in data_use])[
@@ -407,7 +413,7 @@ def transform_tcf(folder, overall_md):
         #     description = "2D Brightfield"
         #     img_formatted = XXX
         elif name == "3D":
-            channels = [img_md["channel_ht"]]
+            channels = [img_md["channel_ht_3d"]]
             description = "3D Holotomography"
             data_type = "uint16"
             img_formatted = np.array([data_use[item][()] for item in data_use])[
