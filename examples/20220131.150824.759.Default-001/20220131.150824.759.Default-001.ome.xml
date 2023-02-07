@@ -1,0 +1,38 @@
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Creator="tcf_to_ome by Henning Zwirnmann v0.1" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd">
+    <Experiment ID="Experiment:1">
+        <Description>Some experiment description</Description>
+    </Experiment>
+    <Experimenter ID="Experimenter:1" Email="henning.zwirnmann@tum.de" FirstName="Henning" Institution="Technical University of Munich (TUM)" LastName="Zwirnmann" UserName="hz" />
+    <Instrument ID="Instrument:1">
+        <Microscope LotNumber="2020-01-01" Manufacturer="Tomocube Inc." Model="HT-2H" SerialNumber="CSN19516891" Type="Other" />
+        <Laser ID="LightSource:1" Power="0.05" Tuneable="false" Type="SolidState" Wavelength="532.0" />
+        <Detector ID="Detector:1" Type="CCD" />
+    </Instrument>
+    <Image ID="Image:1" Name="2D Holotomography Maximum Intensity Projection">
+        <AcquisitionDate>2022-01-31T15:08:24</AcquisitionDate>
+        <ExperimenterRef ID="Experimenter:1" />
+        <Description>2D Holotomography Maximum Intensity Projection</Description>
+        <ExperimentRef ID="Experiment:1" />
+        <InstrumentRef ID="Instrument:1" />
+        <Pixels DimensionOrder="XYZTC" ID="Pixels:1" SizeC="1" SizeT="1" SizeX="732" SizeY="732" SizeZ="1" Type="uint16" PhysicalSizeX="0.09" PhysicalSizeY="0.09" TimeIncrement="0.0">
+            <Channel ID="Channel:ht2d" AcquisitionMode="Other" ContrastMethod="Phase" IlluminationType="Other" Name="2D MIP HT" SamplesPerPixel="1">
+                <LightSourceSettings ID="LightSource:1" />
+            </Channel>
+            <TiffData PlaneCount="1" />
+        </Pixels>
+    </Image>
+    <Image ID="Image:2" Name="3D Holotomography">
+        <AcquisitionDate>2022-01-31T15:08:24</AcquisitionDate>
+        <ExperimenterRef ID="Experimenter:1" />
+        <Description>3D Holotomography</Description>
+        <ExperimentRef ID="Experiment:1" />
+        <InstrumentRef ID="Instrument:1" />
+        <Pixels DimensionOrder="XYZTC" ID="Pixels:2" SizeC="1" SizeT="1" SizeX="732" SizeY="732" SizeZ="210" Type="uint16" PhysicalSizeX="0.09" PhysicalSizeY="0.09" PhysicalSizeZ="0.19" TimeIncrement="0.0">
+            <Channel ID="Channel:ht3d" AcquisitionMode="Other" ContrastMethod="Phase" IlluminationType="Other" Name="3D HT" SamplesPerPixel="1">
+                <LightSourceSettings ID="LightSource:1" />
+            </Channel>
+            <TiffData IFD="1" PlaneCount="210" />
+        </Pixels>
+    </Image>
+</OME>
+

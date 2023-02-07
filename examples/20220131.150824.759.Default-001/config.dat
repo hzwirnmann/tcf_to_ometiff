@@ -1,0 +1,46 @@
+Serial,CSN19516891
+Computer,TomoPC-081
+
+SW Version,3.3.3a
+
+M,58.330000
+NA,1.200000
+NA_CDS,1.200000
+Pixel size,4.500000
+Lambda,0.532000
+n_m,1.337000
+Immersion_RI1.337000
+Acquisition interval 2D,1.000000
+Acquisition interval 3D,1.000000
+Acquisition Z Offset,0.000000
+Acquisition Z Offset Compensation,400.000000
+Acquisition Time Interval,0.000000
+Acquisition Count,1
+phase sign,-1
+mapping sign,-1
+iteration,40
+Pattern type,3000
+Disable ZLimit,0
+Ignore Poor,1
+Camera Shutter,2.975000
+Camera Gain,0.000000
+Images HT2D,0
+Images HT3D,1
+Images FL3D,0
+Images BF,0
+FLCH0_Camera_Shutter,1.000000
+FLCH0_Camera_Gain,0.000000
+FLCH0_Light_Intensity,64.100000
+FLCH0_Fluorophore_Emission,461
+FLCH1_Camera_Shutter,1.000000
+FLCH1_Camera_Gain,1.000000
+FLCH1_Light_Intensity,50.000000
+FLCH1_Fluorophore_Emission,509
+FLCH2_Camera_Shutter,1.000000
+FLCH2_Camera_Gain,1.000000
+FLCH2_Light_Intensity,50.000000
+FLCH2_Fluorophore_Emission,568
+FL_Scan_Step,0.000313
+FL_Scan_Range,0.030000
+FL_Scan_Center,0.769687
+FL_Acquisition_interval_3D,209.600000
