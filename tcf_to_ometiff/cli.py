@@ -1,0 +1,37 @@
+import typer
+
+import tcf_to_ometiff
+
+main = typer.Typer()
+
+
+@main.command()
+def parse_multiple(top_folder: str, config_file_path: str):
+    """CLI to parse images stored in subfolders of a top folder. This is the
+    standard TomoStudio case when on each date a new top folder is created that
+    has one subfolder for each snapshot. The parsed OME-TIFF images are stored
+    in the respective sub folders.
+
+    :param top_folder: Relative or absolute file path to top folder
+    :param config_file_path: Relative or absolute file path to csv file with project OMERO metadata
+
+    """
+    tcf_to_ometiff.transform_folder(top_folder, config_file_path)
+
+
+@main.command()
+def parse(folder: str, config_file_path: str):
+    """CLI to parse an image in a folder that has the same name as the folder and
+    additionally ends with .TCF. The parsed OME-TIFF image is stored in the
+    same folder.
+
+    :param folder: Relative or absolute file path to folder containing image
+    :param config_file_path: Relative or absolute file path to csv file with project OMERO metadata
+
+    """
+    overall_md = tcf_to_ometiff.create_overall_config(config_file_path)
+    tcf_to_ometiff.transform_tcf(folder, overall_md)
+
+
+if __name__ == "__main__":
+    main()
