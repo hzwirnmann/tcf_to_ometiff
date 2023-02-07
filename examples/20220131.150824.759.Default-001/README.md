@@ -2,7 +2,6 @@
 
 ## Download
 Files can be downloaded under this link (large file size): https://syncandshare.lrz.de/getlink/fiPqd3jPq4egLyJsiC8NiP/20220131.150824.759.Default-001   
-Syncandshare link expires after 5 weeks - please reach out to the author if it should be extended.
 
 ## File Contents
 20220131.150824.759.Default-001.TCF: original image file with 3D HT image and 2D HT MIP (maximum intensity projection)   
