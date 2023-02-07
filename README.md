@@ -8,11 +8,11 @@ Holotomography is a microscopy technique to produce label-free 3D images of cell
 `python setup.py install`
 
 ## Usage
-Via CLI:
-Parse a single file that resides in folder _folder_ with the same name as the folder and the extension .TCF:
+Via CLI:   
+Parse a single file that resides in folder _folder_ with the same name as the folder and the extension .TCF:   
 `python tcf_to_ometiff/cli.py parse <folder> <config file path>`
 
-Parse multiple files that reside in subfolders of folder _top\_folder_, each one having the same name as the subfolder and the extension .TCF:
+Parse multiple files that reside in subfolders of folder _top\_folder_, each one having the same name as the subfolder and the extension .TCF:   
 `python tcf_to_ometiff/cli.py parse-multiple <top_folder> <config file path>`
 
 Programmatically:
