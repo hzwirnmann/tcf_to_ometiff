@@ -15,17 +15,17 @@ logging.basicConfig(
 )
 
 
-def def_mic(mic_id, sn, lot=None):
+def def_mic(sn, mic_model="HT-2H", lot=None):
     """Create ome-types microscope for use in OME-XML
 
-    :param mic_id: str: ID of the microscope
+    :param model: model of the microscope
     :param sn: str: serial number of the microscope
+    :param lot:  Lot of the microscope
     :return: ome-types microscope
     """
     return model.Microscope(
-        id=mic_id,
         manufacturer="Tomocube Inc.",
-        model="HT-2H",
+        model=mic_model,
         serial_number=sn,
         lot_number=lot,
         type="Other",
@@ -84,7 +84,7 @@ def def_instr(instr_id, microscope, detectors, light_sources):
         id=instr_id,
         microscope=microscope,
         detectors=detectors,
-        light_source_group=light_sources,
+        lasers=light_sources,
     )
 
 
@@ -135,7 +135,7 @@ def def_experiment(desc, exper):
     :param exper: ome-types.model.experimenter
     :return: ome-types experiment
     """
-    return model.Experiment(description=desc, experimenter=exper)
+    return model.Experiment(description=desc, experimenter_ref=exper)
 
 
 def def_project(proj_id, proj_name, desc):
@@ -190,7 +190,7 @@ def build_ome_xml(
     tiffdata = [model.TiffData(plane_count=n_planes, ifd=offset)]
 
     pixels = model.Pixels(
-        dimension_order=("XYZTC"),
+        dimension_order="XYZTC",
         size_c=len_c,
         size_t=len_t,
         size_x=data_use.attrs["SizeX"][0],
@@ -210,9 +210,9 @@ def build_ome_xml(
         acquisition_date=timestamp,
         name=description,
         description=description,
-        experiment_ref=experiment,
-        experimenter_ref=experimenter,
-        instrument_ref=instrument,
+        experiment_ref=model.ExperimentRef(id=experiment.id),
+        experimenter_ref=model.ExperimenterRef(id=experimenter.id),
+        instrument_ref=model.InstrumentRef(id=instrument.id),
     )
 
     return image, offset + n_planes
@@ -242,7 +242,7 @@ create the OME-TIFF from user-provided metadata.
 
     """
 
-    overall_metadata = {}
+    overall_metadata = dict()
     overall_metadata["exper"] = def_experimenter(
         config_dict["exper_id"],
         config_dict["exper_email"],
@@ -252,7 +252,7 @@ create the OME-TIFF from user-provided metadata.
         config_dict["exper_usern"],
     )
     overall_metadata["exp"] = def_experiment(
-        config_dict["exp_desc"], config_dict["exper_id"]
+        config_dict["exp_desc"], model.ExperimenterRef(id=config_dict["exper_id"])
     )
     overall_metadata["proj"] = def_project(
         config_dict["proj_id"], config_dict["proj_name"], config_dict["proj_desc"]
@@ -262,7 +262,7 @@ create the OME-TIFF from user-provided metadata.
 
 def create_overall_config(overall_config_path):
     """Create dict with overall metadata that contains both the raw metadata read
-from the user-provided file as well as metadata created from it that is needed
+from the user-provided file and metadata created from it that is needed
 to create the OME-TIFF.
 
     :param overall_config_path: Path of csv file with metadata
@@ -305,7 +305,7 @@ used to create the OME-TIFF.
     :returns: dict containing all metadata to create the OME-TIFF.
 
     """
-    img_metadata = {}
+    img_metadata = dict()
     img_metadata["mic"] = def_mic(
         config_dict["mic_id"], exp_config_dict["Serial"], config_dict["lot"]
     )
@@ -444,7 +444,7 @@ def transform_tcf(folder, overall_md):
         imgs.append(img_formatted)
 
     ome_xmls = model.OME(
-        creator="tcf_to_ome by Henning Zwirnmann v0.1",
+        creator="tcf_to_ome by Henning Zwirnmann v0.2",
         images=img_ome_xmls,
         experiments=[overall_md["exp"]],
         experimenters=[overall_md["exper"]],
@@ -465,7 +465,7 @@ def transform_folder(top_folder, overall_config_path):
     has one subfolder for each snapshot. The parsed OME-TIFF images are stored
     in the respective subfolders.
 
-    :param folder: Relative or absolute file path to folder containing image
+    :param top_folder: Relative or absolute file path to folder containing image
     :param overall_config_path: Relative or absolute file path to csv file with overall metadata
 
     """
