@@ -48,9 +48,13 @@ The validation of the correct format of an OME-TIFF XML header is described [her
 
 ## Requirements
 aicsimageio==4.10.0
+
 h5py==3.10.0
+
 numpy==1.25.2
+
 ome-types==0.4.3
+
 typer==0.9.0
 
 ## Open Tasks
