@@ -19,7 +19,7 @@ An overall config file is provided as `examples/overall_config.txt`. See descrip
 `python tcf_to_ometiff/cli.py parse-multiple <top_folder> <overall config file path>`
 
 ### Programmatically:
-- For a single file:
+- For a single file that resides in folder _folder_ with the same name as the folder and the extension .TCF (here: `20220131.150824.759.Default-001`):
 ```
 import tcf_to_ometiff
 
@@ -29,7 +29,7 @@ overall_md = tcf_to_ometiff.create_overall_config(config_file_path)
 tcf_to_ometiff.transform_tcf(folder, overall_md)
 ```
 
-- For multiple files, each coming in one folder that resides in a top folder:
+- For multiple files, each coming in one folder that resides in a top folder (here: `examples`):
 ```
 import tcf_to_ometiff
 
