@@ -88,19 +88,21 @@ def def_instr(instr_id, microscope, detectors, light_sources):
     )
 
 
-def def_channel(chan_id, ls_id, chan_name):
+def def_channel(chan_id, ls_id, chan_name, acquisition_mode="Other", contrast_mode="Phase"):
     """Create ome-types channel for use in OME-XML
 
     :param chan_id: str: ID of the channel
     :param ls_id: id of light source used
     :param chan_name: str: channel name
+    :param acquisition_mode: str:  type of microscopy for channel, e.g. WideField, BrightField, ... (ODT is missing!)
+    :param contrast_mode: str: Technique used to generate contrast for channel, e.g. Brightfield, Phase, ...
     :return: ome-types channel with "Phase" as contrast method
     """
     return model.Channel(
         id=chan_id,
-        acquisition_mode="Other",
-        contrast_method="Phase",
-        illumination_type="Other",
+        acquisition_mode=acquisition_mode,
+        contrast_method=contrast_mode,
+        illumination_type="Transmitted",
         name=chan_name,
         light_source_settings=model.LightSourceSettings(id=ls_id),
         samples_per_pixel=1,
@@ -296,40 +298,44 @@ def read_image_config(folder):
     return exp_config_dict
 
 
-def define_image_metadata(config_dict, exp_config_dict):
+def define_image_metadata(overall_config_dict, img_config_dict):
     """Integrate project and image metadata to obtain comprehensive metadata dict
 used to create the OME-TIFF.
 
-    :param config_dict: Metadata dict with metadata given by the user
-    :param exp_config_dict: Metadata dict with metadata extracted config file in image folder
+    :param overall_config_dict: Dict with overall metadata given by the user
+    :param img_config_dict: Dict with per-image metadata extracted from config file in image folder
     :returns: dict containing all metadata to create the OME-TIFF.
 
     """
     img_metadata = dict()
     img_metadata["mic"] = def_mic(
-        config_dict["mic_id"], exp_config_dict["Serial"], config_dict["lot"]
+        overall_config_dict["mic_id"], img_config_dict["Serial"], overall_config_dict["lot"]
     )
-    img_metadata["det"] = def_det(config_dict["det_id"])
+    img_metadata["det"] = def_det(overall_config_dict["det_id"])
     img_metadata["obj"] = def_obj(
-        config_dict["obj_id"],
-        exp_config_dict["NA"],
-        exp_config_dict["M"]
+        overall_config_dict["obj_id"],
+        img_config_dict["NA"],
+        img_config_dict["M"]
     )
-    img_metadata["light_source"] = def_light_source(config_dict["light_source_id"])
+    img_metadata["light_source"] = def_light_source(overall_config_dict["light_source_id"])
     img_metadata["instr"] = def_instr(
-        config_dict["instr_id"],
+        overall_config_dict["instr_id"],
         img_metadata["mic"],
         [img_metadata["det"]],
         [img_metadata["light_source"]],
     )
     img_metadata["channel_ht_3d"] = def_channel(
-        config_dict["channel_id_ht3d"], config_dict["light_source_id"], "3D HT"
+        overall_config_dict["channel_id_ht3d"], overall_config_dict["light_source_id"], "3D HT"
     )
     img_metadata["channel_ht_2d"] = def_channel(
-        config_dict["channel_id_ht2d"], config_dict["light_source_id"], "2D MIP HT"
+        overall_config_dict["channel_id_ht2d"], overall_config_dict["light_source_id"], "2D MIP HT"
     )
     img_metadata["channel_ht_phase"] = def_channel(
-        config_dict["channel_id_htphase"], config_dict["light_source_id"], "2D Phase"
+        overall_config_dict["channel_id_htphase"], overall_config_dict["light_source_id"], "2D Phase"
+    )
+    img_metadata["channel_bf"] = def_channel(
+        overall_config_dict["channel_id_bf"], overall_config_dict["light_source_id"], "2D Brightfield",
+        acquisition_mode="BrightField", contrast_mode="Brightfield"
     )
 
     return img_metadata
@@ -408,10 +414,13 @@ def transform_tcf(folder, overall_md):
             img_formatted = np.array([data_use[item][()] for item in data_use])[
                 np.newaxis
             ]
-        # elif name == "BF":
-        #     channels = [XXX]
-        #     description = "2D Brightfield"
-        #     img_formatted = XXX
+        elif name == "BF":
+            channels = [img_md["channel_bf"]]
+            description = "2D Brightfield"
+            data_type = "uint8"
+            img_formatted = np.array([data_use[item][0] for item in data_use])[
+                np.newaxis
+            ]
         elif name == "3D":
             channels = [img_md["channel_ht_3d"]]
             description = "3D Holotomography"

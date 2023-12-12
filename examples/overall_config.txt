@@ -17,3 +17,4 @@ instr_id,Instrument:1
 channel_id_ht3d,Channel:ht3d
 channel_id_ht2d,Channel:ht2d
 channel_id_htphase,Channel:htphase
+channel_id_bf,Channel:bf

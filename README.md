@@ -54,7 +54,7 @@ ome-types==0.4.3
 typer==0.9.0
 
 ## Open Tasks
-- Metadata treatment for brightfield (BF) images
+- Make sure treatment for time lapse images is correct
 - Metadata treatment for 2D and 3D fluorescence (FL) images
 - Get correspondence between HT and FL image coordinates right
 
