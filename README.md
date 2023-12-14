@@ -54,9 +54,31 @@ ome-types==0.4.3
 typer==0.9.0
 
 ## Open Tasks
-- Make sure treatment for time lapse images is correct
-- Metadata treatment for 2D and 3D fluorescence (FL) images
 - Get correspondence between HT and FL image coordinates right
+- Add support for tiling
+
+## Acknowledgments
+Thanks to the OME team for their work on imaging standardization and reproducibility. Special thanks to Josh Moore, Talley Lambert, Dan, Sébastien Besson and Christoph Gohlke, who provided initial support to understand the OME XML schema in [this thread](https://forum.image.sc/t/setting-up-ome-xml-for-a-new-microscope-from-scratch/62116) on the image.sc forum.
+
+## Citing this Project
+If this work is helpful for your research, you can cite the [corresponding paper](https://www.sciencedirect.com/science/article/pii/S2405896323012429):
+```
+@article{ZWIRNMANN20236477,
+title = {Towards End-to-End Automated Microscopy Control using Holotomography: Workflow Design and Data Management},
+journal = {IFAC-PapersOnLine},
+volume = {56},
+number = {2},
+pages = {6477-6483},
+year = {2023},
+note = {22nd IFAC World Congress},
+issn = {2405-8963},
+doi = {https://doi.org/10.1016/j.ifacol.2023.10.862},
+url = {https://www.sciencedirect.com/science/article/pii/S2405896323012429},
+author = {Henning Zwirnmann and Dennis Knobbe and Sami Haddadin},
+keywords = {Biomedical and medical image processing and systems, Bio-signals analysis and interpretation, Bioinformatics, Human centred automation},
+abstract = {Microscopy has been a key tool involved in many discoveries in the life sciences over the past centuries. In the last 30 years in particular, enormous progress has been made in developing this measurement technique further to make researchers working with it more effective. To combine gains in reproducibility and efficiency resulting from these advancements in different research areas, we present for the first time a unified and comprehensive concept for an end-to-end automated microscopy workflow. To this end, we employ both robotic and computational methods as well as holotomography microscopy. Considering the physical preparation and cleanup of a measurement, the image acquisition, and the management and analysis of the resulting data, we give a fine-grained workflow description. We present the robotic system to perform the manual process steps and a Python package to standardize the resulting proprietary image (meta)data. For the other tasks, we identify suitable open-source tools to execute them and apply them to our setup. The choice of holotomography as a suitable microscopy technique to realize this workflow is elucidated. We envision that the adoption of an automated workflow paves the way toward a future life science laboratory where microscopy-based research is carried out more efficiently and reproducibly than in the past.}
+}
+```
 
 ## License
 MIT

@@ -1,20 +1,25 @@
-exper_id,Experimenter:1
+exper_id,Experimenter:0
 exper_email,henning.zwirnmann@tum.de
 exper_inst,Technical University of Munich (TUM)
 exper_firstn,Henning
 exper_lastn,Zwirnmann
 exper_usern,hz
-exp_desc,Some experiment description
-proj_id,Project:1
+
+proj_id,Project:0
 proj_name,Some project name
 proj_desc,Some project description
-mic_id,Microscope:1
-lot,2020-01-01
-det_id,Detector:1
-obj_id,Objective:1
-light_source_id,LightSource:1
-instr_id,Instrument:1
-channel_id_ht3d,Channel:ht3d
-channel_id_ht2d,Channel:ht2d
-channel_id_htphase,Channel:htphase
-channel_id_bf,Channel:bf
+
+mic_model,HT-2H
+mic_lot,2020-01-01
+det_id,Detector:0
+obj_id,Objective:0
+instr_id,Instrument:0
+light_source_id_ht,LightSource:0
+light_source_id_fl0,LightSource:1
+light_source_id_fl1,LightSource:2
+light_source_id_fl2,LightSource:3
+channel_id_ht,Channel:0
+channel_id_bf,Channel:1
+channel_id_flred,Channel:2
+channel_id_flgreen,Channel:3
+channel_id_flblue,Channel:4
