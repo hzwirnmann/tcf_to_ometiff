@@ -260,8 +260,8 @@ def def_annotations(img_metadata):
     else:
         ann_bf = None
 
+    ann_fl = []
     if int(img_metadata["Images FL3D"]) > 0:
-        ann_fl = []
         colors_dict = {0: "blue", 1: "green", 2: "red"}
         for i in range(3):
             if img_metadata["FLCH{}_Enable".format(i)] == "true":
@@ -283,8 +283,6 @@ def def_annotations(img_metadata):
                         ])
                     )
                 )
-    else:
-        ann_fl = None
 
     anns_list = [item for item in [ann_overall, ann_ht, ann_bf] + ann_fl if item]
     anns = model.StructuredAnnotationList(__root__=anns_list)

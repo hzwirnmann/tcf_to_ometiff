@@ -1,49 +1,98 @@
-<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd" Creator="tcf_to_ome by Henning Zwirnmann v0.2">
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd" Creator="tcf_to_ome by Henning Zwirnmann v0.4">
    <Experiment ID="Experiment:0">
       <Description>
-         Some experiment description
+         Default-001
       </Description>
-      <ExperimenterRef ID="Experimenter:1"/>
+      <ExperimenterRef ID="Experimenter:0"/>
    </Experiment>
-   <Experimenter ID="Experimenter:1" FirstName="Henning" LastName="Zwirnmann" Email="henning.zwirnmann@tum.de" Institution="Technical University of Munich (TUM)" UserName="hz"/>
-   <Instrument ID="Instrument:1">
-      <Microscope Manufacturer="Tomocube Inc." Model="CSN19516891" SerialNumber="Microscope:1" LotNumber="2020-01-01" Type="Other"/>
-      <Laser ID="LightSource:1" Power="0.05" Type="SolidState" Wavelength="532.0" Tuneable="false"/>
-      <Detector ID="Detector:1" Type="CCD"/>
+   <Experimenter ID="Experimenter:0" FirstName="Henning" LastName="Zwirnmann" Email="henning.zwirnmann@tum.de" Institution="Technical University of Munich (TUM)" UserName="hz"/>
+   <Instrument ID="Instrument:0">
+      <Microscope Manufacturer="Tomocube Inc." Model="HT-2H" SerialNumber="CSN19516891" LotNumber="2020-01-01" Type="Other"/>
+      <LightEmittingDiode ID="LightSource:1"/>
+      <LightEmittingDiode ID="LightSource:2"/>
+      <LightEmittingDiode ID="LightSource:3"/>
+      <Laser ID="LightSource:0" Power="0.05" Type="SolidState" Wavelength="532.0" Tuneable="false"/>
+      <Detector ID="Detector:0" Type="CMOS"/>
    </Instrument>
    <Image ID="Image:0" Name="2D Holotomography Maximum Intensity Projection">
       <AcquisitionDate>
-         2022-01-31T15:08:24
+         2022-01-31T15:08:25.465
       </AcquisitionDate>
-      <ExperimenterRef ID="Experimenter:1"/>
+      <ExperimenterRef ID="Experimenter:0"/>
       <Description>
          2D Holotomography Maximum Intensity Projection
       </Description>
       <ExperimentRef ID="Experiment:0"/>
-      <InstrumentRef ID="Instrument:1"/>
+      <InstrumentRef ID="Instrument:0"/>
       <Pixels ID="Pixels:0" DimensionOrder="XYZTC" Type="uint16" SizeX="732" SizeY="732" SizeZ="1" SizeC="1" SizeT="1" PhysicalSizeX="0.09" PhysicalSizeY="0.09" TimeIncrement="0.0">
-         <Channel ID="Channel:ht2d" Name="2D MIP HT" SamplesPerPixel="1" IlluminationType="Other" AcquisitionMode="Other" ContrastMethod="Phase">
-            <LightSourceSettings ID="LightSource:1"/>
+         <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
+            <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
          </Channel>
          <TiffData IFD="0" PlaneCount="1"/>
       </Pixels>
+      <AnnotationRef ID="Annotation:1"/>
    </Image>
    <Image ID="Image:1" Name="3D Holotomography">
       <AcquisitionDate>
-         2022-01-31T15:08:24
+         2022-01-31T15:08:25.465
       </AcquisitionDate>
-      <ExperimenterRef ID="Experimenter:1"/>
+      <ExperimenterRef ID="Experimenter:0"/>
       <Description>
          3D Holotomography
       </Description>
       <ExperimentRef ID="Experiment:0"/>
-      <InstrumentRef ID="Instrument:1"/>
+      <InstrumentRef ID="Instrument:0"/>
       <Pixels ID="Pixels:1" DimensionOrder="XYZTC" Type="uint16" SizeX="732" SizeY="732" SizeZ="210" SizeC="1" SizeT="1" PhysicalSizeX="0.09" PhysicalSizeY="0.09" PhysicalSizeZ="0.19" TimeIncrement="0.0">
-         <Channel ID="Channel:ht3d" Name="3D HT" SamplesPerPixel="1" IlluminationType="Other" AcquisitionMode="Other" ContrastMethod="Phase">
-            <LightSourceSettings ID="LightSource:1"/>
+         <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
+            <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
          </Channel>
          <TiffData IFD="1" PlaneCount="210"/>
       </Pixels>
+      <AnnotationRef ID="Annotation:1"/>
    </Image>
+   <StructuredAnnotations>
+      <MapAnnotation ID="Annotation:0">
+         <Description>
+            Overall metadata for recording and setup
+         </Description>
+         <Value>
+            <M K="MediumName">
+               PBS
+            </M>
+            <M K="MediumRI">
+               1.337
+            </M>
+            <M K="ImmersionRI">
+               1.337
+            </M>
+            <M K="Annotation"/>
+            <M K="TomoStudioVersion">
+               3.3.3a
+            </M>
+         </Value>
+      </MapAnnotation>
+      <MapAnnotation ID="Annotation:1">
+         <Description>
+            Additional metadata for HT and Phase images
+         </Description>
+         <Value>
+            <M K="HT_MappingSign">
+               -1
+            </M>
+            <M K="HT_PhaseSign">
+               -1
+            </M>
+            <M K="HT_Iterations">
+               40
+            </M>
+            <M K="HT_ExposureTime">
+               2.975000
+            </M>
+            <M K="HT_Gain">
+               0.000000
+            </M>
+         </Value>
+      </MapAnnotation>
+   </StructuredAnnotations>
 </OME>
 
