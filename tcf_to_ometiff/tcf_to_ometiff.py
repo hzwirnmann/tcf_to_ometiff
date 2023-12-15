@@ -233,7 +233,11 @@ def def_annotations(img_metadata):
         ])
     )
 
-    if int(img_metadata["Images HT3D"]) > 0 or int(img_metadata["Images HT2D"]) > 0:
+    # backwards compatibility: old TomoStudio versions do not add number of images to config.dat, so we assume that
+    # HT and FL images are available and add the annotations; however not for BF because there is no BF information
+    # in the metadata files
+    if "Images HT3D" not in img_metadata or int(img_metadata["Images HT3D"]) > 0 \
+            or int(img_metadata["Images HT2D"]) > 0:
         ann_ht = model.MapAnnotation(
             id="Annotation:1",
             description="Additional metadata for HT and Phase images",
@@ -248,7 +252,7 @@ def def_annotations(img_metadata):
     else:
         ann_ht = None
 
-    if int(img_metadata["Images BF"]) > 0:
+    if "Images BF" in img_metadata and int(img_metadata["Images BF"]) > 0:
         ann_bf = model.MapAnnotation(
             id="Annotation:2",
             description="Additional metadata for brightfield image",
@@ -261,7 +265,7 @@ def def_annotations(img_metadata):
         ann_bf = None
 
     ann_fl = []
-    if int(img_metadata["Images FL3D"]) > 0:
+    if "Images FL" not in img_metadata or int(img_metadata["Images FL3D"]) > 0:
         colors_dict = {0: "blue", 1: "green", 2: "red"}
         for i in range(3):
             if img_metadata["FLCH{}_Enable".format(i)] == "true":
@@ -493,7 +497,7 @@ used to create the OME-TIFF.
     return img_metadata
 
 
-def transform_tcf(folder, overall_md):
+def transform_tcf(folder, overall_md, output_xml):
     """Parse an image in a folder that has the same name as the folder
     and additionally ends with .TCF. The parsed OME-TIFF image is stored in the
     same folder. It loops over all imaging modalities contained in the TCF H5F
@@ -503,6 +507,7 @@ def transform_tcf(folder, overall_md):
 
     :param folder: Relative or absolute file path to folder containing image
     :param overall_md: Overall metadata dict
+    :param output_xml: If true, output the ome-xml file alongside the ome-tiff file
 
     """
 
@@ -648,8 +653,13 @@ def transform_tcf(folder, overall_md):
         ome_xml=ome_xmls,
     )
 
+    if output_xml:
+        xml_out = ome_xmls.to_xml()
+        with open(join(folder, basename(folder) + ".ome.xml"), "w") as fn:
+            fn.write(xml_out)
 
-def transform_folder(top_folder, overall_config_path):
+
+def transform_folder(top_folder, overall_config_path, output_xml):
     """Parse images stored in subfolders of a top folder. This is the
     standard TomoStudio case when on each date a new top folder is created that
     has one subfolder for each snapshot. The parsed OME-TIFF images are stored
@@ -657,6 +667,7 @@ def transform_folder(top_folder, overall_config_path):
 
     :param top_folder: Relative or absolute file path to folder containing image
     :param overall_config_path: Relative or absolute file path to csv file with overall metadata
+    :param output_xml: If true, output the ome-xml file alongside the ome-tiff file
 
     """
     overall_md = create_overall_config(overall_config_path)
@@ -664,9 +675,11 @@ def transform_folder(top_folder, overall_config_path):
     logging.info("Traversing folders in {}".format(top_folder))
     folders = [d for d in listdir(top_folder) if isdir(join(top_folder, d))]
     for folder in folders:
+        print(folder)
         logging.info("Reading folder {}".format(folder))
         try:
-            transform_tcf(join(top_folder, folder), overall_md)
+            transform_tcf(join(top_folder, folder), overall_md, output_xml)
         except Exception as e:
+            print(e)
             logging.info(e)
             continue
