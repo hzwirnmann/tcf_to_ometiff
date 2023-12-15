@@ -1,98 +1,89 @@
 <OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd" Creator="tcf_to_ome by Henning Zwirnmann v0.4">
-   <Experiment ID="Experiment:0">
-      <Description>
-         Default-001
-      </Description>
-      <ExperimenterRef ID="Experimenter:0"/>
-   </Experiment>
-   <Experimenter ID="Experimenter:0" FirstName="Henning" LastName="Zwirnmann" Email="henning.zwirnmann@tum.de" Institution="Technical University of Munich (TUM)" UserName="hz"/>
-   <Instrument ID="Instrument:0">
-      <Microscope Manufacturer="Tomocube Inc." Model="HT-2H" SerialNumber="CSN19516891" LotNumber="2020-01-01" Type="Other"/>
-      <LightEmittingDiode ID="LightSource:1"/>
-      <LightEmittingDiode ID="LightSource:2"/>
-      <LightEmittingDiode ID="LightSource:3"/>
-      <Laser ID="LightSource:0" Power="0.05" Type="SolidState" Wavelength="532.0" Tuneable="false"/>
-      <Detector ID="Detector:0" Type="CMOS"/>
-   </Instrument>
-   <Image ID="Image:0" Name="2D Holotomography Maximum Intensity Projection">
-      <AcquisitionDate>
-         2022-01-31T15:08:25.465
-      </AcquisitionDate>
-      <ExperimenterRef ID="Experimenter:0"/>
-      <Description>
-         2D Holotomography Maximum Intensity Projection
-      </Description>
-      <ExperimentRef ID="Experiment:0"/>
-      <InstrumentRef ID="Instrument:0"/>
-      <Pixels ID="Pixels:0" DimensionOrder="XYZTC" Type="uint16" SizeX="732" SizeY="732" SizeZ="1" SizeC="1" SizeT="1" PhysicalSizeX="0.09" PhysicalSizeY="0.09" TimeIncrement="0.0">
-         <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
-            <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
-         </Channel>
-         <TiffData IFD="0" PlaneCount="1"/>
-      </Pixels>
-      <AnnotationRef ID="Annotation:1"/>
-   </Image>
-   <Image ID="Image:1" Name="3D Holotomography">
-      <AcquisitionDate>
-         2022-01-31T15:08:25.465
-      </AcquisitionDate>
-      <ExperimenterRef ID="Experimenter:0"/>
-      <Description>
-         3D Holotomography
-      </Description>
-      <ExperimentRef ID="Experiment:0"/>
-      <InstrumentRef ID="Instrument:0"/>
-      <Pixels ID="Pixels:1" DimensionOrder="XYZTC" Type="uint16" SizeX="732" SizeY="732" SizeZ="210" SizeC="1" SizeT="1" PhysicalSizeX="0.09" PhysicalSizeY="0.09" PhysicalSizeZ="0.19" TimeIncrement="0.0">
-         <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
-            <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
-         </Channel>
-         <TiffData IFD="1" PlaneCount="210"/>
-      </Pixels>
-      <AnnotationRef ID="Annotation:1"/>
-   </Image>
-   <StructuredAnnotations>
-      <MapAnnotation ID="Annotation:0">
-         <Description>
-            Overall metadata for recording and setup
-         </Description>
-         <Value>
-            <M K="MediumName">
-               PBS
-            </M>
-            <M K="MediumRI">
-               1.337
-            </M>
-            <M K="ImmersionRI">
-               1.337
-            </M>
-            <M K="Annotation"/>
-            <M K="TomoStudioVersion">
-               3.3.3a
-            </M>
-         </Value>
-      </MapAnnotation>
-      <MapAnnotation ID="Annotation:1">
-         <Description>
-            Additional metadata for HT and Phase images
-         </Description>
-         <Value>
-            <M K="HT_MappingSign">
-               -1
-            </M>
-            <M K="HT_PhaseSign">
-               -1
-            </M>
-            <M K="HT_Iterations">
-               40
-            </M>
-            <M K="HT_ExposureTime">
-               2.975000
-            </M>
-            <M K="HT_Gain">
-               0.000000
-            </M>
-         </Value>
-      </MapAnnotation>
-   </StructuredAnnotations>
+  <Experiment ID="Experiment:1">
+    <Description>Default-001</Description>
+    <ExperimenterRef ID="Experimenter:0"/>
+  </Experiment>
+  <Experimenter ID="Experimenter:0" FirstName="Henning" LastName="Zwirnmann" Email="henning.zwirnmann@tum.de" Institution="Technical University of Munich (TUM)" UserName="hz"/>
+  <Instrument ID="Instrument:0">
+    <Microscope Manufacturer="Tomocube Inc." Model="HT-2H" SerialNumber="CSN19516891" LotNumber="2020-01-01" Type="Other"/>
+    <LightEmittingDiode ID="LightSource:1"/>
+    <LightEmittingDiode ID="LightSource:2"/>
+    <LightEmittingDiode ID="LightSource:3"/>
+    <Laser ID="LightSource:0" Power="0.05" Type="SolidState" Wavelength="532.0" Tuneable="false"/>
+    <Detector ID="Detector:0" Type="CMOS"/>
+  </Instrument>
+  <Image ID="Image:8" Name="2D Holotomography Maximum Intensity Projection">
+    <AcquisitionDate>2022-01-31T15:08:25.465</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Description>2D Holotomography Maximum Intensity Projection</Description>
+    <ExperimentRef ID="Experiment:1"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <Pixels ID="Pixels:8" DimensionOrder="XYZTC" Type="uint16" SizeX="732" SizeY="732" SizeZ="1" SizeC="1" SizeT="1" PhysicalSizeX="0.09" PhysicalSizeY="0.09" TimeIncrement="0.0">
+      <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
+        <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
+      </Channel>
+      <TiffData IFD="0" PlaneCount="1"/>
+    </Pixels>
+    <AnnotationRef ID="Annotation:1"/>
+  </Image>
+  <Image ID="Image:9" Name="3D Holotomography">
+    <AcquisitionDate>2022-01-31T15:08:25.465</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Description>3D Holotomography</Description>
+    <ExperimentRef ID="Experiment:1"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <Pixels ID="Pixels:9" DimensionOrder="XYZTC" Type="uint16" SizeX="732" SizeY="732" SizeZ="210" SizeC="1" SizeT="1" PhysicalSizeX="0.09" PhysicalSizeY="0.09" PhysicalSizeZ="0.19" TimeIncrement="0.0">
+      <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
+        <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
+      </Channel>
+      <TiffData IFD="1" PlaneCount="210"/>
+    </Pixels>
+    <AnnotationRef ID="Annotation:1"/>
+  </Image>
+  <StructuredAnnotations>
+    <MapAnnotation ID="Annotation:0">
+      <Description>Overall metadata for recording and setup</Description>
+      <Value>
+        <M K="MediumName">PBS</M>
+        <M K="MediumRI">1.337</M>
+        <M K="ImmersionRI">1.337</M>
+        <M K="Annotation"/>
+        <M K="TomoStudioVersion">3.3.3a</M>
+      </Value>
+    </MapAnnotation>
+    <MapAnnotation ID="Annotation:1">
+      <Description>Additional metadata for HT and Phase images</Description>
+      <Value>
+        <M K="HT_MappingSign">-1</M>
+        <M K="HT_PhaseSign">-1</M>
+        <M K="HT_Iterations">40</M>
+        <M K="HT_ExposureTime">2.975000</M>
+        <M K="HT_Gain">0.000000</M>
+      </Value>
+    </MapAnnotation>
+    <MapAnnotation ID="Annotation:3">
+      <Description>Additional metadata for Fluorescence Channel blue images</Description>
+      <Value>
+        <M K="FL0_ExposureTime">1</M>
+        <M K="FL0_Gain">0</M>
+        <M K="FL0_Intensity">64.1</M>
+      </Value>
+    </MapAnnotation>
+    <MapAnnotation ID="Annotation:4">
+      <Description>Additional metadata for Fluorescence Channel green images</Description>
+      <Value>
+        <M K="FL1_ExposureTime">1</M>
+        <M K="FL1_Gain">1</M>
+        <M K="FL1_Intensity">50</M>
+      </Value>
+    </MapAnnotation>
+    <MapAnnotation ID="Annotation:5">
+      <Description>Additional metadata for Fluorescence Channel red images</Description>
+      <Value>
+        <M K="FL2_ExposureTime">1</M>
+        <M K="FL2_Gain">1</M>
+        <M K="FL2_Intensity">50</M>
+      </Value>
+    </MapAnnotation>
+  </StructuredAnnotations>
 </OME>
-

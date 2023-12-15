@@ -1,0 +1,173 @@
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd" Creator="tcf_to_ome by Henning Zwirnmann v0.4">
+  <Experiment ID="Experiment:0">
+    <Description>HZ_tests-002</Description>
+    <ExperimenterRef ID="Experimenter:0"/>
+  </Experiment>
+  <Experimenter ID="Experimenter:0" FirstName="Henning" LastName="Zwirnmann" Email="henning.zwirnmann@tum.de" Institution="Technical University of Munich (TUM)" UserName="hz"/>
+  <Instrument ID="Instrument:0">
+    <Microscope Manufacturer="Tomocube Inc." Model="HT-2H" SerialNumber="CSN19516891" LotNumber="2020-01-01" Type="Other"/>
+    <LightEmittingDiode ID="LightSource:1"/>
+    <LightEmittingDiode ID="LightSource:2"/>
+    <LightEmittingDiode ID="LightSource:3"/>
+    <Laser ID="LightSource:0" Power="0.05" Type="SolidState" Wavelength="532.0" Tuneable="false"/>
+    <Detector ID="Detector:0" Type="CMOS"/>
+  </Instrument>
+  <Image ID="Image:0" Name="2D Fluorescence blue Maximum Intensity Projection">
+    <AcquisitionDate>2021-04-07T12:05:55.312</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Description>2D Fluorescence blue Maximum Intensity Projection</Description>
+    <ExperimentRef ID="Experiment:0"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <Pixels ID="Pixels:0" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="1" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" TimeIncrement="120.0">
+      <Channel ID="Channel:2" Name="Fluorescence blue" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="385.0" EmissionWavelength="461.0" Fluor="DAPI" Color="65535">
+        <LightSourceSettings ID="LightSource:1" Wavelength="385.0"/>
+      </Channel>
+      <TiffData IFD="0" PlaneCount="5"/>
+    </Pixels>
+    <AnnotationRef ID="Annotation:3"/>
+  </Image>
+  <Image ID="Image:1" Name="2D Holotomography Maximum Intensity Projection">
+    <AcquisitionDate>2021-04-07T12:06:52.028</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Description>2D Holotomography Maximum Intensity Projection</Description>
+    <ExperimentRef ID="Experiment:0"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <Pixels ID="Pixels:1" DimensionOrder="XYZTC" Type="uint16" SizeX="468" SizeY="468" SizeZ="1" SizeC="1" SizeT="5" PhysicalSizeX="0.1" PhysicalSizeY="0.1" TimeIncrement="120.0">
+      <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
+        <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
+      </Channel>
+      <TiffData IFD="5" PlaneCount="5"/>
+    </Pixels>
+    <AnnotationRef ID="Annotation:1"/>
+  </Image>
+  <Image ID="Image:2" Name="3D Holotomography">
+    <AcquisitionDate>2021-04-07T12:06:52.028</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Description>3D Holotomography</Description>
+    <ExperimentRef ID="Experiment:0"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <Pixels ID="Pixels:2" DimensionOrder="XYZTC" Type="uint16" SizeX="468" SizeY="468" SizeZ="208" SizeC="1" SizeT="5" PhysicalSizeX="0.1" PhysicalSizeY="0.1" PhysicalSizeZ="0.19" TimeIncrement="120.0">
+      <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
+        <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
+      </Channel>
+      <TiffData IFD="10" PlaneCount="1040"/>
+    </Pixels>
+    <AnnotationRef ID="Annotation:1"/>
+  </Image>
+  <Image ID="Image:3" Name="3D Fluorescence blue">
+    <AcquisitionDate>2021-04-07T12:05:55.312</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Description>3D Fluorescence blue</Description>
+    <ExperimentRef ID="Experiment:0"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <Pixels ID="Pixels:3" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="31" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" PhysicalSizeZ="0.31" TimeIncrement="120.0">
+      <Channel ID="Channel:2" Name="Fluorescence blue" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="385.0" EmissionWavelength="461.0" Fluor="DAPI" Color="65535">
+        <LightSourceSettings ID="LightSource:1" Wavelength="385.0"/>
+      </Channel>
+      <TiffData IFD="1050" PlaneCount="155"/>
+    </Pixels>
+    <AnnotationRef ID="Annotation:3"/>
+  </Image>
+  <Image ID="Image:4" Name="2D Fluorescence green Maximum Intensity Projection">
+    <AcquisitionDate>2021-04-07T12:05:55.527</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Description>2D Fluorescence green Maximum Intensity Projection</Description>
+    <ExperimentRef ID="Experiment:0"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <Pixels ID="Pixels:4" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="1" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" TimeIncrement="120.0">
+      <Channel ID="Channel:3" Name="Fluorescence green" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="470.0" EmissionWavelength="509.0" Fluor="GFP" Color="8388863">
+        <LightSourceSettings ID="LightSource:2" Wavelength="470.0"/>
+      </Channel>
+      <TiffData IFD="1205" PlaneCount="5"/>
+    </Pixels>
+    <AnnotationRef ID="Annotation:4"/>
+  </Image>
+  <Image ID="Image:5" Name="2D Fluorescence red Maximum Intensity Projection">
+    <AcquisitionDate>2021-04-07T12:05:55.867</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Description>2D Fluorescence red Maximum Intensity Projection</Description>
+    <ExperimentRef ID="Experiment:0"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <Pixels ID="Pixels:5" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="1" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" TimeIncrement="120.0">
+      <Channel ID="Channel:4" Name="Fluorescence red" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="570.0" EmissionWavelength="568.0" Fluor="Cy3" Color="-16776961">
+        <LightSourceSettings ID="LightSource:3" Wavelength="570.0"/>
+      </Channel>
+      <TiffData IFD="1210" PlaneCount="5"/>
+    </Pixels>
+    <AnnotationRef ID="Annotation:5"/>
+  </Image>
+  <Image ID="Image:6" Name="3D Fluorescence green">
+    <AcquisitionDate>2021-04-07T12:05:55.527</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Description>3D Fluorescence green</Description>
+    <ExperimentRef ID="Experiment:0"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <Pixels ID="Pixels:6" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="31" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" PhysicalSizeZ="0.31" TimeIncrement="120.0">
+      <Channel ID="Channel:3" Name="Fluorescence green" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="470.0" EmissionWavelength="509.0" Fluor="GFP" Color="8388863">
+        <LightSourceSettings ID="LightSource:2" Wavelength="470.0"/>
+      </Channel>
+      <TiffData IFD="1215" PlaneCount="155"/>
+    </Pixels>
+    <AnnotationRef ID="Annotation:4"/>
+  </Image>
+  <Image ID="Image:7" Name="3D Fluorescence red">
+    <AcquisitionDate>2021-04-07T12:05:55.867</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Description>3D Fluorescence red</Description>
+    <ExperimentRef ID="Experiment:0"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <Pixels ID="Pixels:7" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="31" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" PhysicalSizeZ="0.31" TimeIncrement="120.0">
+      <Channel ID="Channel:4" Name="Fluorescence red" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="570.0" EmissionWavelength="568.0" Fluor="Cy3" Color="-16776961">
+        <LightSourceSettings ID="LightSource:3" Wavelength="570.0"/>
+      </Channel>
+      <TiffData IFD="1370" PlaneCount="155"/>
+    </Pixels>
+    <AnnotationRef ID="Annotation:5"/>
+  </Image>
+  <StructuredAnnotations>
+    <MapAnnotation ID="Annotation:0">
+      <Description>Overall metadata for recording and setup</Description>
+      <Value>
+        <M K="MediumName">UV glue</M>
+        <M K="MediumRI">1.56</M>
+        <M K="ImmersionRI">1.337</M>
+        <M K="Annotation"/>
+        <M K="TomoStudioVersion">3.0.3</M>
+      </Value>
+    </MapAnnotation>
+    <MapAnnotation ID="Annotation:1">
+      <Description>Additional metadata for HT and Phase images</Description>
+      <Value>
+        <M K="HT_MappingSign">-1</M>
+        <M K="HT_PhaseSign">-1</M>
+        <M K="HT_Iterations">40</M>
+        <M K="HT_ExposureTime">1.450000</M>
+        <M K="HT_Gain">0.000000</M>
+      </Value>
+    </MapAnnotation>
+    <MapAnnotation ID="Annotation:3">
+      <Description>Additional metadata for Fluorescence Channel blue images</Description>
+      <Value>
+        <M K="FL0_ExposureTime">167.6</M>
+        <M K="FL0_Gain">0</M>
+        <M K="FL0_Intensity">76.1</M>
+      </Value>
+    </MapAnnotation>
+    <MapAnnotation ID="Annotation:4">
+      <Description>Additional metadata for Fluorescence Channel green images</Description>
+      <Value>
+        <M K="FL1_ExposureTime">96.9</M>
+        <M K="FL1_Gain">0.8</M>
+        <M K="FL1_Intensity">85.8</M>
+      </Value>
+    </MapAnnotation>
+    <MapAnnotation ID="Annotation:5">
+      <Description>Additional metadata for Fluorescence Channel red images</Description>
+      <Value>
+        <M K="FL2_ExposureTime">207.7</M>
+        <M K="FL2_Gain">0</M>
+        <M K="FL2_Intensity">100</M>
+      </Value>
+    </MapAnnotation>
+  </StructuredAnnotations>
+</OME>

@@ -7,7 +7,7 @@ Files can be downloaded under this link (large file size): https://syncandshare.
 `20220131.150824.759.Default-001.TCF`: original image file with 3D HT image and 2D HT MIP (maximum intensity projection)  
 `20220131.150824.759.Default-001.ome.tiff`: OME-TIFF created using tcf\_to\_ometiff  
 `20220131.150824.759.Default-001.ome.xml`: OME-XML header extracted from OME-TIFF  
-`config.dat`: per-image metadata created by TomoStudio - not to be confused with the user-generated overall config file
+`config.dat`: per-image metadata created by TomoStudio - not to be confused with the user-generated overall config file  
 `JobParameter.tcp`: another per-image metadata created by TomoStudio
 
 ## How to Reproduce
