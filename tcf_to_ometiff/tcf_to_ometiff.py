@@ -497,7 +497,7 @@ used to create the OME-TIFF.
     return img_metadata
 
 
-def transform_tcf(folder, overall_md, output_xml):
+def transform_tcf(folder, overall_md, output_xml=False):
     """Parse an image in a folder that has the same name as the folder
     and additionally ends with .TCF. The parsed OME-TIFF image is stored in the
     same folder. It loops over all imaging modalities contained in the TCF H5F
@@ -507,7 +507,7 @@ def transform_tcf(folder, overall_md, output_xml):
 
     :param folder: Relative or absolute file path to folder containing image
     :param overall_md: Overall metadata dict
-    :param output_xml: If true, output the ome-xml file alongside the ome-tiff file
+    :param output_xml: If True, output the ome-xml file alongside the ome-tiff file
 
     """
 
@@ -659,7 +659,7 @@ def transform_tcf(folder, overall_md, output_xml):
             fn.write(xml_out)
 
 
-def transform_folder(top_folder, overall_config_path, output_xml):
+def transform_folder(top_folder, overall_config_path, output_xml=False):
     """Parse images stored in subfolders of a top folder. This is the
     standard TomoStudio case when on each date a new top folder is created that
     has one subfolder for each snapshot. The parsed OME-TIFF images are stored
@@ -667,7 +667,7 @@ def transform_folder(top_folder, overall_config_path, output_xml):
 
     :param top_folder: Relative or absolute file path to folder containing image
     :param overall_config_path: Relative or absolute file path to csv file with overall metadata
-    :param output_xml: If true, output the ome-xml file alongside the ome-tiff file
+    :param output_xml: If True, output the ome-xml file alongside the ome-tiff file
 
     """
     overall_md = create_overall_config(overall_config_path)

@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 0.4.1 (December 15, 2023)
+
+- Added `--output-xml` option to CLI to enable outputting the .ome.xml file alongside the .ome.tiff file (default: False)
+- Added some backwards compatibility for old TomoStudio versions that output incomplete config metadata
+
 ## Version 0.4.0 (December 14, 2023)
 
 - Added support for fluorescence images
