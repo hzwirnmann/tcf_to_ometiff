@@ -56,10 +56,10 @@ per-image config files are needed for the parsing.
 The validation of the correct format of an OME-TIFF XML header is described [here](https://docs.openmicroscopy.org/bio-formats/6.0.1/users/comlinetools/xml-validation.html).
 
 ## Requirements
-aicsimageio==4.10.0  
+aicsimageio==4.14.0  
 h5py==3.10.0  
-numpy==1.25.2  
-ome-types==0.4.3  
+numpy==1.26.4  
+ome-types==0.4.5  
 typer==0.9.0
 
 ## Open Tasks

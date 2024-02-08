@@ -289,9 +289,8 @@ def def_annotations(img_metadata):
                 )
 
     anns_list = [item for item in [ann_overall, ann_ht, ann_bf] + ann_fl if item]
-    anns = model.StructuredAnnotationList(__root__=anns_list)
 
-    return anns
+    return anns_list
 
 
 def build_ome_xml(
@@ -638,7 +637,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
         imgs.append(img_formatted)
 
     ome_xmls = model.OME(
-        creator="tcf_to_ome by Henning Zwirnmann v0.4",
+        creator="tcf_to_ometiff by Henning Zwirnmann v0.42",
         images=img_ome_xmls,
         experiments=[img_md["exp"]],
         experimenters=[overall_md["exper"]],

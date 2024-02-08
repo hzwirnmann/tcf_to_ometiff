@@ -1,5 +1,9 @@
 # Change Log
 
+## Version 0.4.2 (Fabruary 8, 2024)
+
+- Minor changes to reflect ome-types v0.4.5 (StructuredAnnotations instead of StructuredAnnotationsList)
+
 ## Version 0.4.1 (December 15, 2023)
 
 - Added `--output-xml` option to CLI to enable outputting the .ome.xml file alongside the .ome.tiff file (default: False)
