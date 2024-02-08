@@ -1,5 +1,5 @@
-<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd" Creator="tcf_to_ome by Henning Zwirnmann v0.4">
-  <Experiment ID="Experiment:1">
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd" Creator="tcf_to_ometiff by Henning Zwirnmann v0.42">
+  <Experiment ID="Experiment:0">
     <Description>Default-001</Description>
     <ExperimenterRef ID="Experimenter:0"/>
   </Experiment>
@@ -12,13 +12,13 @@
     <Laser ID="LightSource:0" Power="0.05" Type="SolidState" Wavelength="532.0" Tuneable="false"/>
     <Detector ID="Detector:0" Type="CMOS"/>
   </Instrument>
-  <Image ID="Image:8" Name="2D Holotomography Maximum Intensity Projection">
+  <Image ID="Image:0" Name="2D Holotomography Maximum Intensity Projection">
     <AcquisitionDate>2022-01-31T15:08:25.465</AcquisitionDate>
     <ExperimenterRef ID="Experimenter:0"/>
     <Description>2D Holotomography Maximum Intensity Projection</Description>
-    <ExperimentRef ID="Experiment:1"/>
+    <ExperimentRef ID="Experiment:0"/>
     <InstrumentRef ID="Instrument:0"/>
-    <Pixels ID="Pixels:8" DimensionOrder="XYZTC" Type="uint16" SizeX="732" SizeY="732" SizeZ="1" SizeC="1" SizeT="1" PhysicalSizeX="0.09" PhysicalSizeY="0.09" TimeIncrement="0.0">
+    <Pixels ID="Pixels:0" DimensionOrder="XYZTC" Type="uint16" SizeX="732" SizeY="732" SizeZ="1" SizeC="1" SizeT="1" PhysicalSizeX="0.09" PhysicalSizeY="0.09" TimeIncrement="0.0">
       <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
         <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
       </Channel>
@@ -26,14 +26,14 @@
     </Pixels>
     <AnnotationRef ID="Annotation:1"/>
   </Image>
-  <Image ID="Image:9" Name="3D Holotomography">
+  <Image ID="Image:1" Name="3D Holotomography">
     <AcquisitionDate>2022-01-31T15:08:25.465</AcquisitionDate>
     <ExperimenterRef ID="Experimenter:0"/>
     <Description>3D Holotomography</Description>
-    <ExperimentRef ID="Experiment:1"/>
+    <ExperimentRef ID="Experiment:0"/>
     <InstrumentRef ID="Instrument:0"/>
-    <Pixels ID="Pixels:9" DimensionOrder="XYZTC" Type="uint16" SizeX="732" SizeY="732" SizeZ="210" SizeC="1" SizeT="1" PhysicalSizeX="0.09" PhysicalSizeY="0.09" PhysicalSizeZ="0.19" TimeIncrement="0.0">
-      <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
+    <Pixels ID="Pixels:1" DimensionOrder="XYZTC" Type="uint16" SizeX="732" SizeY="732" SizeZ="210" SizeC="1" SizeT="1" PhysicalSizeX="0.09" PhysicalSizeY="0.09" PhysicalSizeZ="0.19" TimeIncrement="0.0">
+      <Channel ID="Channel:1" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
         <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
       </Channel>
       <TiffData IFD="1" PlaneCount="210"/>

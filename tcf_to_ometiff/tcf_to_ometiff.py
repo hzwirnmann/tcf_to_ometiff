@@ -105,7 +105,7 @@ def def_channel(image_name, img_md=None):
 
     if image_name == "ht":
         return model.Channel(
-            id="Channel:0",
+            # id="Channel:0",
             acquisition_mode="Other",
             contrast_method="Phase",
             illumination_type="Transmitted",
@@ -119,7 +119,7 @@ def def_channel(image_name, img_md=None):
 
     elif image_name == "bf":
         return model.Channel(
-            id="Channel:1",
+            # id="Channel:1",
             acquisition_mode="BrightField",
             contrast_method="Brightfield",
             illumination_type="Transmitted",
@@ -159,7 +159,7 @@ def def_channel(image_name, img_md=None):
         else:
             print("Unknown image name: {}".format(image_name))
         return model.Channel(
-            id="Channel:{}".format(int(image_name[2])+2),
+            # id="Channel:{}".format(int(image_name[2])+2),
             acquisition_mode="Other",
             contrast_method="Fluorescence",
             illumination_type="Transmitted",
@@ -539,12 +539,12 @@ def transform_tcf(folder, overall_md, output_xml=False):
         keys_to_loop.extend((n_chans-1)*["3DFL"])
         fl_3d_counter = 0
 
-    for name in keys_to_loop:
+    for i, name in enumerate(keys_to_loop):
         logging.info("Working on {}".format(name))
         data_use = dat["Data"][name]
 
         if name == "2DMIP":
-            channels = [img_md["channel_ht"]]
+            channels = [img_md["channel_ht"].copy()]  # workaround for channel IDs
             description = "2D Holotomography Maximum Intensity Projection"
             data_type = "uint16"
             img_formatted = np.array(
@@ -554,7 +554,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
             timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
 
         elif name == "2D":
-            channels = [img_md["channel_ht"]]
+            channels = [img_md["channel_ht"].copy()]  # workaround for channel IDs
             description = "2D Phasemap"
             data_type = "float"
             img_formatted = np.array([data_use[item][()] for item in data_use])[
@@ -564,7 +564,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
             timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
 
         elif name == "BF":
-            channels = [img_md["channel_bf"]]
+            channels = [img_md["channel_bf"].copy()]  # workaround for channel IDs
             description = "2D Brightfield"
             data_type = "uint8"
             img_formatted = np.array([data_use[item][0] for item in data_use])[
@@ -574,7 +574,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
             timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
 
         elif name == "3D":
-            channels = [img_md["channel_ht"]]
+            channels = [img_md["channel_ht"].copy()]  # workaround for channel IDs
             description = "3D Holotomography"
             data_type = "uint16"
             img_formatted = np.array([data_use[item][()] for item in data_use])[
@@ -587,7 +587,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
             channel = list(data_use.keys())[fl_mip_counter]
             fl_mip_counter += 1
 
-            channels = [img_md["channel_fl{}".format(channel[2])]]
+            channels = [img_md["channel_fl{}".format(channel[2])].copy()]  # workaround for channel IDs]
             description = "2D {} Maximum Intensity Projection"\
                 .format(img_md["channel_fl{}".format(channel[2])].name)
             data_type = "uint16"
@@ -601,7 +601,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
             channel = list(data_use.keys())[fl_3d_counter]
             fl_3d_counter += 1
 
-            channels = [img_md["channel_fl{}".format(channel[2])]]
+            channels = [img_md["channel_fl{}".format(channel[2])].copy()]  # workaround for channel IDs
             description = "3D {}".format(img_md["channel_fl{}".format(channel[2])].name)
             data_type = "uint16"
             img_formatted = np.array([data_use[channel][item][()] for item in data_use[channel]])[
@@ -613,6 +613,8 @@ def transform_tcf(folder, overall_md, output_xml=False):
         else:
             logging.info("Skipping unknown data type {}".format(name))
             continue
+
+        channels[0].id = "Channel:{}".format(i)
 
         # print("No valid data type in {}: {}".format(folder, name))
         # sys.exit(-1)
@@ -637,7 +639,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
         imgs.append(img_formatted)
 
     ome_xmls = model.OME(
-        creator="tcf_to_ometiff by Henning Zwirnmann v0.42",
+        creator="tcf_to_ometiff by Henning Zwirnmann v0.43",
         images=img_ome_xmls,
         experiments=[img_md["exp"]],
         experimenters=[overall_md["exper"]],

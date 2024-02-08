@@ -1,6 +1,10 @@
 # Change Log
 
-## Version 0.4.2 (Fabruary 8, 2024)
+## Version 0.4.3 (February 8, 2024)
+
+- Minor fix: Generated OME.XML is now valid again, wasn't before because the same channel ID got used for several images produced with the same light source, e.g., 3D HT, 2D HT and HT MIP got assigned the same channel ID previously
+
+## Version 0.4.2 (February 8, 2024)
 
 - Minor changes to reflect ome-types v0.4.5 (StructuredAnnotations instead of StructuredAnnotationsList)
 

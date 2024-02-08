@@ -1,4 +1,4 @@
-<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd" Creator="tcf_to_ome by Henning Zwirnmann v0.4">
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd" Creator="tcf_to_ometiff by Henning Zwirnmann v0.42">
   <Experiment ID="Experiment:0">
     <Description>HZ_tests-002</Description>
     <ExperimenterRef ID="Experimenter:0"/>
@@ -19,7 +19,7 @@
     <ExperimentRef ID="Experiment:0"/>
     <InstrumentRef ID="Instrument:0"/>
     <Pixels ID="Pixels:0" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="1" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" TimeIncrement="120.0">
-      <Channel ID="Channel:2" Name="Fluorescence blue" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="385.0" EmissionWavelength="461.0" Fluor="DAPI" Color="65535">
+      <Channel ID="Channel:0" Name="Fluorescence blue" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="385.0" EmissionWavelength="461.0" Fluor="DAPI" Color="65535">
         <LightSourceSettings ID="LightSource:1" Wavelength="385.0"/>
       </Channel>
       <TiffData IFD="0" PlaneCount="5"/>
@@ -33,7 +33,7 @@
     <ExperimentRef ID="Experiment:0"/>
     <InstrumentRef ID="Instrument:0"/>
     <Pixels ID="Pixels:1" DimensionOrder="XYZTC" Type="uint16" SizeX="468" SizeY="468" SizeZ="1" SizeC="1" SizeT="5" PhysicalSizeX="0.1" PhysicalSizeY="0.1" TimeIncrement="120.0">
-      <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
+      <Channel ID="Channel:1" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
         <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
       </Channel>
       <TiffData IFD="5" PlaneCount="5"/>
@@ -47,7 +47,7 @@
     <ExperimentRef ID="Experiment:0"/>
     <InstrumentRef ID="Instrument:0"/>
     <Pixels ID="Pixels:2" DimensionOrder="XYZTC" Type="uint16" SizeX="468" SizeY="468" SizeZ="208" SizeC="1" SizeT="5" PhysicalSizeX="0.1" PhysicalSizeY="0.1" PhysicalSizeZ="0.19" TimeIncrement="120.0">
-      <Channel ID="Channel:0" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
+      <Channel ID="Channel:2" Name="Holotomography" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Phase">
         <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
       </Channel>
       <TiffData IFD="10" PlaneCount="1040"/>
@@ -61,7 +61,7 @@
     <ExperimentRef ID="Experiment:0"/>
     <InstrumentRef ID="Instrument:0"/>
     <Pixels ID="Pixels:3" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="31" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" PhysicalSizeZ="0.31" TimeIncrement="120.0">
-      <Channel ID="Channel:2" Name="Fluorescence blue" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="385.0" EmissionWavelength="461.0" Fluor="DAPI" Color="65535">
+      <Channel ID="Channel:3" Name="Fluorescence blue" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="385.0" EmissionWavelength="461.0" Fluor="DAPI" Color="65535">
         <LightSourceSettings ID="LightSource:1" Wavelength="385.0"/>
       </Channel>
       <TiffData IFD="1050" PlaneCount="155"/>
@@ -75,7 +75,7 @@
     <ExperimentRef ID="Experiment:0"/>
     <InstrumentRef ID="Instrument:0"/>
     <Pixels ID="Pixels:4" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="1" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" TimeIncrement="120.0">
-      <Channel ID="Channel:3" Name="Fluorescence green" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="470.0" EmissionWavelength="509.0" Fluor="GFP" Color="8388863">
+      <Channel ID="Channel:4" Name="Fluorescence green" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="470.0" EmissionWavelength="509.0" Fluor="GFP" Color="8388863">
         <LightSourceSettings ID="LightSource:2" Wavelength="470.0"/>
       </Channel>
       <TiffData IFD="1205" PlaneCount="5"/>
@@ -89,7 +89,7 @@
     <ExperimentRef ID="Experiment:0"/>
     <InstrumentRef ID="Instrument:0"/>
     <Pixels ID="Pixels:5" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="1" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" TimeIncrement="120.0">
-      <Channel ID="Channel:4" Name="Fluorescence red" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="570.0" EmissionWavelength="568.0" Fluor="Cy3" Color="-16776961">
+      <Channel ID="Channel:5" Name="Fluorescence red" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="570.0" EmissionWavelength="568.0" Fluor="Cy3" Color="-16776961">
         <LightSourceSettings ID="LightSource:3" Wavelength="570.0"/>
       </Channel>
       <TiffData IFD="1210" PlaneCount="5"/>
@@ -103,7 +103,7 @@
     <ExperimentRef ID="Experiment:0"/>
     <InstrumentRef ID="Instrument:0"/>
     <Pixels ID="Pixels:6" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="31" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" PhysicalSizeZ="0.31" TimeIncrement="120.0">
-      <Channel ID="Channel:3" Name="Fluorescence green" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="470.0" EmissionWavelength="509.0" Fluor="GFP" Color="8388863">
+      <Channel ID="Channel:6" Name="Fluorescence green" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="470.0" EmissionWavelength="509.0" Fluor="GFP" Color="8388863">
         <LightSourceSettings ID="LightSource:2" Wavelength="470.0"/>
       </Channel>
       <TiffData IFD="1215" PlaneCount="155"/>
@@ -117,7 +117,7 @@
     <ExperimentRef ID="Experiment:0"/>
     <InstrumentRef ID="Instrument:0"/>
     <Pixels ID="Pixels:7" DimensionOrder="XYZTC" Type="uint16" SizeX="580" SizeY="580" SizeZ="31" SizeC="1" SizeT="5" PhysicalSizeX="0.08" PhysicalSizeY="0.08" PhysicalSizeZ="0.31" TimeIncrement="120.0">
-      <Channel ID="Channel:4" Name="Fluorescence red" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="570.0" EmissionWavelength="568.0" Fluor="Cy3" Color="-16776961">
+      <Channel ID="Channel:7" Name="Fluorescence red" SamplesPerPixel="1" IlluminationType="Transmitted" AcquisitionMode="Other" ContrastMethod="Fluorescence" ExcitationWavelength="570.0" EmissionWavelength="568.0" Fluor="Cy3" Color="-16776961">
         <LightSourceSettings ID="LightSource:3" Wavelength="570.0"/>
       </Channel>
       <TiffData IFD="1370" PlaneCount="155"/>
