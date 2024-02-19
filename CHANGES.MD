@@ -1,5 +1,9 @@
 # Change Log
 
+## Version 0.4.4 (February 19, 2024)
+
+- Added StageLabel property for 3D fluorescence image that includes the Z shift in µm between plane 0 of the HT image and plane 0 of the FL image.
+
 ## Version 0.4.3 (February 8, 2024)
 
 - Minor fix: Generated OME.XML is now valid again, wasn't before because the same channel ID got used for several images produced with the same light source, e.g., 3D HT, 2D HT and HT MIP got assigned the same channel ID previously

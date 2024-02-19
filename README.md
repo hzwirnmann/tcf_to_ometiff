@@ -63,7 +63,6 @@ ome-types==0.4.5
 typer==0.9.0
 
 ## Open Tasks
-- Get correspondence between HT and FL image coordinates right
 - Add support for tiling
 
 ## Acknowledgments

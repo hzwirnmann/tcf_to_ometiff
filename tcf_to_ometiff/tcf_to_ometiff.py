@@ -96,6 +96,18 @@ def def_instr(instr_id, microscope, detectors, lasers, leds):
     )
 
 
+def def_stagelabel(offset, ht_height, fl_height):
+
+    z_shift = round(offset - fl_height/2, 2)
+
+    sl = model.StageLabel(
+        name="Fluorescence Image Z Shift",
+        z=z_shift
+    )
+
+    return sl
+
+
 def def_channel(image_name, img_md=None):
     """Create ome-types channel for use in OME-XML
 
@@ -302,6 +314,7 @@ def build_ome_xml(
     experiment,
     experimenter,
     instrument,
+    stagelabel,
     data_type,
     ann_id
 ):
@@ -315,6 +328,7 @@ def build_ome_xml(
     :param experiment: ome-types experiment the image was part of
     :param experimenter: ome-types experimenter who took the image
     :param instrument: ome-types instrument the image was taken with
+    :param stagelabel: ome-types stagelabel to report the shift between HT and FL images
     :param data_type: Python data type of the image data
     :param ann_id: ID of annotation with additional image metadata
     :return: ome-types image with relevant metadata
@@ -357,7 +371,8 @@ def build_ome_xml(
         experiment_ref=model.ExperimentRef(id=experiment.id),
         experimenter_ref=model.ExperimenterRef(id=experimenter.id),
         instrument_ref=model.InstrumentRef(id=instrument.id),
-        annotation_refs=[model.AnnotationRef(id=ann_id)]
+        annotation_refs=[model.AnnotationRef(id=ann_id)],
+        stage_label=stagelabel
     )
 
     return image, offset + n_planes
@@ -542,6 +557,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
     for i, name in enumerate(keys_to_loop):
         logging.info("Working on {}".format(name))
         data_use = dat["Data"][name]
+        stagelabel = None
 
         if name == "2DMIP":
             channels = [img_md["channel_ht"].copy()]  # workaround for channel IDs
@@ -609,6 +625,9 @@ def transform_tcf(folder, overall_md, output_xml=False):
             ]
             ann_ref = 3 + int(channel[2])
             timestamp = data_use[channel]["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            stagelabel = def_stagelabel(dat["Data"]["3DFL"].attrs["OffsetZ"],
+                                        dat["Data"]["3D"].attrs["ResolutionZ"] * dat["Data"]["3D"].attrs["SizeZ"],
+                                        dat["Data"]["3DFL"].attrs["ResolutionZ"] * dat["Data"]["3DFL"].attrs["SizeZ"])
 
         else:
             logging.info("Skipping unknown data type {}".format(name))
@@ -629,6 +648,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
                 img_md["exp"],
                 overall_md["exper"],
                 img_md["instr"],
+                stagelabel,
                 data_type,
                 "Annotation:{}".format(ann_ref)
             )
@@ -639,7 +659,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
         imgs.append(img_formatted)
 
     ome_xmls = model.OME(
-        creator="tcf_to_ometiff by Henning Zwirnmann v0.43",
+        creator="tcf_to_ometiff by Henning Zwirnmann v0.4.4",
         images=img_ome_xmls,
         experiments=[img_md["exp"]],
         experimenters=[overall_md["exper"]],
