@@ -15,7 +15,7 @@ URL = 'https://github.com/hzwirnmann/tcf_to_ometiff'
 EMAIL = 'henning.zwirnmann@tum.de'
 AUTHOR = 'Henning Zwirnmann'
 REQUIRES_PYTHON = '>=3.8.0'
-VERSION = '0.4.4'
+VERSION = '0.4.6'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
@@ -64,5 +64,5 @@ setup(
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,
-    license='GPLv3',
+    license='MIT',
 )

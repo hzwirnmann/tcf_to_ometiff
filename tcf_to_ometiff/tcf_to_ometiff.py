@@ -96,13 +96,16 @@ def def_instr(instr_id, microscope, detectors, lasers, leds):
     )
 
 
-def def_stagelabel(offset, ht_height, fl_height):
-
+def def_stagelabel(x_stage, y_stage, offset, ht_height, fl_height):
     z_shift = round(offset - fl_height/2, 2)
 
     sl = model.StageLabel(
         name="Fluorescence Image Z Shift",
-        z=z_shift
+        z=z_shift,
+        x=x_stage,
+        x_unit="mm",
+        y=y_stage,
+        y_unit="mm"
     )
 
     return sl
@@ -227,10 +230,11 @@ def def_project(proj_id, proj_name, desc):
     return model.Project(id=proj_id, name=proj_name, description=desc)
 
 
-def def_annotations(img_metadata):
+def def_annotations(img_metadata, tiling_info):
     """Create ome-types StructuredAnnotations with additional per-image metadata.
 
     :param img_metadata: Dict with all per-image metadata
+    :param tiling_info: Dict with information about tiles (could be empty)
     :return: ome-types StructuredAnnotations object
     """
     ann_overall = model.MapAnnotation(
@@ -300,7 +304,22 @@ def def_annotations(img_metadata):
                     )
                 )
 
-    anns_list = [item for item in [ann_overall, ann_ht, ann_bf] + ann_fl if item]
+    ann_tiling = []
+    if len(tiling_info) > 0:
+        ann_tiling.append(
+            model.MapAnnotation(
+                id="Annotation:6",
+                description="Tiling information",
+                value=model.Map(ms=[
+                        {"value": tiling_info["tile_img_id"], "k": "Tiling_TileNumberInImage"},
+                        {"value": tiling_info["tile_total_images"], "k": "Tiling_TotalTilesInImage"},
+                        {"value": tiling_info["tile_row"], "k": "Tiling_Row"},
+                        {"value": tiling_info["tile_column"], "k": "Tiling_Column"}
+                ])
+            )
+        )
+
+    anns_list = [item for item in [ann_overall, ann_ht, ann_bf] + ann_fl + ann_tiling if item]
 
     return anns_list
 
@@ -360,7 +379,7 @@ def build_ome_xml(
         physical_size_z=physical_size_z,
         tiff_data_blocks=tiffdata,
         time_increment=data_use.attrs["TimeInterval"][0],
-        channels=channels,
+        channels=channels
     )
 
     image = model.Image(
@@ -385,11 +404,11 @@ def read_overall_config(filepath):
     :return: Dict containing the overall metadata
     """
 
-    logging.info("Reading overall config from {}".format(filepath))
+    logging.debug("Reading overall config from {}".format(filepath))
     with open(filepath) as f:
         config_dat = f.readlines()
-    config_dat = [item.split(",", 1) for item in config_dat if item != "\n"]
-    config_dict = {item[0]: item[1].strip("\n") for item in config_dat}
+    config_dat = [item.split(",", 1) for item in config_dat if item not in ("\n", "\r\n")]
+    config_dict = {item[0]: item[1].strip("\r\n").strip("\n") for item in config_dat}
     return config_dict
 
 
@@ -433,7 +452,8 @@ to create the OME-TIFF.
 
 
 def read_image_config(folder):
-    """Read auto-generated files with config data from image folder (config.dat and JobParameter.tcp) and return dict.
+    """Read auto-generated files with config data from image folder (config.dat, JobParameter.tcp, position.txt) and
+    return dict.
 
     :param folder: Folder name as string
     :return: Dict containing the per-image metadata
@@ -456,21 +476,53 @@ def read_image_config(folder):
 
     exp_config_dat_2 = [item.rstrip("\n").split("=", 1) for item in exp_config_dat_2 if item != "\n"]
 
+    # read and treat position.txt
+    with open(join(folder, "position.txt")) as f:
+        exp_config_dat_3 = f.readlines()
+
+    exp_config_dat_3 = [float(item.rstrip("\n")) for item in exp_config_dat_3 if item != "\n"]
+    exp_config_dict_3 = {
+        "x_rec": exp_config_dat_3[0],
+        "y_rec": exp_config_dat_3[1],
+        "z_rec": exp_config_dat_3[2],
+        "c_rec": exp_config_dat_3[3]
+    }
+
     # print(*exp_config_dat_1, sep="\n")
     # print(*exp_config_dat_2, sep="\n")
     # merge
     exp_config_dict = {item[0]: item[1] for item in exp_config_dat_1}
     exp_config_dict.update({item[0]: item[1] for item in exp_config_dat_2})
+    exp_config_dict.update(exp_config_dict_3)
 
     return exp_config_dict
 
 
-def define_image_metadata(overall_config_dict, img_config_dict):
+def read_tiling_info(folder):
+    """Read tiling info for image.
+
+    :param folder: Folder name as string
+    :return: Dict containing the per-image tiling data
+    """
+    try:
+        with open(join(folder, "tiling_info.txt")) as f:
+            tiling_info = f.readlines()
+
+        tmp = [item.split(",") for item in tiling_info]
+        tiling_dict = {item[0]: int(item[1].strip()) for item in tmp}
+    except FileNotFoundError:
+        tiling_dict = {}
+
+    return tiling_dict
+
+
+def define_image_metadata(overall_config_dict, img_config_dict, tiling_dict):
     """Integrate project and image metadata to obtain comprehensive metadata dict
 used to create the OME-TIFF.
 
     :param overall_config_dict: Dict with overall metadata given by the user
     :param img_config_dict: Dict with per-image metadata extracted from config file in image folder
+    :param tiling_dict: Dict with per-image tiling information
     :returns: Dict containing all metadata to create the OME-TIFF.
 
     """
@@ -506,7 +558,7 @@ used to create the OME-TIFF.
     img_metadata["channel_fl1"] = def_channel("fl1", img_config_dict)
     img_metadata["channel_fl2"] = def_channel("fl2", img_config_dict)
 
-    img_metadata["anns"] = def_annotations(img_config_dict)
+    img_metadata["anns"] = def_annotations(img_config_dict, tiling_dict)
 
     return img_metadata
 
@@ -531,7 +583,9 @@ def transform_tcf(folder, overall_md, output_xml=False):
     except Exception as e:
         raise Exception("Skipping folder {} with Exception {}".format(folder, e))
 
-    img_md = define_image_metadata(overall_md, exp_config_dict)
+    tiling_dict = read_tiling_info(folder)
+
+    img_md = define_image_metadata(overall_md, exp_config_dict, tiling_dict)
     # timestamp = get_img_timestamp(folder)
 
     # open HDF5 image (TCF)
@@ -555,9 +609,9 @@ def transform_tcf(folder, overall_md, output_xml=False):
         fl_3d_counter = 0
 
     for i, name in enumerate(keys_to_loop):
-        logging.info("Working on {}".format(name))
+        logging.debug("Working on {}".format(name))
         data_use = dat["Data"][name]
-        stagelabel = None
+        stagelabel = def_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], 0, 0, 0)
 
         if name == "2DMIP":
             channels = [img_md["channel_ht"].copy()]  # workaround for channel IDs
@@ -601,7 +655,6 @@ def transform_tcf(folder, overall_md, output_xml=False):
 
         elif name == "2DFLMIP":
             channel = list(data_use.keys())[fl_mip_counter]
-            fl_mip_counter += 1
 
             channels = [img_md["channel_fl{}".format(channel[2])].copy()]  # workaround for channel IDs]
             description = "2D {} Maximum Intensity Projection"\
@@ -613,9 +666,10 @@ def transform_tcf(folder, overall_md, output_xml=False):
             ann_ref = 3 + int(channel[2])
             timestamp = data_use[channel]["000000"].attrs["RecordingTime"][0].decode("utf-8")
 
+            fl_mip_counter += 1
+
         elif name == "3DFL":
             channel = list(data_use.keys())[fl_3d_counter]
-            fl_3d_counter += 1
 
             channels = [img_md["channel_fl{}".format(channel[2])].copy()]  # workaround for channel IDs
             description = "3D {}".format(img_md["channel_fl{}".format(channel[2])].name)
@@ -625,9 +679,15 @@ def transform_tcf(folder, overall_md, output_xml=False):
             ]
             ann_ref = 3 + int(channel[2])
             timestamp = data_use[channel]["000000"].attrs["RecordingTime"][0].decode("utf-8")
-            stagelabel = def_stagelabel(dat["Data"]["3DFL"].attrs["OffsetZ"],
-                                        dat["Data"]["3D"].attrs["ResolutionZ"] * dat["Data"]["3D"].attrs["SizeZ"],
-                                        dat["Data"]["3DFL"].attrs["ResolutionZ"] * dat["Data"]["3DFL"].attrs["SizeZ"])
+            stagelabel = def_stagelabel(
+                exp_config_dict["x_rec"],
+                exp_config_dict["y_rec"],
+                dat["Data"]["3DFL"].attrs["OffsetZ"],
+                dat["Data"]["3D"].attrs["ResolutionZ"] * dat["Data"]["3D"].attrs["SizeZ"],
+                dat["Data"]["3DFL"].attrs["ResolutionZ"] * dat["Data"]["3DFL"].attrs["SizeZ"]
+            )
+
+            fl_3d_counter += 1
 
         else:
             logging.info("Skipping unknown data type {}".format(name))
@@ -659,7 +719,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
         imgs.append(img_formatted)
 
     ome_xmls = model.OME(
-        creator="tcf_to_ometiff by Henning Zwirnmann v0.4.4",
+        creator="tcf_to_ometiff by Henning Zwirnmann v0.4.6",
         images=img_ome_xmls,
         experiments=[img_md["exp"]],
         experimenters=[overall_md["exper"]],

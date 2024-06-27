@@ -1,5 +1,5 @@
 # TCF to OME-TIFF Parser
-Python package to parse Tomocube TCF (Tomocube Common Format) files to OME-TIFF format.
+Python package to parse Tomocube TCF (Tomocube Common Format) files to OME-TIFF format. [Link to this repo](https://github.com/hzwirnmann/tcf_to_ometiff)
 
 ## Motivation
 Holotomography is a microscopy technique to produce label-free 3D images of cells using quantitative phase imaging. The [Tomocube HT-2H](https://www.tomocube.com/product/ht-series/#HT_series_cont) is based on this principle. The images produced with the software provided (TomoStudio) are stored as TCF files (Tomocube Common Format). This project provides a parser that translates this format into a standardized [OME-TIFF](https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/) file where the image is stored as tiff and metadata is compliant with OME-XML specifications.

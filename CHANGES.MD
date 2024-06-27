@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.4.6 (June 3, 2024)
+
+- Added support to include tiling information over several pictures as additional annotation
+
+## Version 0.4.5 (May 7, 2024)
+
+- Added Stage to Pixels elements including information about x/y/z/exposure time
+
 ## Version 0.4.4 (February 19, 2024)
 
 - Added StageLabel property for 3D fluorescence image that includes the Z shift in µm between plane 0 of the HT image and plane 0 of the FL image.
