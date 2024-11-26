@@ -721,9 +721,9 @@ def transform_tcf(folder, overall_md, output_xml=False):
                 exp_config_dict["x_rec"],
                 exp_config_dict["y_rec"],
                 exp_config_dict["z_rec"],
-                tiling_info["tile_timestep"]*tiling_info["timestep_size"],
+                tiling_dict["tile_timestep"]*tiling_dict["timestep_size"],
                 i,
-                tiling_info["tile_timestep"],
+                tiling_dict["tile_timestep"],
                 k
             ) for k in range(img_formatted.shape[2])]
         ann_refs = [0, ann_ref, 6]
