@@ -318,7 +318,8 @@ def def_annotations(img_metadata, tiling_info):
                     {"value": tiling_info["tile_row"], "k": "Tiling_Row"},
                     {"value": tiling_info["tile_column"], "k": "Tiling_Column"},
                     {"value": tiling_info["tile_total_timesteps"], "k": "Tiling_TotalTimesteps"},
-                    {"value": tiling_info["tile_timestep"], "k": "Tiling_Timestep"}
+                    {"value": tiling_info["tile_timestep"], "k": "Tiling_Timestep"},
+                    {"value": tiling_info["tile_timestep_size"], "k": "Tiling_Timedelta"},
                 ])
         )
         anns.append(ann_tiling)
@@ -526,7 +527,9 @@ def read_tiling_info(folder):
     """
     def convert_to_float(item):
         try:
-            return float(item)
+            if "." in item:
+                return float(item)
+            return int(item)
         except ValueError:
             return item.strip()
 
