@@ -716,8 +716,8 @@ def transform_tcf(folder, overall_md, output_xml=False):
 
         channels[0].id = "Channel:{}".format(i)
 
-        try:
-            planes = [def_plane(
+        # try:
+        planes = [def_plane(
                 exp_config_dict["x_rec"],
                 exp_config_dict["y_rec"],
                 exp_config_dict["z_rec"],
@@ -726,10 +726,10 @@ def transform_tcf(folder, overall_md, output_xml=False):
                 tiling_info["tile_timestep"],
                 k
             ) for k in range(img_formatted.shape[2])]
-            ann_refs = [0, ann_ref, 6]
-        except NameError:
-            planes = []
-            ann_refs = [0, ann_ref]
+        ann_refs = [0, ann_ref, 6]
+        # except NameError:
+        #     planes = []
+        #     ann_refs = [0, ann_ref]
         # logging.warning("TIMESTAMP: {}".format(timestamp))
 
         tzinfo = datetime.now().astimezone().tzinfo
