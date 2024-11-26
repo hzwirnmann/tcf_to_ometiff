@@ -323,104 +323,8 @@ def def_annotations(img_metadata, tiling_info):
         )
         anns.append(ann_tiling)
 
-    logging.info("anns_list: {}".format(anns))
-
     return anns
-def def_annotations(img_metadata, tiling_info):
-    """Create ome-types StructuredAnnotations with additional per-image metadata.
 
-    :param img_metadata: Dict with all per-image metadata
-    :param tiling_info: Dict with information about tiles (could be empty)
-    :return: ome-types StructuredAnnotations object
-    """
-    ann_overall = model.MapAnnotation(
-        id="Annotation:0",
-        description="Overall metadata for recording and setup",
-        value=model.Map(ms=[
-                {"value": img_metadata["Medium_Name"], "k": "MediumName"},
-                {"value": img_metadata["Medium_RI"], "k": "MediumRI"},
-                {"value": img_metadata["Immersion_RI"], "k": "ImmersionRI"},
-                {"value": img_metadata["Annotation"], "k": "Annotation"},
-                {"value": img_metadata["SW Version"], "k": "TomoStudioVersion"}
-        ])
-    )
-
-    # backwards compatibility: old TomoStudio versions do not add number of images to config.dat, so we assume that
-    # HT and FL images are available and add the annotations; however not for BF because there is no BF information
-    # in the metadata files
-    if "Images HT3D" not in img_metadata or int(img_metadata["Images HT3D"]) > 0 \
-            or int(img_metadata["Images HT2D"]) > 0:
-        ann_ht = model.MapAnnotation(
-            id="Annotation:1",
-            description="Additional metadata for HT and Phase images",
-            value=model.Map(ms=[
-                    {"value": img_metadata["mapping sign"], "k": "HT_MappingSign"},
-                    {"value": img_metadata["phase sign"], "k": "HT_PhaseSign"},
-                    {"value": img_metadata["iteration"], "k": "HT_Iterations"},
-                    {"value": img_metadata["Camera Shutter"], "k": "HT_ExposureTime"},
-                    {"value": img_metadata["Camera Gain"], "k": "HT_Gain"}
-            ])
-        )
-    else:
-        ann_ht = None
-
-    if "Images BF" in img_metadata and int(img_metadata["Images BF"]) > 0:
-        ann_bf = model.MapAnnotation(
-            id="Annotation:2",
-            description="Additional metadata for brightfield image",
-            value=model.Map(ms=[
-                    {"value": img_metadata["BF_Camera_Shutter"], "k": "BF_ExposureTime"},
-                    {"value": img_metadata["BF_Light_Intensity"], "k": "BF_Intensity"}
-            ])
-        )
-    else:
-        ann_bf = None
-
-    ann_fl = []
-    if "Images FL" not in img_metadata or int(img_metadata["Images FL3D"]) > 0:
-        colors_dict = {0: "blue", 1: "green", 2: "red"}
-        for i in range(3):
-            if img_metadata["FLCH{}_Enable".format(i)] == "true":
-                ann_fl.append(
-                    model.MapAnnotation(
-                        id="Annotation:{}".format(i+3),
-                        description="Additional metadata for Fluorescence Channel {} images".format(colors_dict[i]),
-                        value=model.Map(ms=[
-                            {
-                                "value": img_metadata["FLCH{}_Camera_Shutter".format(i)],
-                                "k": "FL{}_ExposureTime".format(i)
-                            }, {
-                                "value": img_metadata["FLCH{}_Camera_Gain".format(i)],
-                                "k": "FL{}_Gain".format(i)
-                            }, {
-                                "value":  img_metadata["FLCH{}_Light_Intensity".format(i)],
-                                "k": "FL{}_Intensity".format(i)
-                            }
-                        ])
-                    )
-                )
-
-    ann_tiling = []
-    if len(tiling_info) > 0:
-        ann_tiling.append(
-            model.MapAnnotation(
-                id="Annotation:6",
-                description="Spatial and temporal tiling information",
-                value=model.Map(ms=[
-                    {"value": tiling_info["tile_img_id"], "k": "Tiling_ClusterID"},
-                    {"value": tiling_info["tile_total_images"], "k": "Tiling_TotalTilesInImage"},
-                    {"value": tiling_info["tile_tile_number"], "k": "Tiling_NumberInImage"},
-                    {"value": tiling_info["tile_row"], "k": "Tiling_Row"},
-                    {"value": tiling_info["tile_column"], "k": "Tiling_Column"},
-                    {"value": tiling_info["tile_total_timesteps"], "k": "Tiling_TotalTimesteps"},
-                    {"value": tiling_info["tile_timestep"], "k": "Tiling_Timestep"}
-                ])
-            )
-        )
-
-    anns_list = [item for item in [ann_overall, ann_ht, ann_bf] + ann_fl + ann_tiling if item]
-
-    return anns_list
 
 def def_plane(x_coord, y_coord, z_coord, delta_t, thec, thet, thez):
     plane = model.Plane(
@@ -627,10 +531,9 @@ def read_tiling_info(folder):
         tmp = [item.split(",") for item in tiling_info]
         tiling_dict = {item[0]: item[1].strip() for item in tmp}
     except FileNotFoundError:
-        logging.info("tiling info not found")
+        logging.debug("Tiling info not found.")
         tiling_dict = {}
 
-    logging.info("TILING: {}".format(tiling_dict))
     return tiling_dict
 
 
