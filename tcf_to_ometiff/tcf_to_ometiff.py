@@ -1,5 +1,6 @@
 from os.path import join, basename, isdir
 from os import listdir
+from datetime import datetime
 
 import numpy as np
 import logging
@@ -97,7 +98,7 @@ def def_instr(instr_id, microscope, detectors, lasers, leds):
 
 
 def def_stagelabel(x_stage, y_stage, offset, ht_height, fl_height):
-    z_shift = round(offset - fl_height/2, 2)
+    z_shift = np.round(offset - fl_height/2, 2)
 
     sl = model.StageLabel(
         name="Fluorescence Image Z Shift",
@@ -309,12 +310,15 @@ def def_annotations(img_metadata, tiling_info):
         ann_tiling.append(
             model.MapAnnotation(
                 id="Annotation:6",
-                description="Tiling information",
+                description="Spatial and temporal tiling information",
                 value=model.Map(ms=[
-                        {"value": tiling_info["tile_img_id"], "k": "Tiling_TileNumberInImage"},
-                        {"value": tiling_info["tile_total_images"], "k": "Tiling_TotalTilesInImage"},
-                        {"value": tiling_info["tile_row"], "k": "Tiling_Row"},
-                        {"value": tiling_info["tile_column"], "k": "Tiling_Column"}
+                    {"value": tiling_info["tile_img_id"], "k": "Tiling_ClusterID"},
+                    {"value": tiling_info["tile_total_images"], "k": "Tiling_TotalTilesInImage"},
+                    {"value": tiling_info["tile_tile_number"], "k": "Tiling_NumberInImage"},
+                    {"value": tiling_info["tile_row"], "k": "Tiling_Row"},
+                    {"value": tiling_info["tile_column"], "k": "Tiling_Column"},
+                    {"value": tiling_info["tile_total_timesteps"], "k": "Tiling_TotalTimesteps"},
+                    {"value": tiling_info["tile_timestep"], "k": "Tiling_Timestep"}
                 ])
             )
         )
@@ -322,6 +326,21 @@ def def_annotations(img_metadata, tiling_info):
     anns_list = [item for item in [ann_overall, ann_ht, ann_bf] + ann_fl + ann_tiling if item]
 
     return anns_list
+
+
+def def_plane(x_coord, y_coord, z_coord, delta_t, thec, thet, thez):
+    plane = model.Plane(
+        the_c=thec,
+        the_t=thet,
+        the_z=thez,
+        position_x=x_coord,
+        position_y=y_coord,
+        position_z=z_coord,
+        position_x_unit="mm",
+        position_y_unit="mm",
+        delta_t=delta_t
+    )
+    return plane
 
 
 def build_ome_xml(
@@ -335,13 +354,14 @@ def build_ome_xml(
     instrument,
     stagelabel,
     data_type,
-    ann_id
+    ann_id,
+    planes
 ):
     """Create OME-XML file from given ome-types metadata
 
-    :param data_use:
+    :param data_use: raw tcf/h5 input data with metadata
     :param offset: int: plane offset
-    :param channels: ome-types channels used in image
+    :param channels: ome-types list of channels used in image
     :param timestamp: str: timestamp in YYYY-MM-DD format the image was acquired at
     :param description: ome-types description of the image
     :param experiment: ome-types experiment the image was part of
@@ -350,6 +370,7 @@ def build_ome_xml(
     :param stagelabel: ome-types stagelabel to report the shift between HT and FL images
     :param data_type: Python data type of the image data
     :param ann_id: ID of annotation with additional image metadata
+    :param planes: ome-types list of planes
     :return: ome-types image with relevant metadata
     :return: int to give the image plane offset for the next image in a multidimensional array
     (with t and channel components)
@@ -379,7 +400,8 @@ def build_ome_xml(
         physical_size_z=physical_size_z,
         tiff_data_blocks=tiffdata,
         time_increment=data_use.attrs["TimeInterval"][0],
-        channels=channels
+        channels=channels,
+        planes=planes
     )
 
     image = model.Image(
@@ -397,14 +419,14 @@ def build_ome_xml(
     return image, offset + n_planes
 
 
-def read_overall_config(filepath):
+def read_basic_user_config(filepath):
     """Read user-created file with metadata needed to create the OME-TIFF.
 
     :param filepath: Path of csv file with metadata
-    :return: Dict containing the overall metadata
+    :return: Dict containing the basic OME metadata
     """
 
-    logging.debug("Reading overall config from {}".format(filepath))
+    logging.debug("Reading basic OME config from {}".format(filepath))
     with open(filepath) as f:
         config_dat = f.readlines()
     config_dat = [item.split(",", 1) for item in config_dat if item not in ("\n", "\r\n")]
@@ -412,8 +434,8 @@ def read_overall_config(filepath):
     return config_dict
 
 
-def def_omero_overall_md(config_dict):
-    """Create experimenter, experiment and project metadata dictionaries needed to
+def def_ome_basic_md(config_dict):
+    """Create experimenter and project metadata dictionaries needed to
 create the OME-TIFF from user-provided metadata.
 
     :param config_dict: Dict of user-created metadata
@@ -421,8 +443,8 @@ create the OME-TIFF from user-provided metadata.
 
     """
 
-    overall_metadata = dict()
-    overall_metadata["exper"] = def_experimenter(
+    basic_ome_md = dict()
+    basic_ome_md["exper"] = def_experimenter(
         config_dict["exper_id"],
         config_dict["exper_email"],
         config_dict["exper_inst"],
@@ -430,24 +452,24 @@ create the OME-TIFF from user-provided metadata.
         config_dict["exper_lastn"],
         config_dict["exper_usern"],
     )
-    overall_metadata["proj"] = def_project(
+    basic_ome_md["proj"] = def_project(
         config_dict["proj_id"], config_dict["proj_name"], config_dict["proj_desc"]
     )
-    return overall_metadata
+    return basic_ome_md
 
 
-def create_overall_config(overall_config_path):
+def create_overall_config(basic_config_path):
     """Create dict with overall metadata that contains both the raw metadata read
 from the user-provided file and metadata created from it that is needed
 to create the OME-TIFF.
 
-    :param overall_config_path: Path of csv file with metadata
+    :param basic_config_path: Path of csv file with basic metadata
     :return: Dict containing the overall metadata that can be used for all folders in one top folder
 
     """
-    overall_config_dict = read_overall_config(overall_config_path)
-    omero_overall_md = def_omero_overall_md(overall_config_dict)
-    overall_md = dict(overall_config_dict, **omero_overall_md)
+    basic_config_dict = read_basic_user_config(basic_config_path)
+    basic_ome_config_md = def_ome_basic_md(basic_config_dict)
+    overall_md = dict(basic_config_dict, **basic_ome_config_md)
     return overall_md
 
 
@@ -511,8 +533,10 @@ def read_tiling_info(folder):
         tmp = [item.split(",") for item in tiling_info]
         tiling_dict = {item[0]: int(item[1].strip()) for item in tmp}
     except FileNotFoundError:
+        logging.info("tiling info not found")
         tiling_dict = {}
 
+    logging.info("TILING: {}".format(tiling_dict))
     return tiling_dict
 
 
@@ -614,7 +638,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
         stagelabel = def_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], 0, 0, 0)
 
         if name == "2DMIP":
-            channels = [img_md["channel_ht"].copy()]  # workaround for channel IDs
+            channels = [img_md["channel_ht"].model_copy()]  # workaround for channel IDs
             description = "2D Holotomography Maximum Intensity Projection"
             data_type = "uint16"
             img_formatted = np.array(
@@ -624,7 +648,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
             timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
 
         elif name == "2D":
-            channels = [img_md["channel_ht"].copy()]  # workaround for channel IDs
+            channels = [img_md["channel_ht"].model_copy()]  # workaround for channel IDs
             description = "2D Phasemap"
             data_type = "float"
             img_formatted = np.array([data_use[item][()] for item in data_use])[
@@ -634,7 +658,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
             timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
 
         elif name == "BF":
-            channels = [img_md["channel_bf"].copy()]  # workaround for channel IDs
+            channels = [img_md["channel_bf"].model_copy()]  # workaround for channel IDs
             description = "2D Brightfield"
             data_type = "uint8"
             img_formatted = np.array([data_use[item][0] for item in data_use])[
@@ -644,7 +668,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
             timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
 
         elif name == "3D":
-            channels = [img_md["channel_ht"].copy()]  # workaround for channel IDs
+            channels = [img_md["channel_ht"].model_copy()]  # workaround for channel IDs
             description = "3D Holotomography"
             data_type = "uint16"
             img_formatted = np.array([data_use[item][()] for item in data_use])[
@@ -656,7 +680,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
         elif name == "2DFLMIP":
             channel = list(data_use.keys())[fl_mip_counter]
 
-            channels = [img_md["channel_fl{}".format(channel[2])].copy()]  # workaround for channel IDs]
+            channels = [img_md["channel_fl{}".format(channel[2])].model_copy()]  # workaround for channel IDs]
             description = "2D {} Maximum Intensity Projection"\
                 .format(img_md["channel_fl{}".format(channel[2])].name)
             data_type = "uint16"
@@ -671,7 +695,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
         elif name == "3DFL":
             channel = list(data_use.keys())[fl_3d_counter]
 
-            channels = [img_md["channel_fl{}".format(channel[2])].copy()]  # workaround for channel IDs
+            channels = [img_md["channel_fl{}".format(channel[2])].model_copy()]  # workaround for channel IDs
             description = "3D {}".format(img_md["channel_fl{}".format(channel[2])].name)
             data_type = "uint16"
             img_formatted = np.array([data_use[channel][item][()] for item in data_use[channel]])[
@@ -694,23 +718,39 @@ def transform_tcf(folder, overall_md, output_xml=False):
             continue
 
         channels[0].id = "Channel:{}".format(i)
+        print("Len Z = {}".format(img_formatted.shape[2]))
+        try:
+            planes = [def_plane(
+                exp_config_dict["x_rec"],
+                exp_config_dict["y_rec"],
+                exp_config_dict["z_rec"],
+                tiling_info["tile_timestep"]*tiling_info["timestep_size"],
+                i,
+                tiling_info["tile_timestep"],
+                k
+            ) for k in range(img_formatted.shape[2])]
+        except NameError:
+            planes = []
+        logging.warning("TIMESTAMP: {}".format(timestamp))
 
-        # print("No valid data type in {}: {}".format(folder, name))
-        # sys.exit(-1)
+        tzinfo = datetime.now().astimezone().tzinfo
+        dt = datetime.strptime(timestamp[:-4], '%Y-%m-%d %H:%M:%S').replace(tzinfo=tzinfo)
+        logging.warning("dt = {}".format(dt))
 
         try:
             xml, plane_offset = build_ome_xml(
                 data_use,
                 plane_offset,
                 channels,
-                timestamp,
+                dt,
                 description,
                 img_md["exp"],
                 overall_md["exper"],
                 img_md["instr"],
                 stagelabel,
                 data_type,
-                "Annotation:{}".format(ann_ref)
+                "Annotation:{}".format(ann_ref),
+                planes
             )
         except Exception as e:
             raise Exception("Exception during xml building: {}".format(e))
@@ -719,7 +759,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
         imgs.append(img_formatted)
 
     ome_xmls = model.OME(
-        creator="tcf_to_ometiff by Henning Zwirnmann v0.4.6",
+        creator="tcf_to_ometiff by Henning Zwirnmann v0.5.0",
         images=img_ome_xmls,
         experiments=[img_md["exp"]],
         experimenters=[overall_md["exper"]],
@@ -740,18 +780,18 @@ def transform_tcf(folder, overall_md, output_xml=False):
             fn.write(xml_out)
 
 
-def transform_folder(top_folder, overall_config_path, output_xml=False):
+def transform_folder(top_folder, basic_config_path, output_xml=False):
     """Parse images stored in subfolders of a top folder. This is the
     standard TomoStudio case when on each date a new top folder is created that
     has one subfolder for each snapshot. The parsed OME-TIFF images are stored
     in the respective subfolders.
 
     :param top_folder: Relative or absolute file path to folder containing image
-    :param overall_config_path: Relative or absolute file path to csv file with overall metadata
+    :param basic_config_path: Relative or absolute file path to csv file with basic metadata
     :param output_xml: If True, output the ome-xml file alongside the ome-tiff file
 
     """
-    overall_md = create_overall_config(overall_config_path)
+    overall_md = create_overall_config(basic_config_path)
 
     logging.info("Traversing folders in {}".format(top_folder))
     folders = [d for d in listdir(top_folder) if isdir(join(top_folder, d))]

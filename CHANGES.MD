@@ -1,5 +1,15 @@
 # Change Log
 
+## Version 0.5.0 (November 26, 2024)
+
+- bugfix overall config
+- updated tiling info
+- added Planes info for pixels
+
+## Version 0.4.7 (June 27, 2024)
+
+- included time zone information so the acquisition datetime shown in OMERO is the same as in the .ome.tiff (see related discussion: https://forum.image.sc/t/omero-webclient-import-date-modify-timezone/54384 )
+
 ## Version 0.4.6 (June 3, 2024)
 
 - Added support to include tiling information over several pictures as additional annotation
