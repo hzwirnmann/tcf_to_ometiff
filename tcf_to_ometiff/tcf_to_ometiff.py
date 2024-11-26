@@ -238,6 +238,101 @@ def def_annotations(img_metadata, tiling_info):
     :param tiling_info: Dict with information about tiles (could be empty)
     :return: ome-types StructuredAnnotations object
     """
+
+    anns = []
+    ann_overall = model.MapAnnotation(
+        id="Annotation:0",
+        description="Overall metadata for recording and setup",
+        value=model.Map(ms=[
+                {"value": img_metadata["Medium_Name"], "k": "MediumName"},
+                {"value": img_metadata["Medium_RI"], "k": "MediumRI"},
+                {"value": img_metadata["Immersion_RI"], "k": "ImmersionRI"},
+                {"value": img_metadata["Annotation"], "k": "Annotation"},
+                {"value": img_metadata["SW Version"], "k": "TomoStudioVersion"}
+        ])
+    )
+    anns.append(ann_overall)
+
+    # backwards compatibility: old TomoStudio versions do not add number of images to config.dat, so we assume that
+    # HT and FL images are available and add the annotations; however not for BF because there is no BF information
+    # in the metadata files
+    if "Images HT3D" not in img_metadata or int(img_metadata["Images HT3D"]) > 0 \
+            or int(img_metadata["Images HT2D"]) > 0:
+        ann_ht = model.MapAnnotation(
+            id="Annotation:1",
+            description="Additional metadata for HT and Phase images",
+            value=model.Map(ms=[
+                    {"value": img_metadata["mapping sign"], "k": "HT_MappingSign"},
+                    {"value": img_metadata["phase sign"], "k": "HT_PhaseSign"},
+                    {"value": img_metadata["iteration"], "k": "HT_Iterations"},
+                    {"value": img_metadata["Camera Shutter"], "k": "HT_ExposureTime"},
+                    {"value": img_metadata["Camera Gain"], "k": "HT_Gain"}
+            ])
+        )
+        anns.append(ann_ht)
+
+    if "Images BF" in img_metadata and int(img_metadata["Images BF"]) > 0:
+        ann_bf = model.MapAnnotation(
+            id="Annotation:2",
+            description="Additional metadata for brightfield image",
+            value=model.Map(ms=[
+                    {"value": img_metadata["BF_Camera_Shutter"], "k": "BF_ExposureTime"},
+                    {"value": img_metadata["BF_Light_Intensity"], "k": "BF_Intensity"}
+            ])
+        )
+        anns.append(ann_bf)
+
+    ann_fl = []
+    if "Images FL" not in img_metadata or int(img_metadata["Images FL3D"]) > 0:
+        colors_dict = {0: "blue", 1: "green", 2: "red"}
+        for i in range(3):
+            if img_metadata["FLCH{}_Enable".format(i)] == "true":
+                ann_fl.append(
+                    model.MapAnnotation(
+                        id="Annotation:{}".format(i+3),
+                        description="Additional metadata for Fluorescence Channel {} images".format(colors_dict[i]),
+                        value=model.Map(ms=[
+                            {
+                                "value": img_metadata["FLCH{}_Camera_Shutter".format(i)],
+                                "k": "FL{}_ExposureTime".format(i)
+                            }, {
+                                "value": img_metadata["FLCH{}_Camera_Gain".format(i)],
+                                "k": "FL{}_Gain".format(i)
+                            }, {
+                                "value":  img_metadata["FLCH{}_Light_Intensity".format(i)],
+                                "k": "FL{}_Intensity".format(i)
+                            }
+                        ])
+                    )
+                )
+    anns.extend(ann_fl)
+
+    if len(tiling_info) > 0:
+        ann_tiling = model.MapAnnotation(
+                id="Annotation:6",
+                description="Spatial and temporal tiling information",
+                value=model.Map(ms=[
+                    {"value": tiling_info["tile_img_id"], "k": "Tiling_ClusterID"},
+                    {"value": tiling_info["tile_total_images"], "k": "Tiling_TotalTilesInImage"},
+                    {"value": tiling_info["tile_number"], "k": "Tiling_NumberInImage"},
+                    {"value": tiling_info["tile_row"], "k": "Tiling_Row"},
+                    {"value": tiling_info["tile_column"], "k": "Tiling_Column"},
+                    {"value": tiling_info["tile_total_timesteps"], "k": "Tiling_TotalTimesteps"},
+                    {"value": tiling_info["tile_timestep"], "k": "Tiling_Timestep"}
+                ])
+        )
+        anns.append(ann_tiling)
+
+    logging.info("anns_list: {}".format(anns))
+
+    return anns
+def def_annotations(img_metadata, tiling_info):
+    """Create ome-types StructuredAnnotations with additional per-image metadata.
+
+    :param img_metadata: Dict with all per-image metadata
+    :param tiling_info: Dict with information about tiles (could be empty)
+    :return: ome-types StructuredAnnotations object
+    """
     ann_overall = model.MapAnnotation(
         id="Annotation:0",
         description="Overall metadata for recording and setup",
@@ -327,7 +422,6 @@ def def_annotations(img_metadata, tiling_info):
 
     return anns_list
 
-
 def def_plane(x_coord, y_coord, z_coord, delta_t, thec, thet, thez):
     plane = model.Plane(
         the_c=thec,
@@ -354,7 +448,7 @@ def build_ome_xml(
     instrument,
     stagelabel,
     data_type,
-    ann_id,
+    ann_ids,
     planes
 ):
     """Create OME-XML file from given ome-types metadata
@@ -369,7 +463,7 @@ def build_ome_xml(
     :param instrument: ome-types instrument the image was taken with
     :param stagelabel: ome-types stagelabel to report the shift between HT and FL images
     :param data_type: Python data type of the image data
-    :param ann_id: ID of annotation with additional image metadata
+    :param ann_ids: IDs of annotations with additional image metadata
     :param planes: ome-types list of planes
     :return: ome-types image with relevant metadata
     :return: int to give the image plane offset for the next image in a multidimensional array
@@ -412,7 +506,7 @@ def build_ome_xml(
         experiment_ref=model.ExperimentRef(id=experiment.id),
         experimenter_ref=model.ExperimenterRef(id=experimenter.id),
         instrument_ref=model.InstrumentRef(id=instrument.id),
-        annotation_refs=[model.AnnotationRef(id=ann_id)],
+        annotation_refs=[model.AnnotationRef(id=i) for i in ann_ids],
         stage_label=stagelabel
     )
 
@@ -718,7 +812,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
             continue
 
         channels[0].id = "Channel:{}".format(i)
-        print("Len Z = {}".format(img_formatted.shape[2]))
+
         try:
             planes = [def_plane(
                 exp_config_dict["x_rec"],
@@ -729,13 +823,15 @@ def transform_tcf(folder, overall_md, output_xml=False):
                 tiling_info["tile_timestep"],
                 k
             ) for k in range(img_formatted.shape[2])]
+            ann_refs = [0, ann_ref, 6]
         except NameError:
             planes = []
-        logging.warning("TIMESTAMP: {}".format(timestamp))
+            ann_refs = [0, ann_ref]
+        # logging.warning("TIMESTAMP: {}".format(timestamp))
 
         tzinfo = datetime.now().astimezone().tzinfo
         dt = datetime.strptime(timestamp[:-4], '%Y-%m-%d %H:%M:%S').replace(tzinfo=tzinfo)
-        logging.warning("dt = {}".format(dt))
+        # logging.warning("dt = {}".format(dt))
 
         try:
             xml, plane_offset = build_ome_xml(
@@ -749,7 +845,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
                 img_md["instr"],
                 stagelabel,
                 data_type,
-                "Annotation:{}".format(ann_ref),
+                ["Annotation:{}".format(item) for item in ann_refs],
                 planes
             )
         except Exception as e:
