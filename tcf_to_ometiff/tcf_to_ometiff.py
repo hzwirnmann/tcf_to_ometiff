@@ -524,12 +524,18 @@ def read_tiling_info(folder):
     :param folder: Folder name as string
     :return: Dict containing the per-image tiling data
     """
+    def convert_to_float(item):
+        try:
+            return float(item)
+        except ValueError:
+            return item.strip()
+
     try:
         with open(join(folder, "tiling_info.txt")) as f:
             tiling_info = f.readlines()
 
         tmp = [item.split(",") for item in tiling_info]
-        tiling_dict = {item[0]: item[1].strip() if not item[1].isdigit() else float(item[1]) for item in tmp}
+        tiling_dict = {item[0]: convert_to_float(item[1]) for item in tmp}
     except FileNotFoundError:
         logging.debug("Tiling info not found.")
         tiling_dict = {}
