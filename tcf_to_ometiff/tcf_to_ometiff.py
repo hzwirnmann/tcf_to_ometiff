@@ -529,7 +529,7 @@ def read_tiling_info(folder):
             tiling_info = f.readlines()
 
         tmp = [item.split(",") for item in tiling_info]
-        tiling_dict = {item[0]: item[1].strip() for item in tmp}
+        tiling_dict = {item[0]: item[1].strip() if not item[1].isdigit() else float(item[1]) for item in tmp}
     except FileNotFoundError:
         logging.debug("Tiling info not found.")
         tiling_dict = {}
