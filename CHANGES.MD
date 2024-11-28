@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.5.1 (November 28, 2024)
+
+- change from aicsimageio to bioio for writing
+- updates to tiling
+- updated links and versions in Readme
+
 ## Version 0.5.0 (November 26, 2024)
 
 - bugfix overall config
