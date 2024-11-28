@@ -5,6 +5,11 @@ exper_firstn,Henning
 exper_lastn,Zwirnmann
 exper_usern,hz
 
+eg_id,ExperimenterGroup:0
+eg_desc,MIRMI Experimenters
+eg_leaders,Experimenter:0
+eg_name,MIRMI Base Experimenter Group
+
 proj_id,Project:0
 proj_name,Some project name
 proj_desc,Some project description

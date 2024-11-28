@@ -8,6 +8,7 @@ import logging
 from ome_types import model
 import h5py
 from bioio import writers
+from pandoc.about import description
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
@@ -197,8 +198,8 @@ def def_experimenter(exper_id, email, inst, first_name, last_name, user_name):
     :param inst: str: institution of the experimenter
     :param first_name: str: first name of the experimenter
     :param last_name: str: last name of the experimenter
-    :param user_name: str: user name of the experimenter
-    :return: ome-types experimenter
+    :param user_name: str: username of the experimenter
+    :return: ome-types Experimenter
     """
     return model.Experimenter(
         id=exper_id,
@@ -210,14 +211,37 @@ def def_experimenter(exper_id, email, inst, first_name, last_name, user_name):
     )
 
 
-def def_experiment(desc, exper):
+def def_experimenter_group(eg_id, desc, exper_refs, leaders, name):
+
+    """Create ome-types experimenter for use in OME-XML
+
+    :param eg_id: str: ID of the experimenter group
+    :param desc: str: Description of the experimenter group
+    :param exper_refs: list of ome-types ExperimenterRefs for experimenters in the group
+    :param leaders: list of ome-types Leaders of the group
+    :param name: str: name of the experimenter group
+    :return: ome-types ExperimenterGroup
+    """
+    return model.ExperimenterGroup(
+        id=eg_id,
+        name=name,
+        leaders=leaders,
+        experimenter_refs=exper_refs,
+        description=desc
+    )
+
+
+def def_experiment(desc, exper, exp_type=None):
     """Create ome-types experiment for use in OME-XML
 
     :param desc: str: experiment description
-    :param exper: ome-types.model.experimenter
-    :return: ome-types experiment
+    :param exper: ome-types Experimenter
+    :param exp_type: list of valid str for experiment type
+    :return: ome-types Experiment
     """
-    return model.Experiment(description=desc, experimenter_ref=exper)
+    if not exp_type:
+        exp_type = ["Other"]
+    return model.Experiment(description=desc, experimenter_ref=exper, type=exp_type)
 
 
 def def_project(proj_id, proj_name, desc):
@@ -342,6 +366,7 @@ def def_plane(x_coord, y_coord, z_coord, delta_t, thec, thet, thez):
         position_z=z_coord,
         position_x_unit="mm",
         position_y_unit="mm",
+        position_z_unit="mm",
         delta_t=delta_t
     )
     return plane
@@ -365,17 +390,17 @@ def build_ome_xml(
 
     :param data_use: raw tcf/h5 input data with metadata
     :param offset: int: plane offset
-    :param channels: ome-types list of channels used in image
+    :param channels: list of ome-types Channels used in image
     :param timestamp: str: timestamp in YYYY-MM-DD format the image was acquired at
-    :param description: ome-types description of the image
-    :param experiment: ome-types experiment the image was part of
-    :param experimenter: ome-types experimenter who took the image
-    :param instrument: ome-types instrument the image was taken with
-    :param stagelabel: ome-types stagelabel to report the shift between HT and FL images
+    :param description: ome-types Description of the image
+    :param experiment: ome-types Experiment the image was part of
+    :param experimenter: ome-types Experimenter who took the image
+    :param instrument: ome-types Instrument the image was taken with
+    :param stagelabel: ome-types Stagelabel to report the shift between HT and FL images
     :param data_type: Python data type of the image data
     :param ann_ids: IDs of annotations with additional image metadata
-    :param planes: ome-types list of planes
-    :return: ome-types image with relevant metadata
+    :param planes: list of ome-types Planes in the image
+    :return: ome-types Image with relevant metadata
     :return: int to give the image plane offset for the next image in a multidimensional array
     (with t and channel components)
     """
@@ -440,7 +465,7 @@ def read_basic_user_config(filepath):
 
 def def_ome_basic_md(config_dict):
     """Create experimenter and project metadata dictionaries needed to
-create the OME-TIFF from user-provided metadata.
+    create the OME-TIFF from user-provided metadata.
 
     :param config_dict: Dict of user-created metadata
     :return: Dict containing metadata needed for OME-TIFF
@@ -455,6 +480,13 @@ create the OME-TIFF from user-provided metadata.
         config_dict["exper_firstn"],
         config_dict["exper_lastn"],
         config_dict["exper_usern"],
+    )
+    basic_ome_md["exper_group"] = def_experimenter_group(
+        config_dict["eg_id"],
+        config_dict["eg_desc"],
+        [model.ExperimenterRef(id=config_dict["exper_id"])],
+        [model.Leader(id=config_dict["eg_leaders"])],
+        config_dict["eg_name"]
     )
     basic_ome_md["proj"] = def_project(
         config_dict["proj_id"], config_dict["proj_name"], config_dict["proj_desc"]
@@ -528,7 +560,7 @@ def read_tiling_info(folder):
     """Read tiling info for image.
 
     :param folder: Folder name as string
-    :return: Dict containing the per-image tiling data
+    :return: dict containing the per-image tiling data
     """
     def convert_to_float(item):
         try:
@@ -555,10 +587,10 @@ def define_image_metadata(overall_config_dict, img_config_dict, tiling_dict):
     """Integrate project and image metadata to obtain comprehensive metadata dict
 used to create the OME-TIFF.
 
-    :param overall_config_dict: Dict with overall metadata given by the user
-    :param img_config_dict: Dict with per-image metadata extracted from config file in image folder
-    :param tiling_dict: Dict with per-image tiling information
-    :returns: Dict containing all metadata to create the OME-TIFF.
+    :param overall_config_dict: dict with overall metadata given by the user
+    :param img_config_dict: dict with per-image metadata extracted from config file in image folder
+    :param tiling_dict: dict with per-image tiling information
+    :returns: dict containing all metadata to create the OME-TIFF.
 
     """
     img_metadata = dict()
@@ -643,7 +675,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
         keys_to_loop.extend((n_chans-1)*["3DFL"])
         fl_3d_counter = 0
 
-    for i, name in enumerate(keys_to_loop):
+    for i_chan, name in enumerate(keys_to_loop):
         logging.debug("Working on {}".format(name))
         data_use = dat["Data"][name]
         stagelabel = def_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], 0, 0, 0)
@@ -728,7 +760,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
             logging.info("Skipping unknown data type {}".format(name))
             continue
 
-        channels[0].id = "Channel:{}".format(i)
+        channels[0].id = "Channel:{}".format(i_chan)
 
         try:
             planes = [def_plane(
@@ -736,14 +768,27 @@ def transform_tcf(folder, overall_md, output_xml=False):
                     exp_config_dict["y_rec"],
                     exp_config_dict["z_rec"],
                     tiling_dict["tile_timestep"]*tiling_dict["tile_timestep_size"],
-                    i,
+                    0,
                     tiling_dict["tile_timestep"],
-                    k
-                ) for k in range(img_formatted.shape[2])]
+                    k_plane
+                ) for k_plane in range(img_formatted.shape[2])]
             ann_refs = [0, ann_ref, 6]
         except KeyError:
-            planes = []
-            ann_refs = [0, ann_ref]
+            # try:
+                planes = [def_plane(
+                    exp_config_dict["x_rec"],
+                    exp_config_dict["y_rec"],
+                    exp_config_dict["z_rec"],
+                    j_time*data_use.attrs["TimeInterval"][0],
+                    0,
+                    j_time,
+                    k_plane
+                ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
+                ann_refs = [0, ann_ref]
+            # except KeyError:
+            #     print("here")
+            #     planes = []
+            #     ann_refs = [0, ann_ref]
         # logging.warning("TIMESTAMP: {}".format(timestamp))
 
         tzinfo = datetime.now().astimezone().tzinfo
@@ -772,10 +817,11 @@ def transform_tcf(folder, overall_md, output_xml=False):
         imgs.append(img_formatted)
 
     ome_xmls = model.OME(
-        creator="tcf_to_ometiff by Henning Zwirnmann v0.5.1",
+        creator="tcf_to_ometiff by Henning Zwirnmann v0.5.2",
         images=img_ome_xmls,
         experiments=[img_md["exp"]],
         experimenters=[overall_md["exper"]],
+        experimenter_groups=[overall_md["exper_group"]],
         instruments=[img_md["instr"]],
         structured_annotations=img_md["anns"]
     )

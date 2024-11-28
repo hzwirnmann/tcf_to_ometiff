@@ -1,5 +1,9 @@
 # Change Log
 
+## Version 0.5.2 (November 28, 2024)
+
+- minor changes to reflect ome-types v0.5.3 (e.g. include ExperimenterGroup)
+
 ## Version 0.5.1 (November 28, 2024)
 
 - change from aicsimageio to bioio for writing
