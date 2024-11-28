@@ -15,11 +15,11 @@ URL = 'https://github.com/hzwirnmann/tcf_to_ometiff'
 EMAIL = 'henning.zwirnmann@tum.de'
 AUTHOR = 'Henning Zwirnmann'
 REQUIRES_PYTHON = '>=3.8.0'
-VERSION = '0.5.0'
+VERSION = '0.5.1'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    "numpy", "ome_types", "h5py", "aicsimageio", "typer"
+    "numpy", "ome_types", "h5py", "bioio", "typer"
 ]
 
 EXTRAS = {}

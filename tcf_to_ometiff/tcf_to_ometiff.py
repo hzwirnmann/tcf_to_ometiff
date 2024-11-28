@@ -7,7 +7,7 @@ import logging
 
 from ome_types import model
 import h5py
-from aicsimageio import writers
+from bioio import writers
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
@@ -242,6 +242,7 @@ def def_annotations(img_metadata, tiling_info):
     anns = []
     ann_overall = model.MapAnnotation(
         id="Annotation:0",
+        namespace="overall",
         description="Overall metadata for recording and setup",
         value=model.Map(ms=[
                 {"value": img_metadata["Medium_Name"], "k": "MediumName"},
@@ -260,6 +261,7 @@ def def_annotations(img_metadata, tiling_info):
             or int(img_metadata["Images HT2D"]) > 0:
         ann_ht = model.MapAnnotation(
             id="Annotation:1",
+            namespace="holotomography",
             description="Additional metadata for HT and Phase images",
             value=model.Map(ms=[
                     {"value": img_metadata["mapping sign"], "k": "HT_MappingSign"},
@@ -274,6 +276,7 @@ def def_annotations(img_metadata, tiling_info):
     if "Images BF" in img_metadata and int(img_metadata["Images BF"]) > 0:
         ann_bf = model.MapAnnotation(
             id="Annotation:2",
+            namespace="brightfield",
             description="Additional metadata for brightfield image",
             value=model.Map(ms=[
                     {"value": img_metadata["BF_Camera_Shutter"], "k": "BF_ExposureTime"},
@@ -290,6 +293,7 @@ def def_annotations(img_metadata, tiling_info):
                 ann_fl.append(
                     model.MapAnnotation(
                         id="Annotation:{}".format(i+3),
+                        namespace="fluorescence",
                         description="Additional metadata for Fluorescence Channel {} images".format(colors_dict[i]),
                         value=model.Map(ms=[
                             {
@@ -309,18 +313,19 @@ def def_annotations(img_metadata, tiling_info):
 
     if len(tiling_info) > 0:
         ann_tiling = model.MapAnnotation(
-                id="Annotation:6",
-                description="Spatial and temporal tiling information",
-                value=model.Map(ms=[
-                    {"value": tiling_info["tile_img_id"], "k": "Tiling_ClusterID"},
-                    {"value": tiling_info["tile_total_images"], "k": "Tiling_TotalTilesInImage"},
-                    {"value": tiling_info["tile_number"], "k": "Tiling_NumberInImage"},
-                    {"value": tiling_info["tile_row"], "k": "Tiling_Row"},
-                    {"value": tiling_info["tile_column"], "k": "Tiling_Column"},
-                    {"value": tiling_info["tile_total_timesteps"], "k": "Tiling_TotalTimesteps"},
-                    {"value": tiling_info["tile_timestep"], "k": "Tiling_Timestep"},
-                    {"value": tiling_info["tile_timestep_size"], "k": "Tiling_Timedelta"},
-                ])
+            id="Annotation:6",
+            namespace="tiling",
+            description="Spatial and temporal tiling information",
+            value=model.Map(ms=[
+                {"value": tiling_info["tile_img_id"], "k": "Tiling_ClusterID"},
+                {"value": tiling_info["tile_total_images"], "k": "Tiling_TotalTilesInImage"},
+                {"value": tiling_info["tile_number"], "k": "Tiling_NumberInImage"},
+                {"value": tiling_info["tile_row"], "k": "Tiling_Row"},
+                {"value": tiling_info["tile_column"], "k": "Tiling_Column"},
+                {"value": tiling_info["tile_total_timesteps"], "k": "Tiling_TotalTimesteps"},
+                {"value": tiling_info["tile_timestep"], "k": "Tiling_Timestep"},
+                {"value": tiling_info["tile_timestep_size"], "k": "Tiling_Timedelta"},
+            ])
         )
         anns.append(ann_tiling)
 
@@ -725,20 +730,20 @@ def transform_tcf(folder, overall_md, output_xml=False):
 
         channels[0].id = "Channel:{}".format(i)
 
-        # try:
-        planes = [def_plane(
-                exp_config_dict["x_rec"],
-                exp_config_dict["y_rec"],
-                exp_config_dict["z_rec"],
-                tiling_dict["tile_timestep"]*tiling_dict["tile_timestep_size"],
-                i,
-                tiling_dict["tile_timestep"],
-                k
-            ) for k in range(img_formatted.shape[2])]
-        ann_refs = [0, ann_ref, 6]
-        # except NameError:
-        #     planes = []
-        #     ann_refs = [0, ann_ref]
+        try:
+            planes = [def_plane(
+                    exp_config_dict["x_rec"],
+                    exp_config_dict["y_rec"],
+                    exp_config_dict["z_rec"],
+                    tiling_dict["tile_timestep"]*tiling_dict["tile_timestep_size"],
+                    i,
+                    tiling_dict["tile_timestep"],
+                    k
+                ) for k in range(img_formatted.shape[2])]
+            ann_refs = [0, ann_ref, 6]
+        except KeyError:
+            planes = []
+            ann_refs = [0, ann_ref]
         # logging.warning("TIMESTAMP: {}".format(timestamp))
 
         tzinfo = datetime.now().astimezone().tzinfo
@@ -767,7 +772,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
         imgs.append(img_formatted)
 
     ome_xmls = model.OME(
-        creator="tcf_to_ometiff by Henning Zwirnmann v0.5.0",
+        creator="tcf_to_ometiff by Henning Zwirnmann v0.5.1",
         images=img_ome_xmls,
         experiments=[img_md["exp"]],
         experimenters=[overall_md["exper"]],
@@ -776,7 +781,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
     )
 
     logging.info("Writing file {}".format(file_name_store))
-    writers.ome_tiff_writer.OmeTiffWriter().save(
+    writers.OmeTiffWriter.save(
         imgs,
         file_name_store,
         ome_xml=ome_xmls,
