@@ -1,9 +1,14 @@
-<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd" Creator="tcf_to_ometiff by Henning Zwirnmann v0.43">
-  <Experiment ID="Experiment:0">
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd" Creator="tcf_to_ometiff by Henning Zwirnmann v0.5.3">
+  <Experiment Type="Other" ID="Experiment:0">
     <Description>Default-001</Description>
     <ExperimenterRef ID="Experimenter:0"/>
   </Experiment>
   <Experimenter ID="Experimenter:0" FirstName="Henning" LastName="Zwirnmann" Email="henning.zwirnmann@tum.de" Institution="Technical University of Munich (TUM)" UserName="hz"/>
+  <ExperimenterGroup Name="MIRMI Base Experimenter Group" ID="ExperimenterGroup:0">
+    <Description>MIRMI Experimenters</Description>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <Leader ID="Experimenter:0"/>
+  </ExperimenterGroup>
   <Instrument ID="Instrument:0">
     <Microscope Manufacturer="Tomocube Inc." Model="HT-2H" SerialNumber="CSN19516891" LotNumber="2020-01-01" Type="Other"/>
     <LightEmittingDiode ID="LightSource:1"/>
@@ -13,7 +18,7 @@
     <Detector ID="Detector:0" Type="CMOS"/>
   </Instrument>
   <Image ID="Image:0" Name="2D Holotomography Maximum Intensity Projection">
-    <AcquisitionDate>2022-01-31T15:08:25.465</AcquisitionDate>
+    <AcquisitionDate>2022-01-31T15:08:25+01:00</AcquisitionDate>
     <ExperimenterRef ID="Experimenter:0"/>
     <Description>2D Holotomography Maximum Intensity Projection</Description>
     <ExperimentRef ID="Experiment:0"/>
@@ -23,11 +28,13 @@
         <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
       </Channel>
       <TiffData IFD="0" PlaneCount="1"/>
+      <Plane TheZ="0" TheT="0" TheC="0" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
     </Pixels>
+    <AnnotationRef ID="Annotation:0"/>
     <AnnotationRef ID="Annotation:1"/>
   </Image>
   <Image ID="Image:1" Name="3D Holotomography">
-    <AcquisitionDate>2022-01-31T15:08:25.465</AcquisitionDate>
+    <AcquisitionDate>2022-01-31T15:08:25+01:00</AcquisitionDate>
     <ExperimenterRef ID="Experimenter:0"/>
     <Description>3D Holotomography</Description>
     <ExperimentRef ID="Experiment:0"/>
@@ -37,11 +44,222 @@
         <LightSourceSettings ID="LightSource:0" Wavelength="532.0"/>
       </Channel>
       <TiffData IFD="1" PlaneCount="210"/>
+      <Plane TheZ="0" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="1" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="2" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="3" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="4" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="5" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="6" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="7" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="8" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="9" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="10" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="11" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="12" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="13" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="14" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="15" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="16" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="17" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="18" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="19" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="20" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="21" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="22" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="23" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="24" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="25" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="26" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="27" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="28" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="29" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="30" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="31" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="32" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="33" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="34" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="35" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="36" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="37" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="38" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="39" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="40" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="41" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="42" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="43" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="44" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="45" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="46" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="47" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="48" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="49" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="50" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="51" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="52" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="53" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="54" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="55" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="56" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="57" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="58" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="59" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="60" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="61" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="62" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="63" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="64" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="65" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="66" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="67" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="68" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="69" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="70" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="71" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="72" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="73" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="74" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="75" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="76" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="77" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="78" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="79" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="80" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="81" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="82" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="83" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="84" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="85" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="86" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="87" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="88" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="89" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="90" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="91" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="92" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="93" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="94" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="95" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="96" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="97" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="98" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="99" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="100" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="101" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="102" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="103" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="104" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="105" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="106" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="107" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="108" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="109" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="110" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="111" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="112" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="113" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="114" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="115" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="116" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="117" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="118" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="119" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="120" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="121" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="122" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="123" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="124" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="125" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="126" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="127" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="128" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="129" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="130" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="131" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="132" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="133" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="134" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="135" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="136" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="137" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="138" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="139" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="140" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="141" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="142" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="143" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="144" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="145" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="146" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="147" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="148" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="149" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="150" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="151" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="152" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="153" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="154" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="155" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="156" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="157" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="158" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="159" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="160" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="161" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="162" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="163" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="164" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="165" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="166" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="167" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="168" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="169" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="170" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="171" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="172" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="173" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="174" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="175" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="176" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="177" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="178" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="179" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="180" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="181" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="182" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="183" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="184" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="185" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="186" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="187" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="188" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="189" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="190" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="191" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="192" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="193" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="194" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="195" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="196" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="197" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="198" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="199" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="200" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="201" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="202" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="203" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="204" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="205" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="206" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="207" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="208" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
+      <Plane TheZ="209" TheT="0" TheC="1" DeltaT="0.0" DeltaTUnit="s" ExposureTime="2.975" ExposureTimeUnit="s" PositionX="-0.140515" PositionXUnit="mm" PositionY="0.0206108" PositionYUnit="mm" PositionZ="0.746094" PositionZUnit="mm"/>
     </Pixels>
+    <AnnotationRef ID="Annotation:0"/>
     <AnnotationRef ID="Annotation:1"/>
   </Image>
   <StructuredAnnotations>
-    <MapAnnotation ID="Annotation:0">
+    <MapAnnotation ID="Annotation:0" Namespace="overall">
       <Description>Overall metadata for recording and setup</Description>
       <Value>
         <M K="MediumName">PBS</M>
@@ -51,7 +269,7 @@
         <M K="TomoStudioVersion">3.3.3a</M>
       </Value>
     </MapAnnotation>
-    <MapAnnotation ID="Annotation:1">
+    <MapAnnotation ID="Annotation:1" Namespace="holotomography">
       <Description>Additional metadata for HT and Phase images</Description>
       <Value>
         <M K="HT_MappingSign">-1</M>
@@ -61,7 +279,7 @@
         <M K="HT_Gain">0.000000</M>
       </Value>
     </MapAnnotation>
-    <MapAnnotation ID="Annotation:3">
+    <MapAnnotation ID="Annotation:3" Namespace="fluorescence">
       <Description>Additional metadata for Fluorescence Channel blue images</Description>
       <Value>
         <M K="FL0_ExposureTime">1</M>
@@ -69,7 +287,7 @@
         <M K="FL0_Intensity">64.1</M>
       </Value>
     </MapAnnotation>
-    <MapAnnotation ID="Annotation:4">
+    <MapAnnotation ID="Annotation:4" Namespace="fluorescence">
       <Description>Additional metadata for Fluorescence Channel green images</Description>
       <Value>
         <M K="FL1_ExposureTime">1</M>
@@ -77,7 +295,7 @@
         <M K="FL1_Intensity">50</M>
       </Value>
     </MapAnnotation>
-    <MapAnnotation ID="Annotation:5">
+    <MapAnnotation ID="Annotation:5" Namespace="fluorescence">
       <Description>Additional metadata for Fluorescence Channel red images</Description>
       <Value>
         <M K="FL2_ExposureTime">1</M>

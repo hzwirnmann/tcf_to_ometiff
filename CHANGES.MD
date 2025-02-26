@@ -1,5 +1,11 @@
 # Change Log
 
+## Version 0.5.3 (February 26, 2025)
+
+- Added exposure time to planes
+- Changed the existing stagelabel so that it is only used when there is a fluorescence image
+- Changed capitalization in documentation
+
 ## Version 0.5.2 (November 28, 2024)
 
 - minor changes to reflect ome-types v0.5.3 (e.g. include ExperimenterGroup)

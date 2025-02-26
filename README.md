@@ -31,7 +31,7 @@ command from above.
 import tcf_to_ometiff
 
 config_file_path = "./examples/overall_config.txt"
-folder = "20220131.150824.759.Default-001"
+folder = "examples/20220131.150824.759.Default-001"
 overall_md = tcf_to_ometiff.create_overall_config(config_file_path)
 tcf_to_ometiff.transform_tcf(folder, overall_md, output_xml=False)
 ```

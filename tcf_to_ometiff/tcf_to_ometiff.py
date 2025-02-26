@@ -10,6 +10,8 @@ import h5py
 from bioio import writers
 from pandoc.about import description
 
+from .version import __version__
+
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
     level=logging.INFO,
@@ -18,12 +20,12 @@ logging.basicConfig(
 
 
 def def_mic(sn, mic_model, lot=None):
-    """Create ome-types microscope for use in OME-XML
+    """Create ome-types Microscope for use in OME-XML.
 
     :param mic_model: model of the microscope
     :param sn: str: serial number of the microscope
     :param lot:  Lot of the microscope
-    :return: ome-types microscope
+    :return: ome-types Microscope
     """
     return model.Microscope(
         manufacturer="Tomocube Inc.",
@@ -35,21 +37,21 @@ def def_mic(sn, mic_model, lot=None):
 
 
 def def_det(det_id):
-    """Create ome-types detector for use in OME-XML
+    """Create ome-types Detector for use in OME-XML.
 
     :param det_id: str: ID of the detector
-    :return: ome-types detector
+    :return: ome-types Detector
     """
     return model.Detector(id=det_id, type="CMOS")
 
 
 def def_obj(obj_id, lens_na, lens_magn):
-    """Create ome-types objective for use in OME-XML
+    """Create ome-types Objective for use in OME-XML.
 
     :param obj_id: str: ID of the objective
     :param lens_na: float: numerical aperture
     :param lens_magn: float: magnification
-    :return: ome-types objective
+    :return: ome-types Objective
     """
     return model.Objective(
         id=obj_id, lens_na=lens_na, nominal_magnification=lens_magn, immersion="Water"
@@ -57,10 +59,10 @@ def def_obj(obj_id, lens_na, lens_magn):
 
 
 def def_light_source(light_source_id):
-    """Create ome-types light source (HT laser) for use in OME-XML
+    """Create ome-types LightSource (HT laser / FL LED) for use in OME-XML.
 
     :param light_source_id: str: ID of the light source
-    :return: ome-types laser
+    :return: ome-types LightSource (Laser or LightEmittingDiode)
     """
 
     if light_source_id == "LightSource:0":
@@ -79,14 +81,14 @@ def def_light_source(light_source_id):
 
 
 def def_instr(instr_id, microscope, detectors, lasers, leds):
-    """Create ome-types instrument for use in OME-XML
+    """Create ome-types Instrument for use in OME-XML.
 
     :param instr_id: str: ID of the instrument
     :param microscope: ome_types.model.Microscope
     :param detectors: list of ome_types.model.Detector
     :param lasers: list of ome_types.model.Laser
     :param leds: list of ome_types.model.LightEmittingDiode
-    :return: ome-types instrument
+    :return: ome-types Instrument
     """
 
     return model.Instrument(
@@ -98,26 +100,32 @@ def def_instr(instr_id, microscope, detectors, lasers, leds):
     )
 
 
-def def_stagelabel(x_stage, y_stage, offset, ht_height, fl_height):
+def def_ht_fl_shift_stagelabel(offset, fl_height):
+    """Create ome-types StageLabel to define the z shift between ht and fl image.
+
+    :param
+    :return: ome-types StageLabel
+    """
     z_shift = np.round(offset - fl_height/2, 2)
 
     sl = model.StageLabel(
         name="Fluorescence Image Z Shift",
         z=z_shift,
-        x=x_stage,
-        x_unit="mm",
-        y=y_stage,
-        y_unit="mm"
+        z_unit="mm"
+        # x=x_stage,
+        # x_unit="mm",
+        # y=y_stage,
+        # y_unit="mm"
     )
 
     return sl
 
 
 def def_channel(image_name, img_md=None):
-    """Create ome-types channel for use in OME-XML
+    """Create ome-types Channel for either HT or FL for use in OME-XML.
 
     :param
-    :return: ome-types channel with "Phase" as contrast method
+    :return: ome-types Channel
     """
 
     if image_name == "ht":
@@ -174,7 +182,7 @@ def def_channel(image_name, img_md=None):
                 wavelength=lambda_exc
             )
         else:
-            print("Unknown image name: {}".format(image_name))
+            logging.warning("Unknown image name: {}".format(image_name))
         return model.Channel(
             # id="Channel:{}".format(int(image_name[2])+2),
             acquisition_mode="Other",
@@ -191,7 +199,7 @@ def def_channel(image_name, img_md=None):
 
 
 def def_experimenter(exper_id, email, inst, first_name, last_name, user_name):
-    """Create ome-types experimenter for use in OME-XML
+    """Create ome-types Experimenter for use in OME-XML.
 
     :param exper_id: str: ID of the experimenter
     :param email: str: email address of the experimenter
@@ -213,7 +221,7 @@ def def_experimenter(exper_id, email, inst, first_name, last_name, user_name):
 
 def def_experimenter_group(eg_id, desc, exper_refs, leaders, name):
 
-    """Create ome-types experimenter for use in OME-XML
+    """Create ome-types ExperimenterGroup for use in OME-XML.
 
     :param eg_id: str: ID of the experimenter group
     :param desc: str: Description of the experimenter group
@@ -232,7 +240,7 @@ def def_experimenter_group(eg_id, desc, exper_refs, leaders, name):
 
 
 def def_experiment(desc, exper, exp_type=None):
-    """Create ome-types experiment for use in OME-XML
+    """Create ome-types Experiment for use in OME-XML.
 
     :param desc: str: experiment description
     :param exper: ome-types Experimenter
@@ -245,12 +253,12 @@ def def_experiment(desc, exper, exp_type=None):
 
 
 def def_project(proj_id, proj_name, desc):
-    """Create ome-types project for use in OME-XML
+    """Create ome-types Project for use in OME-XML.
 
     :param proj_id: str: ID of the project
     :param proj_name: str: name of the project
     :param desc: str: description of the project
-    :return: ome-types project
+    :return: ome-types Project
     """
     return model.Project(id=proj_id, name=proj_name, description=desc)
 
@@ -356,7 +364,20 @@ def def_annotations(img_metadata, tiling_info):
     return anns
 
 
-def def_plane(x_coord, y_coord, z_coord, delta_t, thec, thet, thez):
+def def_plane(x_coord, y_coord, z_coord, delta_t, thec, thet, thez, exposure):
+    """Create ome-types Plane with information for each x-y image plane with varying z / time / channel.
+
+    :param x_coord: Center of the plane on the stage in x (in mm)
+    :param y_coord: Center of the plane on the stage in y (in mm)
+    :param z_coord: z-position of the stage (in mm)
+    :param delta_t: Time point of the plane (/recording) in seconds
+    :param thec: Number of the channel
+    :param thet: Number of the time step
+    :param thez: Number of the z plane
+    :param exposure: Exposure time in seconds
+
+    :return: ome-types Plane
+    """
     plane = model.Plane(
         the_c=thec,
         the_t=thet,
@@ -367,7 +388,10 @@ def def_plane(x_coord, y_coord, z_coord, delta_t, thec, thet, thez):
         position_x_unit="mm",
         position_y_unit="mm",
         position_z_unit="mm",
-        delta_t=delta_t
+        delta_t=delta_t,
+        delta_t_unit="s",
+        exposure_time=exposure,
+        exposure_time_unit="s"
     )
     return plane
 
@@ -381,7 +405,7 @@ def build_ome_xml(
     experiment,
     experimenter,
     instrument,
-    stagelabel,
+    ht_fl_shift,
     data_type,
     ann_ids,
     planes
@@ -396,7 +420,7 @@ def build_ome_xml(
     :param experiment: ome-types Experiment the image was part of
     :param experimenter: ome-types Experimenter who took the image
     :param instrument: ome-types Instrument the image was taken with
-    :param stagelabel: ome-types Stagelabel to report the shift between HT and FL images
+    :param ht_fl_shift: ome-types Stagelabel to report the shift between HT and FL images
     :param data_type: Python data type of the image data
     :param ann_ids: IDs of annotations with additional image metadata
     :param planes: list of ome-types Planes in the image
@@ -442,7 +466,7 @@ def build_ome_xml(
         experimenter_ref=model.ExperimenterRef(id=experimenter.id),
         instrument_ref=model.InstrumentRef(id=instrument.id),
         annotation_refs=[model.AnnotationRef(id=i) for i in ann_ids],
-        stage_label=stagelabel
+        stage_label=ht_fl_shift
     )
 
     return image, offset + n_planes
@@ -546,8 +570,6 @@ def read_image_config(folder):
         "c_rec": exp_config_dat_3[3]
     }
 
-    # print(*exp_config_dat_1, sep="\n")
-    # print(*exp_config_dat_2, sep="\n")
     # merge
     exp_config_dict = {item[0]: item[1] for item in exp_config_dat_1}
     exp_config_dict.update({item[0]: item[1] for item in exp_config_dat_2})
@@ -652,7 +674,7 @@ def transform_tcf(folder, overall_md, output_xml=False):
 
     tiling_dict = read_tiling_info(folder)
 
-    img_md = define_image_metadata(overall_md, exp_config_dict, tiling_dict)
+    ome_img_md = define_image_metadata(overall_md, exp_config_dict, tiling_dict)
     # timestamp = get_img_timestamp(folder)
 
     # open HDF5 image (TCF)
@@ -678,10 +700,11 @@ def transform_tcf(folder, overall_md, output_xml=False):
     for i_chan, name in enumerate(keys_to_loop):
         logging.debug("Working on {}".format(name))
         data_use = dat["Data"][name]
-        stagelabel = def_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], 0, 0, 0)
+        # stagelabel = def_ht_fl_shift_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], 0, 0, 0)
+        stagelabel = None
 
         if name == "2DMIP":
-            channels = [img_md["channel_ht"].model_copy()]  # workaround for channel IDs
+            channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
             description = "2D Holotomography Maximum Intensity Projection"
             data_type = "uint16"
             img_formatted = np.array(
@@ -689,9 +712,10 @@ def transform_tcf(folder, overall_md, output_xml=False):
             )[np.newaxis]
             ann_ref = 1
             timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            exposure = exp_config_dict["Camera Shutter"]
 
         elif name == "2D":
-            channels = [img_md["channel_ht"].model_copy()]  # workaround for channel IDs
+            channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
             description = "2D Phasemap"
             data_type = "float"
             img_formatted = np.array([data_use[item][()] for item in data_use])[
@@ -699,9 +723,10 @@ def transform_tcf(folder, overall_md, output_xml=False):
             ]
             ann_ref = 1
             timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            exposure = exp_config_dict["Camera Shutter"]
 
         elif name == "BF":
-            channels = [img_md["channel_bf"].model_copy()]  # workaround for channel IDs
+            channels = [ome_img_md["channel_bf"].model_copy()]  # workaround for channel IDs
             description = "2D Brightfield"
             data_type = "uint8"
             img_formatted = np.array([data_use[item][0] for item in data_use])[
@@ -709,9 +734,10 @@ def transform_tcf(folder, overall_md, output_xml=False):
             ]
             ann_ref = 2
             timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            exposure = exp_config_dict["BF_Camera_Shutter"]
 
         elif name == "3D":
-            channels = [img_md["channel_ht"].model_copy()]  # workaround for channel IDs
+            channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
             description = "3D Holotomography"
             data_type = "uint16"
             img_formatted = np.array([data_use[item][()] for item in data_use])[
@@ -719,40 +745,41 @@ def transform_tcf(folder, overall_md, output_xml=False):
             ]
             ann_ref = 1
             timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            exposure = exp_config_dict["Camera Shutter"]
 
         elif name == "2DFLMIP":
             channel = list(data_use.keys())[fl_mip_counter]
 
-            channels = [img_md["channel_fl{}".format(channel[2])].model_copy()]  # workaround for channel IDs]
+            channels = [ome_img_md["channel_fl{}".format(channel[2])].model_copy()]  # workaround for channel IDs]
             description = "2D {} Maximum Intensity Projection"\
-                .format(img_md["channel_fl{}".format(channel[2])].name)
+                .format(ome_img_md["channel_fl{}".format(channel[2])].name)
             data_type = "uint16"
             img_formatted = np.array(
                 [data_use[channel][item][()][np.newaxis] for item in data_use[channel]]
             )[np.newaxis]
             ann_ref = 3 + int(channel[2])
             timestamp = data_use[channel]["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
 
             fl_mip_counter += 1
 
         elif name == "3DFL":
             channel = list(data_use.keys())[fl_3d_counter]
 
-            channels = [img_md["channel_fl{}".format(channel[2])].model_copy()]  # workaround for channel IDs
-            description = "3D {}".format(img_md["channel_fl{}".format(channel[2])].name)
+            channels = [ome_img_md["channel_fl{}".format(channel[2])].model_copy()]  # workaround for channel IDs
+            description = "3D {}".format(ome_img_md["channel_fl{}".format(channel[2])].name)
             data_type = "uint16"
             img_formatted = np.array([data_use[channel][item][()] for item in data_use[channel]])[
                 np.newaxis
             ]
             ann_ref = 3 + int(channel[2])
             timestamp = data_use[channel]["000000"].attrs["RecordingTime"][0].decode("utf-8")
-            stagelabel = def_stagelabel(
-                exp_config_dict["x_rec"],
-                exp_config_dict["y_rec"],
+            stagelabel = def_ht_fl_shift_stagelabel(
                 dat["Data"]["3DFL"].attrs["OffsetZ"],
-                dat["Data"]["3D"].attrs["ResolutionZ"] * dat["Data"]["3D"].attrs["SizeZ"],
+                # dat["Data"]["3D"].attrs["ResolutionZ"] * dat["Data"]["3D"].attrs["SizeZ"],
                 dat["Data"]["3DFL"].attrs["ResolutionZ"] * dat["Data"]["3DFL"].attrs["SizeZ"]
             )
+            exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
 
             fl_3d_counter += 1
 
@@ -768,9 +795,10 @@ def transform_tcf(folder, overall_md, output_xml=False):
                     exp_config_dict["y_rec"],
                     exp_config_dict["z_rec"],
                     tiling_dict["tile_timestep"]*tiling_dict["tile_timestep_size"],
-                    0,
+                    i_chan,
                     tiling_dict["tile_timestep"],
-                    k_plane
+                    k_plane,
+                    exposure
                 ) for k_plane in range(img_formatted.shape[2])]
             ann_refs = [0, ann_ref, 6]
         except KeyError:
@@ -780,9 +808,10 @@ def transform_tcf(folder, overall_md, output_xml=False):
                     exp_config_dict["y_rec"],
                     exp_config_dict["z_rec"],
                     j_time*data_use.attrs["TimeInterval"][0],
-                    0,
+                    i_chan,
                     j_time,
-                    k_plane
+                    k_plane,
+                    exposure
                 ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
                 ann_refs = [0, ann_ref]
             # except KeyError:
@@ -802,9 +831,9 @@ def transform_tcf(folder, overall_md, output_xml=False):
                 channels,
                 dt,
                 description,
-                img_md["exp"],
+                ome_img_md["exp"],
                 overall_md["exper"],
-                img_md["instr"],
+                ome_img_md["instr"],
                 stagelabel,
                 data_type,
                 ["Annotation:{}".format(item) for item in ann_refs],
@@ -817,13 +846,13 @@ def transform_tcf(folder, overall_md, output_xml=False):
         imgs.append(img_formatted)
 
     ome_xmls = model.OME(
-        creator="tcf_to_ometiff by Henning Zwirnmann v0.5.2",
+        creator="tcf_to_ometiff by Henning Zwirnmann v{}".format(__version__),
         images=img_ome_xmls,
-        experiments=[img_md["exp"]],
+        experiments=[ome_img_md["exp"]],
         experimenters=[overall_md["exper"]],
         experimenter_groups=[overall_md["exper_group"]],
-        instruments=[img_md["instr"]],
-        structured_annotations=img_md["anns"]
+        instruments=[ome_img_md["instr"]],
+        structured_annotations=ome_img_md["anns"]
     )
 
     logging.info("Writing file {}".format(file_name_store))
