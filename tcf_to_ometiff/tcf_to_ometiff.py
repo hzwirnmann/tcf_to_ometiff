@@ -132,7 +132,7 @@ def def_channel(image_name, img_md=None):
         return model.Channel(
             # id="Channel:0",
             acquisition_mode="Other",
-            contrast_method="Phase",
+            contrast_method="Phase",  # not correct actually, contrast is rather refractive index
             illumination_type="Transmitted",
             name="Holotomography",
             light_source_settings=model.LightSourceSettings(
