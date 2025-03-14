@@ -689,7 +689,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
 
     keys_to_loop = list(dat["Data"].keys())
     if not include_mip:
-        keys_to_loop = [item for item in keys_to_loop if not item.contains("MIP")]
+        keys_to_loop = [item for item in keys_to_loop if not "MIP" in item]
     # FL channels are nested one level below imaging modalities --> (ugly) trick to achieve them in a similar way
     if "2DFLMIP" in keys_to_loop:
         n_chans = len(dat["Data"]["2DFLMIP"])
