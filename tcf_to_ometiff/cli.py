@@ -14,11 +14,11 @@ def parse_multiple(top_folder: str, config_file_path: str, output_xml: bool = Fa
 
     :param top_folder: Relative or absolute file path to top folder
     :param config_file_path: Relative or absolute file path to csv file with project OMERO metadata
-    :param output_xml: If true, output the ome-xml file alongside the ome-tiff file
-    :param include_mip: If true, maximum intensity projections are included in the output ome tiff file
+    :param output_xml: If True, output the ome-xml files alongside the ome-tiff files
+    :param include_mip: If True, maximum intensity projections are included in the output ome tiff files
 
     """
-    tcf_to_ometiff.transform_folder(top_folder, config_file_path, output_xml)
+    tcf_to_ometiff.transform_folder(top_folder, config_file_path, output_xml, include_mip)
 
 
 @main.command()
@@ -29,12 +29,12 @@ def parse(folder: str, config_file_path: str, output_xml: bool = False, include_
 
     :param folder: Relative or absolute file path to folder containing image
     :param config_file_path: Relative or absolute file path to csv file with project OMERO metadata
-    :param output_xml: If true, output the ome-xml file alongside the ome-tiff file
-    :param include_mip: If true, maximum intensity projections are included in the output ome tiff file
+    :param output_xml: If True, output the ome-xml file alongside the ome-tiff file
+    :param include_mip: If True, maximum intensity projections are included in the output ome tiff file
 
     """
     overall_md = tcf_to_ometiff.create_overall_config(config_file_path)
-    tcf_to_ometiff.transform_tcf(folder, overall_md, output_xml)
+    tcf_to_ometiff.transform_tcf(folder, overall_md, output_xml, include_mip)
 
 
 if __name__ == "__main__":

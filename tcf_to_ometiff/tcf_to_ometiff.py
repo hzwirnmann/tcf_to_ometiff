@@ -662,7 +662,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
     :param folder: Relative or absolute file path to folder containing image
     :param overall_md: Overall metadata dict
     :param output_xml: If True, output the ome-xml file alongside the ome-tiff file
-    :param include_mip: If true, maximum intensity projections are included in the
+    :param include_mip: If True, maximum intensity projections are included in the
     output ome tiff file
 
     """
@@ -882,10 +882,10 @@ def transform_folder(top_folder, basic_config_path, output_xml=False,
     image
     :param basic_config_path: Relative or absolute file path to csv file with
     basic metadata
-    :param output_xml: If True, output the ome-xml file alongside the ome-tiff
-    file
-    :param include_mip: If true, maximum intensity projections are included in
-    the output ome tiff file
+    :param output_xml: If True, output the ome-xml files alongside the ome-tiff
+    files
+    :param include_mip: If True, maximum intensity projections are included in
+    the output ome tiff files
 
     """
     overall_md = create_overall_config(basic_config_path)
@@ -896,7 +896,7 @@ def transform_folder(top_folder, basic_config_path, output_xml=False,
         print(folder)
         logging.info("Reading folder {}".format(folder))
         try:
-            transform_tcf(join(top_folder, folder), overall_md, output_xml)
+            transform_tcf(join(top_folder, folder), overall_md, output_xml, include_mip)
         except Exception as e:
             print(e)
             logging.info(e)

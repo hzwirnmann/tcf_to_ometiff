@@ -1,5 +1,10 @@
 # Change Log
 
+## Version 0.5.4 (March 14, 2025)
+
+ - Updated Readme to include CLI commands correctly
+ - Included `include_mip` to suppress mip images if wanted
+
 ## Version 0.5.3 (February 26, 2025)
 
 - Added exposure time to planes
