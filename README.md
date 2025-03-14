@@ -17,10 +17,10 @@ An overall config file is provided as `examples/overall_config.txt`. See descrip
 
 ### CLI
 - Parse a single file that resides in folder _folder_ with the same name as the folder and the extension .TCF:
-```python tcf_to_ometiff/cli.py parse <folder> <overall config file path>```
+```python -m tcf_to_ometiff.cli parse <folder> <overall config file path>```
 
 - Parse multiple files that reside in subfolders of folder _top\_folder_, each one having the same name as the subfolder and the extension .TCF:
-```python tcf_to_ometiff/cli.py parse-multiple <top_folder> <overall config file path>```
+```python -m tcf_to_ometiff.cli parse-multiple <top_folder> <overall config file path>```
 
 - If you want to output the `.ome.xml` for the image as a separate file, append the option `--output-xml` to the 
 command from above.
