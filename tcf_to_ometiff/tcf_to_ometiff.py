@@ -8,7 +8,6 @@ import logging
 from ome_types import model
 import h5py
 from bioio import writers
-from pandoc.about import description
 
 from .version import __version__
 
@@ -374,7 +373,7 @@ def def_plane(x_coord, y_coord, z_coord, delta_t, thec, thet, thez, exposure):
     :param thec: Number of the channel
     :param thet: Number of the time step
     :param thez: Number of the z plane
-    :param exposure: Exposure time in seconds
+    :param exposure: Exposure time in milliseconds
 
     :return: ome-types Plane
     """
@@ -391,7 +390,7 @@ def def_plane(x_coord, y_coord, z_coord, delta_t, thec, thet, thez, exposure):
         delta_t=delta_t,
         delta_t_unit="s",
         exposure_time=exposure,
-        exposure_time_unit="s"
+        exposure_time_unit="ms"
     )
     return plane
 
@@ -652,7 +651,7 @@ used to create the OME-TIFF.
     return img_metadata
 
 
-def transform_tcf(folder, overall_md, output_xml=False):
+def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True):
     """Parse an image in a folder that has the same name as the folder
     and additionally ends with .TCF. The parsed OME-TIFF image is stored in the
     same folder. It loops over all imaging modalities contained in the TCF H5F
@@ -663,6 +662,8 @@ def transform_tcf(folder, overall_md, output_xml=False):
     :param folder: Relative or absolute file path to folder containing image
     :param overall_md: Overall metadata dict
     :param output_xml: If True, output the ome-xml file alongside the ome-tiff file
+    :param include_mip: If true, maximum intensity projections are included in the
+    output ome tiff file
 
     """
 
@@ -687,6 +688,8 @@ def transform_tcf(folder, overall_md, output_xml=False):
     plane_offset = 0  # for multiple timesteps / channels
 
     keys_to_loop = list(dat["Data"].keys())
+    if not include_mip:
+        keys_to_loop = [item for item in keys_to_loop if not item.contains("MIP")]
     # FL channels are nested one level below imaging modalities --> (ugly) trick to achieve them in a similar way
     if "2DFLMIP" in keys_to_loop:
         n_chans = len(dat["Data"]["2DFLMIP"])
@@ -868,15 +871,21 @@ def transform_tcf(folder, overall_md, output_xml=False):
             fn.write(xml_out)
 
 
-def transform_folder(top_folder, basic_config_path, output_xml=False):
+def transform_folder(top_folder, basic_config_path, output_xml=False,
+                     include_mip: bool = True):
     """Parse images stored in subfolders of a top folder. This is the
     standard TomoStudio case when on each date a new top folder is created that
     has one subfolder for each snapshot. The parsed OME-TIFF images are stored
     in the respective subfolders.
 
-    :param top_folder: Relative or absolute file path to folder containing image
-    :param basic_config_path: Relative or absolute file path to csv file with basic metadata
-    :param output_xml: If True, output the ome-xml file alongside the ome-tiff file
+    :param top_folder: Relative or absolute file path to folder containing
+    image
+    :param basic_config_path: Relative or absolute file path to csv file with
+    basic metadata
+    :param output_xml: If True, output the ome-xml file alongside the ome-tiff
+    file
+    :param include_mip: If true, maximum intensity projections are included in
+    the output ome tiff file
 
     """
     overall_md = create_overall_config(basic_config_path)
