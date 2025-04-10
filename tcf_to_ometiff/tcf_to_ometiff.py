@@ -9,7 +9,7 @@ from ome_types import model
 import h5py
 from bioio import writers
 
-from tcf_to_ometiff.version import __version__
+from .version import __version__
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
