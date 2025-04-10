@@ -9,7 +9,7 @@ from ome_types import model
 import h5py
 from bioio import writers
 
-from .version import __version__
+from tcf_to_ometiff.version import __version__
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
@@ -160,21 +160,21 @@ def def_channel(image_name, img_md=None):
         fluor = img_md["FLCH{}_Fluorophore_Name".format(image_name[2])]
 
         if image_name[2] == "0":
-            color = "blue"
+            color = "#0000FFFF"
             lambda_exc = 385
             settings = model.LightSourceSettings(
                 id="LightSource:1",
                 wavelength=lambda_exc
             )
         elif image_name[2] == "1":
-            color = "green"
+            color = "#008000FF"
             lambda_exc = 470
             settings = model.LightSourceSettings(
                 id="LightSource:2",
                 wavelength=lambda_exc
             )
         elif image_name[2] == "2":
-            color = "red"
+            color = "#FF0000FF"
             lambda_exc = 570
             settings = model.LightSourceSettings(
                 id="LightSource:3",
@@ -280,7 +280,8 @@ def def_annotations(img_metadata, tiling_info):
                 {"value": img_metadata["Medium_RI"], "k": "MediumRI"},
                 {"value": img_metadata["Immersion_RI"], "k": "ImmersionRI"},
                 {"value": img_metadata["Annotation"], "k": "Annotation"},
-                {"value": img_metadata["SW Version"], "k": "TomoStudioVersion"}
+                {"value": img_metadata["SW Version"], "k": "TomoStudioVersion"},
+                {"value": img_metadata["Job_Title"], "k": "ImageJobTitle"}
         ])
     )
     anns.append(ann_overall)
