@@ -680,7 +680,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
     # timestamp = get_img_timestamp(folder)
 
     # open HDF5 image (TCF)
-    logging.info("Reading image")
+    logging.debug("Reading image")
     dat = h5py.File(join(folder, basename(folder) + ".TCF"), "r")
     # file_name_store = join(top_folder, folder, folder + ".ome.tiff")
     file_name_store = join(folder, basename(folder) + ".ome.tiff")
@@ -859,7 +859,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
         structured_annotations=ome_img_md["anns"]
     )
 
-    logging.info("Writing file {}".format(file_name_store))
+    logging.debug("Writing file {}".format(file_name_store))
     writers.OmeTiffWriter.save(
         imgs,
         file_name_store,
