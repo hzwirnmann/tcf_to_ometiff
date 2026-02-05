@@ -1,5 +1,6 @@
-bioio=1.2.0
-h5py==3.13.0
-numpy==1.26.4
-ome-types==0.6.0
-typer==0.15.1
+bioio=3.2.0
+h5py==3.15.1
+numpy==2.3.5
+ome-types==0.6.3
+typer==0.21.1
+bioio-ome-tiff==1.4.0

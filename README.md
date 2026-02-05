@@ -62,9 +62,10 @@ The validation of the correct format of an OME-TIFF XML header is described [her
 ## Requirements
 bioio==3.2.0  
 h5py==3.15.1  
-numpy==1.26.4  
-ome-types==0.6.1  
-typer==0.21.1
+ome-types==0.6.3  
+typer==0.21.1  
+numpy==2.3.5  
+bioio-ome-tiff==1.4.0
 
 ## Acknowledgments
 Thanks to the OME team for their work on imaging standardization and reproducibility. Special thanks to Josh Moore,

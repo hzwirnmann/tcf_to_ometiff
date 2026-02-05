@@ -19,7 +19,7 @@ REQUIRES_PYTHON = '>=3.8.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    "numpy", "ome_types", "h5py", "bioio", "typer"
+    "numpy", "ome_types", "h5py", "bioio", "typer", "bioio-ome-tiff"
 ]
 
 EXTRAS = {}
