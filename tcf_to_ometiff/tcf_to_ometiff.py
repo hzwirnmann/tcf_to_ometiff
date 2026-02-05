@@ -7,7 +7,8 @@ import logging
 
 from ome_types import model
 import h5py
-from bioio import writers
+from bioio_ome_tiff.writers import OmeTiffWriter
+
 
 from .version import __version__
 
@@ -860,10 +861,11 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
     )
 
     logging.debug("Writing file {}".format(file_name_store))
-    writers.OmeTiffWriter.save(
+    OmeTiffWriter.save(
         imgs,
         file_name_store,
         ome_xml=ome_xmls,
+        tifffile_kwargs={"compression": "zlib", "compressionargs": {"level": 9}},
     )
 
     if output_xml:

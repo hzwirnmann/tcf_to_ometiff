@@ -1,5 +1,9 @@
 # Change Log
 
+## Version 0.5.5 (February 5, 2026)
+
+ - minor changes to reflect updated bioio v3.2.0
+
 ## Version 0.5.4 (March 14, 2025)
 
  - Updated Readme to include CLI commands correctly
