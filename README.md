@@ -60,10 +60,10 @@ per-image config files are needed for the parsing.
 The validation of the correct format of an OME-TIFF XML header is described [here](https://bio-formats.readthedocs.io/en/stable/users/comlinetools/xml-validation.html).
 
 ## Requirements
-bioio==3.2.0  
+bioio==3.4.0  
 h5py==3.15.1  
 ome-types==0.6.3  
-typer==0.21.1  
+typer==0.26.7  
 numpy==2.3.5  
 bioio-ome-tiff==1.4.0
 

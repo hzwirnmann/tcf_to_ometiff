@@ -1,5 +1,13 @@
 # Change Log
 
+## Version 0.5.6 (June 24, 2026)
+
+ - Added StageLabel with stage and objective positions to each image so they appear in OMERO
+ - Added condenser position to overall annotations
+ - Moved FL shift to additional FL image annotation
+ - Added color names instead of just hex values
+ - Updated typer and bioio versions
+
 ## Version 0.5.5 (February 5, 2026)
 
  - minor changes to reflect updated bioio v3.2.0

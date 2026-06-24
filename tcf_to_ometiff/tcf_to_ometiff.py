@@ -100,6 +100,28 @@ def def_instr(instr_id, microscope, detectors, lasers, leds):
     )
 
 
+def def_stagelabel(x, y, z):
+    """Create ome-types StageLabel for the stage and objective position of the image.
+    
+    :param x: float: x-position of the stage in mm
+    :param y: float: y-position of the stage in mm
+    :param z: float: z-position of the objective in mm
+    :return: ome-types StageLabel
+    """
+
+    sl = model.StageLabel(
+        name="Stage and objective position",
+        z=z,
+        z_unit="mm",
+        x=x,
+        x_unit="mm",
+        y=y,
+        y_unit="mm"
+    )
+
+    return sl
+
+
 def def_ht_fl_shift_stagelabel(offset, fl_height):
     """Create ome-types StageLabel to define the z shift between ht and fl image.
 
@@ -161,6 +183,7 @@ def def_channel(image_name, img_md=None):
         fluor = img_md["FLCH{}_Fluorophore_Name".format(image_name[2])]
 
         if image_name[2] == "0":
+            color_name = "blue"
             color = "#0000FFFF"
             lambda_exc = 385
             settings = model.LightSourceSettings(
@@ -168,6 +191,7 @@ def def_channel(image_name, img_md=None):
                 wavelength=lambda_exc
             )
         elif image_name[2] == "1":
+            color_name = "green"
             color = "#008000FF"
             lambda_exc = 470
             settings = model.LightSourceSettings(
@@ -175,6 +199,7 @@ def def_channel(image_name, img_md=None):
                 wavelength=lambda_exc
             )
         elif image_name[2] == "2":
+            color_name = "red"
             color = "#FF0000FF"
             lambda_exc = 570
             settings = model.LightSourceSettings(
@@ -188,7 +213,7 @@ def def_channel(image_name, img_md=None):
             acquisition_mode="Other",
             contrast_method="Fluorescence",
             illumination_type="Transmitted",
-            name="Fluorescence {}".format(color),
+            name="Fluorescence {}".format(color_name),
             light_source_settings=settings,
             samples_per_pixel=1,
             color=color,
@@ -263,7 +288,7 @@ def def_project(proj_id, proj_name, desc):
     return model.Project(id=proj_id, name=proj_name, description=desc)
 
 
-def def_annotations(img_metadata, tiling_info):
+def def_annotations(img_metadata, tiling_info, fl_md):
     """Create ome-types StructuredAnnotations with additional per-image metadata.
 
     :param img_metadata: Dict with all per-image metadata
@@ -277,12 +302,13 @@ def def_annotations(img_metadata, tiling_info):
         namespace="overall",
         description="Overall metadata for recording and setup",
         value=model.Map(ms=[
-                {"value": img_metadata["Medium_Name"], "k": "MediumName"},
-                {"value": img_metadata["Medium_RI"], "k": "MediumRI"},
-                {"value": img_metadata["Immersion_RI"], "k": "ImmersionRI"},
-                {"value": img_metadata["Annotation"], "k": "Annotation"},
-                {"value": img_metadata["SW Version"], "k": "TomoStudioVersion"},
-                {"value": img_metadata["Job_Title"], "k": "ImageJobTitle"}
+                {"k": "MediumName", "value": img_metadata["Medium_Name"]},
+                {"k": "MediumRI", "value": img_metadata["Medium_RI"]},
+                {"k": "ImmersionRI", "value": img_metadata["Immersion_RI"]},
+                {"k": "Annotation", "value": img_metadata["Annotation"]},
+                {"k": "TomoStudioVersion", "value": img_metadata["SW Version"]},
+                {"k": "ImageJobTitle", "value": img_metadata["Job_Title"]},
+                {"k": "CondenserPosition", "value": str(img_metadata["c_rec"]) + " mm"}
         ])
     )
     anns.append(ann_overall)
@@ -297,11 +323,11 @@ def def_annotations(img_metadata, tiling_info):
             namespace="holotomography",
             description="Additional metadata for HT and Phase images",
             value=model.Map(ms=[
-                    {"value": img_metadata["mapping sign"], "k": "HT_MappingSign"},
-                    {"value": img_metadata["phase sign"], "k": "HT_PhaseSign"},
-                    {"value": img_metadata["iteration"], "k": "HT_Iterations"},
-                    {"value": img_metadata["Camera Shutter"], "k": "HT_ExposureTime"},
-                    {"value": img_metadata["Camera Gain"], "k": "HT_Gain"}
+                    {"k": "HT_MappingSign", "value": img_metadata["mapping sign"]},
+                    {"k": "HT_PhaseSign", "value": img_metadata["phase sign"]},
+                    {"k": "HT_Iterations", "value": img_metadata["iteration"]},
+                    {"k": "HT_ExposureTime", "value": img_metadata["Camera Shutter"]},
+                    {"k": "HT_Gain", "value": img_metadata["Camera Gain"]}
             ])
         )
         anns.append(ann_ht)
@@ -312,14 +338,14 @@ def def_annotations(img_metadata, tiling_info):
             namespace="brightfield",
             description="Additional metadata for brightfield image",
             value=model.Map(ms=[
-                    {"value": img_metadata["BF_Camera_Shutter"], "k": "BF_ExposureTime"},
-                    {"value": img_metadata["BF_Light_Intensity"], "k": "BF_Intensity"}
+                    {"k": "BF_ExposureTime", "value": img_metadata["BF_Camera_Shutter"]},
+                    {"k": "BF_Intensity", "value": img_metadata["BF_Light_Intensity"]}
             ])
         )
         anns.append(ann_bf)
 
     ann_fl = []
-    if "Images FL" not in img_metadata or int(img_metadata["Images FL3D"]) > 0:
+    if "Images FL3D" not in img_metadata or int(img_metadata["Images FL3D"]) > 0:
         colors_dict = {0: "blue", 1: "green", 2: "red"}
         for i in range(3):
             if img_metadata["FLCH{}_Enable".format(i)] == "true":
@@ -330,18 +356,40 @@ def def_annotations(img_metadata, tiling_info):
                         description="Additional metadata for Fluorescence Channel {} images".format(colors_dict[i]),
                         value=model.Map(ms=[
                             {
-                                "value": img_metadata["FLCH{}_Camera_Shutter".format(i)],
-                                "k": "FL{}_ExposureTime".format(i)
+                                "k": "FL{}_ExposureTime".format(i),
+                                "value": img_metadata["FLCH{}_Camera_Shutter".format(i)]
                             }, {
-                                "value": img_metadata["FLCH{}_Camera_Gain".format(i)],
-                                "k": "FL{}_Gain".format(i)
+                                "k": "FL{}_Gain".format(i),
+                                "value": img_metadata["FLCH{}_Camera_Gain".format(i)]
+                                
                             }, {
+                                "k": "FL{}_Intensity".format(i),
                                 "value":  img_metadata["FLCH{}_Light_Intensity".format(i)],
-                                "k": "FL{}_Intensity".format(i)
                             }
                         ])
                     )
                 )
+        ann_fl.append(
+            model.MapAnnotation(
+                id="Annotation:7",
+                namespace="fluorescence",
+                description="3D fluorescence image shift with respect to HT",
+                value=model.Map(ms=[
+                    {
+                        "k": "Offset",
+                        "value": np.round(fl_md["OffsetZ"][0], 3)
+                    },
+                    {
+                        "k": "Fluorescence image height",
+                        "value": fl_md["ResolutionZ"][0] * fl_md["SizeZ"][0]
+                    },
+                    {
+                        "k": "Shift",
+                        "value": np.round(fl_md["OffsetZ"] - fl_md["ResolutionZ"] * fl_md["SizeZ"]/2, 2)[0]
+                    }
+                ])
+            )
+        )
     anns.extend(ann_fl)
 
     if len(tiling_info) > 0:
@@ -350,14 +398,14 @@ def def_annotations(img_metadata, tiling_info):
             namespace="tiling",
             description="Spatial and temporal tiling information",
             value=model.Map(ms=[
-                {"value": tiling_info["tile_img_id"], "k": "Tiling_ClusterID"},
-                {"value": tiling_info["tile_total_images"], "k": "Tiling_TotalTilesInImage"},
-                {"value": tiling_info["tile_number"], "k": "Tiling_NumberInImage"},
-                {"value": tiling_info["tile_row"], "k": "Tiling_Row"},
-                {"value": tiling_info["tile_column"], "k": "Tiling_Column"},
-                {"value": tiling_info["tile_total_timesteps"], "k": "Tiling_TotalTimesteps"},
-                {"value": tiling_info["tile_timestep"], "k": "Tiling_Timestep"},
-                {"value": tiling_info["tile_timestep_size"], "k": "Tiling_Timedelta"},
+                {"k": "Tiling_ClusterID", "value": tiling_info["tile_img_id"]},
+                {"k": "Tiling_TotalTilesInImage", "value": tiling_info["tile_total_images"]},
+                {"k": "Tiling_NumberInImage", "value": tiling_info["tile_number"]},
+                {"k": "Tiling_Row", "value": tiling_info["tile_row"]},
+                {"k": "Tiling_Column", "value": tiling_info["tile_column"]},
+                {"k": "Tiling_TotalTimesteps", "value": tiling_info["tile_total_timesteps"]},
+                {"k": "Tiling_Timestep", "value": tiling_info["tile_timestep"]},
+                {"k": "Tiling_Timedelta", "value": tiling_info["tile_timestep_size"]},
             ])
         )
         anns.append(ann_tiling)
@@ -606,7 +654,7 @@ def read_tiling_info(folder):
     return tiling_dict
 
 
-def define_image_metadata(overall_config_dict, img_config_dict, tiling_dict):
+def define_image_metadata(overall_config_dict, img_config_dict, tiling_dict, fl_md=None):
     """Integrate project and image metadata to obtain comprehensive metadata dict
 used to create the OME-TIFF.
 
@@ -648,7 +696,7 @@ used to create the OME-TIFF.
     img_metadata["channel_fl1"] = def_channel("fl1", img_config_dict)
     img_metadata["channel_fl2"] = def_channel("fl2", img_config_dict)
 
-    img_metadata["anns"] = def_annotations(img_config_dict, tiling_dict)
+    img_metadata["anns"] = def_annotations(img_config_dict, tiling_dict, fl_md)
 
     return img_metadata
 
@@ -677,12 +725,14 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
 
     tiling_dict = read_tiling_info(folder)
 
-    ome_img_md = define_image_metadata(overall_md, exp_config_dict, tiling_dict)
-    # timestamp = get_img_timestamp(folder)
-
     # open HDF5 image (TCF)
     logging.debug("Reading image")
     dat = h5py.File(join(folder, basename(folder) + ".TCF"), "r")
+    try:
+        ome_img_md = define_image_metadata(overall_md, exp_config_dict, tiling_dict, dat["Data"]["3DFL"].attrs)
+    except KeyError:
+        ome_img_md = define_image_metadata(overall_md, exp_config_dict, tiling_dict)
+
     # file_name_store = join(top_folder, folder, folder + ".ome.tiff")
     file_name_store = join(folder, basename(folder) + ".ome.tiff")
     img_ome_xmls = []
@@ -706,7 +756,6 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
         logging.debug("Working on {}".format(name))
         data_use = dat["Data"][name]
         # stagelabel = def_ht_fl_shift_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], 0, 0, 0)
-        stagelabel = None
 
         if name == "2DMIP":
             channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
@@ -779,11 +828,11 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             ]
             ann_ref = 3 + int(channel[2])
             timestamp = data_use[channel]["000000"].attrs["RecordingTime"][0].decode("utf-8")
-            stagelabel = def_ht_fl_shift_stagelabel(
-                dat["Data"]["3DFL"].attrs["OffsetZ"],
+            # stagelabel = def_ht_fl_shift_stagelabel(
+            #     dat["Data"]["3DFL"].attrs["OffsetZ"],
                 # dat["Data"]["3D"].attrs["ResolutionZ"] * dat["Data"]["3D"].attrs["SizeZ"],
-                dat["Data"]["3DFL"].attrs["ResolutionZ"] * dat["Data"]["3DFL"].attrs["SizeZ"]
-            )
+            #     dat["Data"]["3DFL"].attrs["ResolutionZ"] * dat["Data"]["3DFL"].attrs["SizeZ"]
+            # )
             exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
 
             fl_3d_counter += 1
@@ -824,10 +873,12 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             #     planes = []
             #     ann_refs = [0, ann_ref]
         # logging.warning("TIMESTAMP: {}".format(timestamp))
+        if "FL" in name:
+            ann_refs.append(7)
 
         tzinfo = datetime.now().astimezone().tzinfo
         dt = datetime.strptime(timestamp[:-4], '%Y-%m-%d %H:%M:%S').replace(tzinfo=tzinfo)
-        # logging.warning("dt = {}".format(dt))
+        stagelabel = def_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], exp_config_dict["z_rec"])
 
         try:
             xml, plane_offset = build_ome_xml(
