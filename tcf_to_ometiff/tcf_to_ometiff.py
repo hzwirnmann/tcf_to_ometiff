@@ -971,7 +971,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
         experimenters=[overall_md["exper"]],
         experimenter_groups=[overall_md["exper_group"]],
         instruments=[ome_img_md["instr"]],
-        structured_annotations=ome_img_md["anns"]
+        structured_annotations=ome_img_md["anns"] if ome_img_md["anns"] else None
     )
 
     logging.debug("Writing file {}".format(file_name_store))
