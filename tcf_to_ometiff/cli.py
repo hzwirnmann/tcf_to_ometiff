@@ -22,7 +22,8 @@ def parse_multiple(top_folder: str, config_file_path: str, output_xml: bool = Fa
 
 
 @main.command()
-def parse(folder: str, config_file_path: str, output_xml: bool = False, include_mip: bool = True):
+def parse(folder: str, config_file_path: str, output_xml: bool = False, include_mip: bool = True,
+          no_metadata: bool = False):
     """CLI to parse an image in a folder that has the same name as the folder and
     additionally ends with .TCF. The parsed OME-TIFF image is stored in the
     same folder.

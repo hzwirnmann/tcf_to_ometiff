@@ -1,5 +1,9 @@
 # Change Log
 
+## Version 0.5.7 /July 29, 2026)
+
+ - Added possibility to parse images without accompanying metadata files (config.dat, JobParameter.tcp, position.txt)
+
 ## Version 0.5.6 (June 24, 2026)
 
  - Added StageLabel with stage and objective positions to each image so they appear in OMERO

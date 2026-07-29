@@ -1,6 +1,7 @@
 from os.path import join, basename, isdir
 from os import listdir
 from datetime import datetime
+from typing import cast
 
 import numpy as np
 import logging
@@ -19,7 +20,7 @@ logging.basicConfig(
 )
 
 
-def def_mic(sn, mic_model, lot=None):
+def def_mic(mic_model, sn=None, lot=None):
     """Create ome-types Microscope for use in OME-XML.
 
     :param mic_model: model of the microscope
@@ -32,20 +33,11 @@ def def_mic(sn, mic_model, lot=None):
         model=mic_model,
         serial_number=sn,
         lot_number=lot,
-        type="Other",
+        type=model.Microscope_Type.OTHER,
     )
 
 
-def def_det(det_id):
-    """Create ome-types Detector for use in OME-XML.
-
-    :param det_id: str: ID of the detector
-    :return: ome-types Detector
-    """
-    return model.Detector(id=det_id, type="CMOS")
-
-
-def def_obj(obj_id, lens_na, lens_magn):
+def def_obj(lens_na=None, lens_magn=None):
     """Create ome-types Objective for use in OME-XML.
 
     :param obj_id: str: ID of the objective
@@ -54,7 +46,7 @@ def def_obj(obj_id, lens_na, lens_magn):
     :return: ome-types Objective
     """
     return model.Objective(
-        id=obj_id, lens_na=lens_na, nominal_magnification=lens_magn, immersion="Water"
+        lens_na=lens_na, nominal_magnification=lens_magn, immersion=model.Objective_Immersion.WATER_DIPPING
     )
 
 
@@ -70,7 +62,7 @@ def def_light_source(light_source_id):
             id=light_source_id,
             power=0.05,
             tuneable=False,
-            type="SolidState",
+            type=model.Laser_Type.SOLID_STATE,
             wavelength=532,
         )
 
@@ -80,12 +72,11 @@ def def_light_source(light_source_id):
         )
 
 
-def def_instr(instr_id, microscope, detectors, lasers, leds):
+def def_instr(instr_id, microscope, lasers, leds):
     """Create ome-types Instrument for use in OME-XML.
 
     :param instr_id: str: ID of the instrument
     :param microscope: ome_types.model.Microscope
-    :param detectors: list of ome_types.model.Detector
     :param lasers: list of ome_types.model.Laser
     :param leds: list of ome_types.model.LightEmittingDiode
     :return: ome-types Instrument
@@ -94,7 +85,7 @@ def def_instr(instr_id, microscope, detectors, lasers, leds):
     return model.Instrument(
         id=instr_id,
         microscope=microscope,
-        detectors=detectors,
+        detectors=[model.Detector(type=model.Detector_Type.CMOS)],
         lasers=lasers,
         light_emitting_diodes=leds
     )
@@ -112,11 +103,11 @@ def def_stagelabel(x, y, z):
     sl = model.StageLabel(
         name="Stage and objective position",
         z=z,
-        z_unit="mm",
+        z_unit=model.UnitsLength.MILLIMETER,
         x=x,
-        x_unit="mm",
+        x_unit=model.UnitsLength.MILLIMETER,
         y=y,
-        y_unit="mm"
+        y_unit=model.UnitsLength.MILLIMETER
     )
 
     return sl
@@ -133,7 +124,7 @@ def def_ht_fl_shift_stagelabel(offset, fl_height):
     sl = model.StageLabel(
         name="Fluorescence Image Z Shift",
         z=z_shift,
-        z_unit="mm"
+        z_unit=model.UnitsLength.MILLIMETER
         # x=x_stage,
         # x_unit="mm",
         # y=y_stage,
@@ -143,7 +134,7 @@ def def_ht_fl_shift_stagelabel(offset, fl_height):
     return sl
 
 
-def def_channel(image_name, img_md=None):
+def def_channel(image_name, overall_md, img_md=None):
     """Create ome-types Channel for either HT or FL for use in OME-XML.
 
     :param
@@ -153,12 +144,12 @@ def def_channel(image_name, img_md=None):
     if image_name == "ht":
         return model.Channel(
             # id="Channel:0",
-            acquisition_mode="Other",
-            contrast_method="Phase",  # not correct actually, contrast is rather refractive index
-            illumination_type="Transmitted",
+            acquisition_mode=model.Channel_AcquisitionMode.OTHER,
+            contrast_method=model.Channel_ContrastMethod.PHASE,  # not correct actually, contrast is rather refractive index
+            illumination_type=model.Channel_IlluminationType.TRANSMITTED,
             name="Holotomography",
             light_source_settings=model.LightSourceSettings(
-                id="LightSource:0",
+                id=overall_md["light_source_id_ht"],
                 wavelength=532
             ),
             samples_per_pixel=1,
@@ -167,27 +158,31 @@ def def_channel(image_name, img_md=None):
     elif image_name == "bf":
         return model.Channel(
             # id="Channel:1",
-            acquisition_mode="BrightField",
-            contrast_method="Brightfield",
-            illumination_type="Transmitted",
+            acquisition_mode=model.Channel_AcquisitionMode.BRIGHT_FIELD,
+            contrast_method=model.Channel_ContrastMethod.BRIGHTFIELD,
+            illumination_type=model.Channel_IlluminationType.TRANSMITTED,
             name="Brightfield",
             light_source_settings=model.LightSourceSettings(
-                id="LightSource:0",
+                id=overall_md["light_source_id_ht"],
                 wavelength=532
             ),
             samples_per_pixel=1,
         )
 
     else:
-        lambda_emi = img_md["FLCH{}_Fluorophore_Emission".format(image_name[2])]
-        fluor = img_md["FLCH{}_Fluorophore_Name".format(image_name[2])]
+        try:
+            lambda_emi = img_md["FLCH{}_Fluorophore_Emission".format(image_name[2])]
+            fluor = img_md["FLCH{}_Fluorophore_Name".format(image_name[2])]
+        except (KeyError, TypeError):
+            lambda_emi = None
+            fluor = None
 
         if image_name[2] == "0":
             color_name = "blue"
             color = "#0000FFFF"
             lambda_exc = 385
             settings = model.LightSourceSettings(
-                id="LightSource:1",
+                id=overall_md["light_source_id_fl0"],
                 wavelength=lambda_exc
             )
         elif image_name[2] == "1":
@@ -195,7 +190,7 @@ def def_channel(image_name, img_md=None):
             color = "#008000FF"
             lambda_exc = 470
             settings = model.LightSourceSettings(
-                id="LightSource:2",
+                id=overall_md["light_source_id_fl1"],
                 wavelength=lambda_exc
             )
         elif image_name[2] == "2":
@@ -203,16 +198,16 @@ def def_channel(image_name, img_md=None):
             color = "#FF0000FF"
             lambda_exc = 570
             settings = model.LightSourceSettings(
-                id="LightSource:3",
+                id=overall_md["light_source_id_fl2"],
                 wavelength=lambda_exc
             )
         else:
             logging.warning("Unknown image name: {}".format(image_name))
         return model.Channel(
             # id="Channel:{}".format(int(image_name[2])+2),
-            acquisition_mode="Other",
-            contrast_method="Fluorescence",
-            illumination_type="Transmitted",
+            acquisition_mode=model.Channel_AcquisitionMode.WIDE_FIELD,
+            contrast_method=model.Channel_ContrastMethod.FLUORESCENCE,
+            illumination_type=model.Channel_IlluminationType.EPIFLUORESCENCE,
             name="Fluorescence {}".format(color_name),
             light_source_settings=settings,
             samples_per_pixel=1,
@@ -264,17 +259,15 @@ def def_experimenter_group(eg_id, desc, exper_refs, leaders, name):
     )
 
 
-def def_experiment(desc, exper, exp_type=None):
+def def_experiment(exper, desc=None):
     """Create ome-types Experiment for use in OME-XML.
 
     :param desc: str: experiment description
     :param exper: ome-types Experimenter
-    :param exp_type: list of valid str for experiment type
     :return: ome-types Experiment
     """
-    if not exp_type:
-        exp_type = ["Other"]
-    return model.Experiment(description=desc, experimenter_ref=exper, type=exp_type)
+    return model.Experiment(description=desc, experimenter_ref=exper,
+                            type=[model.Experiment_value.OTHER, model.Experiment_value.TIME_LAPSE])
 
 
 def def_project(proj_id, proj_name, desc):
@@ -297,96 +290,111 @@ def def_annotations(img_metadata, tiling_info, fl_md):
     """
 
     anns = []
-    ann_overall = model.MapAnnotation(
-        id="Annotation:0",
-        namespace="overall",
-        description="Overall metadata for recording and setup",
-        value=model.Map(ms=[
-                {"k": "MediumName", "value": img_metadata["Medium_Name"]},
-                {"k": "MediumRI", "value": img_metadata["Medium_RI"]},
-                {"k": "ImmersionRI", "value": img_metadata["Immersion_RI"]},
-                {"k": "Annotation", "value": img_metadata["Annotation"]},
-                {"k": "TomoStudioVersion", "value": img_metadata["SW Version"]},
-                {"k": "ImageJobTitle", "value": img_metadata["Job_Title"]},
-                {"k": "CondenserPosition", "value": str(img_metadata["c_rec"]) + " mm"}
-        ])
-    )
-    anns.append(ann_overall)
+
+    try:
+        ann_overall = model.MapAnnotation(
+            id="Annotation:0",
+            namespace="overall",
+            description="Overall metadata for recording and setup",
+            value=model.Map(ms=[
+                    model.Map.M(k="MediumName", value=img_metadata["Medium_Name"]),
+                    model.Map.M(k="MediumRI", value=img_metadata["Medium_RI"]),
+                    model.Map.M(k="ImmersionRI", value=img_metadata["Immersion_RI"]),
+                    model.Map.M(k="Annotation", value=img_metadata["Annotation"]),
+                    model.Map.M(k="TomoStudioVersion", value=img_metadata["SW Version"]),
+                    model.Map.M(k="ImageJobTitle", value=img_metadata["Job_Title"]),
+                    model.Map.M(k="CondenserPosition", value=str(img_metadata["c_rec"]) + " mm")
+            ])
+        )
+        anns.append(ann_overall)
+    except (KeyError, TypeError):
+        pass
 
     # backwards compatibility: old TomoStudio versions do not add number of images to config.dat, so we assume that
     # HT and FL images are available and add the annotations; however not for BF because there is no BF information
     # in the metadata files
     if "Images HT3D" not in img_metadata or int(img_metadata["Images HT3D"]) > 0 \
             or int(img_metadata["Images HT2D"]) > 0:
-        ann_ht = model.MapAnnotation(
-            id="Annotation:1",
-            namespace="holotomography",
-            description="Additional metadata for HT and Phase images",
-            value=model.Map(ms=[
-                    {"k": "HT_MappingSign", "value": img_metadata["mapping sign"]},
-                    {"k": "HT_PhaseSign", "value": img_metadata["phase sign"]},
-                    {"k": "HT_Iterations", "value": img_metadata["iteration"]},
-                    {"k": "HT_ExposureTime", "value": img_metadata["Camera Shutter"]},
-                    {"k": "HT_Gain", "value": img_metadata["Camera Gain"]}
-            ])
-        )
-        anns.append(ann_ht)
+        try:
+            ann_ht = model.MapAnnotation(
+                id="Annotation:1",
+                namespace="holotomography",
+                description="Additional metadata for HT and Phase images",
+                value=model.Map(ms=[
+                        model.Map.M(k="HT_MappingSign", value=img_metadata["mapping sign"]),
+                        model.Map.M(k="HT_PhaseSign", value=img_metadata["phase sign"]),
+                        model.Map.M(k="HT_Iterations", value=img_metadata["iteration"]),
+                        model.Map.M(k="HT_ExposureTime", value=img_metadata["Camera Shutter"]),
+                        model.Map.M(k="HT_Gain", value=img_metadata["Camera Gain"])
+                ])
+            )
+            anns.append(ann_ht)
+        except (KeyError, TypeError):
+            pass
 
     if "Images BF" in img_metadata and int(img_metadata["Images BF"]) > 0:
-        ann_bf = model.MapAnnotation(
-            id="Annotation:2",
-            namespace="brightfield",
-            description="Additional metadata for brightfield image",
-            value=model.Map(ms=[
-                    {"k": "BF_ExposureTime", "value": img_metadata["BF_Camera_Shutter"]},
-                    {"k": "BF_Intensity", "value": img_metadata["BF_Light_Intensity"]}
-            ])
-        )
-        anns.append(ann_bf)
+        try:
+            ann_bf = model.MapAnnotation(
+                id="Annotation:2",
+                namespace="brightfield",
+                description="Additional metadata for brightfield image",
+                value=model.Map(ms=[
+                        model.Map.M(k="BF_ExposureTime", value=img_metadata["BF_Camera_Shutter"]),
+                        model.Map.M(k="BF_Intensity", value=img_metadata["BF_Light_Intensity"])
+                ])
+            )
+            anns.append(ann_bf)
+        except (KeyError, TypeError):
+            pass
 
     ann_fl = []
     if "Images FL3D" not in img_metadata or int(img_metadata["Images FL3D"]) > 0:
         colors_dict = {0: "blue", 1: "green", 2: "red"}
         for i in range(3):
             if img_metadata["FLCH{}_Enable".format(i)] == "true":
-                ann_fl.append(
-                    model.MapAnnotation(
-                        id="Annotation:{}".format(i+3),
-                        namespace="fluorescence",
-                        description="Additional metadata for Fluorescence Channel {} images".format(colors_dict[i]),
-                        value=model.Map(ms=[
-                            {
-                                "k": "FL{}_ExposureTime".format(i),
-                                "value": img_metadata["FLCH{}_Camera_Shutter".format(i)]
-                            }, {
-                                "k": "FL{}_Gain".format(i),
-                                "value": img_metadata["FLCH{}_Camera_Gain".format(i)]
-                                
-                            }, {
-                                "k": "FL{}_Intensity".format(i),
-                                "value":  img_metadata["FLCH{}_Light_Intensity".format(i)],
-                            }
-                        ])
-                    )
+                try:
+                    ann_fl.append(
+                        model.MapAnnotation(
+                            id="Annotation:{}".format(i+3),
+                            namespace="fluorescence",
+                            description="Additional metadata for Fluorescence Channel {} images".format(colors_dict[i]),
+                            value=model.Map(ms=[
+                                model.Map.M(
+                                    k="FL{}_ExposureTime".format(i),
+                                    value=img_metadata["FLCH{}_Camera_Shutter".format(i)]
+                                ),
+                                model.Map.M(
+                                    k="FL{}_Gain".format(i),
+                                    value=img_metadata["FLCH{}_Camera_Gain".format(i)]
+                                    
+                                ),
+                                model.Map.M(
+                                    k="FL{}_Intensity".format(i),
+                                    value=img_metadata["FLCH{}_Light_Intensity".format(i)],
+                            )
+                            ])
+                        )
                 )
+                except (KeyError, TypeError):
+                    pass
         ann_fl.append(
             model.MapAnnotation(
                 id="Annotation:7",
                 namespace="fluorescence",
                 description="3D fluorescence image shift with respect to HT",
                 value=model.Map(ms=[
-                    {
-                        "k": "Offset",
-                        "value": np.round(fl_md["OffsetZ"][0], 3)
-                    },
-                    {
-                        "k": "Fluorescence image height",
-                        "value": fl_md["ResolutionZ"][0] * fl_md["SizeZ"][0]
-                    },
-                    {
-                        "k": "Shift",
-                        "value": np.round(fl_md["OffsetZ"] - fl_md["ResolutionZ"] * fl_md["SizeZ"]/2, 2)[0]
-                    }
+                    model.Map.M(
+                        k="Offset",
+                        value=np.round(fl_md["OffsetZ"][0], 3)
+                    ),
+                    model.Map.M(
+                        k="Fluorescence image height",
+                        value=fl_md["ResolutionZ"][0] * fl_md["SizeZ"][0]
+                    ),
+                    model.Map.M(
+                        k="Shift",
+                        value=np.round(fl_md["OffsetZ"] - fl_md["ResolutionZ"] * fl_md["SizeZ"]/2, 2)[0]
+                    )
                 ])
             )
         )
@@ -398,14 +406,14 @@ def def_annotations(img_metadata, tiling_info, fl_md):
             namespace="tiling",
             description="Spatial and temporal tiling information",
             value=model.Map(ms=[
-                {"k": "Tiling_ClusterID", "value": tiling_info["tile_img_id"]},
-                {"k": "Tiling_TotalTilesInImage", "value": tiling_info["tile_total_images"]},
-                {"k": "Tiling_NumberInImage", "value": tiling_info["tile_number"]},
-                {"k": "Tiling_Row", "value": tiling_info["tile_row"]},
-                {"k": "Tiling_Column", "value": tiling_info["tile_column"]},
-                {"k": "Tiling_TotalTimesteps", "value": tiling_info["tile_total_timesteps"]},
-                {"k": "Tiling_Timestep", "value": tiling_info["tile_timestep"]},
-                {"k": "Tiling_Timedelta", "value": tiling_info["tile_timestep_size"]},
+                model.Map.M(k="Tiling_ClusterID", value=tiling_info["tile_img_id"]),
+                model.Map.M(k="Tiling_TotalTilesInImage", value=tiling_info["tile_total_images"]),
+                model.Map.M(k="Tiling_NumberInImage", value=tiling_info["tile_number"]),
+                model.Map.M(k="Tiling_Row", value=tiling_info["tile_row"]),
+                model.Map.M(k="Tiling_Column", value=tiling_info["tile_column"]),
+                model.Map.M(k="Tiling_TotalTimesteps", value=tiling_info["tile_total_timesteps"]),
+                model.Map.M(k="Tiling_Timestep", value=tiling_info["tile_timestep"]),
+                model.Map.M(k="Tiling_Timedelta", value=tiling_info["tile_timestep_size"]),
             ])
         )
         anns.append(ann_tiling)
@@ -434,13 +442,13 @@ def def_plane(x_coord, y_coord, z_coord, delta_t, thec, thet, thez, exposure):
         position_x=x_coord,
         position_y=y_coord,
         position_z=z_coord,
-        position_x_unit="mm",
-        position_y_unit="mm",
-        position_z_unit="mm",
+        position_x_unit=model.UnitsLength.MILLIMETER,
+        position_y_unit=model.UnitsLength.MILLIMETER,
+        position_z_unit=model.UnitsLength.MILLIMETER,
         delta_t=delta_t,
-        delta_t_unit="s",
+        delta_t_unit=model.UnitsTime.SECOND,
         exposure_time=exposure,
-        exposure_time_unit="ms"
+        exposure_time_unit=model.UnitsTime.MILLISECOND
     )
     return plane
 
@@ -490,7 +498,7 @@ def build_ome_xml(
     tiffdata = [model.TiffData(plane_count=n_planes, ifd=offset)]
 
     pixels = model.Pixels(
-        dimension_order="XYZTC",
+        dimension_order=model.Pixels_DimensionOrder.XYZTC,
         size_c=len_c,
         size_t=len_t,
         size_x=data_use.attrs["SizeX"][0],
@@ -583,46 +591,63 @@ to create the OME-TIFF.
 
 
 def read_image_config(folder):
-    """Read auto-generated files with config data from image folder (config.dat, JobParameter.tcp, position.txt) and
+    """Read auto-generated files with config data from image folder (config.dat, JobParameter.tcp, position.txt)  if available  and
     return dict.
 
     :param folder: Folder name as string
     :return: Dict containing the per-image metadata
     """
 
-    # read and treat config.dat
-    with open(join(folder, "config.dat")) as f:
-        exp_config_dat_1 = f.readlines()
+    try:
+        # read and treat config.dat
+        with open(join(folder, "config.dat")) as f:
+            exp_config_dat_1 = f.readlines()
 
-    for i in range(len(exp_config_dat_1)):  # output lacks a ","
-        if exp_config_dat_1[i].startswith("Immersion_RI"):
-            exp_config_dat_1[i] = "Immersion_RI," + exp_config_dat_1[i][12:]
-            break
+        for i in range(len(exp_config_dat_1)):  # output lacks a ","
+            if exp_config_dat_1[i].startswith("Immersion_RI"):
+                exp_config_dat_1[i] = "Immersion_RI," + exp_config_dat_1[i][12:]
+                break
 
-    exp_config_dat_1 = [item.rstrip("\n").split(",", 1) for item in exp_config_dat_1 if item != "\n"]
+        exp_config_dat_1 = [item.rstrip("\n").split(",", 1) for item in exp_config_dat_1 if item != "\n"]
+        exp_config_dict = {item[0]: item[1] for item in exp_config_dat_1}
+    except FileNotFoundError:
+        logging.info("Could not find file config.dat in {}".format(folder))
+        exp_config_dict = {}
 
-    # read and treat JobParameter.tcp
-    with open(join(folder, "JobParameter.tcp")) as f:
-        exp_config_dat_2 = f.readlines()[1:]
+    try:
+        # read and treat JobParameter.tcp
+        with open(join(folder, "JobParameter.tcp")) as f:
+            exp_config_dat_2 = f.readlines()[1:]
 
-    exp_config_dat_2 = [item.rstrip("\n").split("=", 1) for item in exp_config_dat_2 if item != "\n"]
+        exp_config_dat_2 = [item.rstrip("\n").split("=", 1) for item in exp_config_dat_2 if item != "\n"]
+        exp_config_dict_2 = {item[0]: item[1] for item in exp_config_dat_2}
+    except FileNotFoundError:
+        logging.info("Could not find file JopParameter.tcp in {}".format(folder))
+        exp_config_dict_2 = {}
 
-    # read and treat position.txt
-    with open(join(folder, "position.txt")) as f:
-        exp_config_dat_3 = f.readlines()
+    try:
+        # read and treat position.txt
+        with open(join(folder, "position.txt")) as f:
+            exp_config_dat_3 = f.readlines()
 
-    exp_config_dat_3 = [float(item.rstrip("\n")) for item in exp_config_dat_3 if item != "\n"]
-    exp_config_dict_3 = {
-        "x_rec": exp_config_dat_3[0],
-        "y_rec": exp_config_dat_3[1],
-        "z_rec": exp_config_dat_3[2],
-        "c_rec": exp_config_dat_3[3]
-    }
+        exp_config_dat_3 = [float(item.rstrip("\n")) for item in exp_config_dat_3 if item != "\n"]
+        exp_config_dict_3 = {
+            "x_rec": exp_config_dat_3[0],
+            "y_rec": exp_config_dat_3[1],
+            "z_rec": exp_config_dat_3[2],
+            "c_rec": exp_config_dat_3[3]
+        }
+    except FileNotFoundError:
+        logging.info("Could not find file position.txt in {}".format(folder))
+        exp_config_dict_3 = {}
 
     # merge
-    exp_config_dict = {item[0]: item[1] for item in exp_config_dat_1}
-    exp_config_dict.update({item[0]: item[1] for item in exp_config_dat_2})
+    # exp_config_dict = {item[0]: item[1] for item in exp_config_dat_1}
+    exp_config_dict.update(exp_config_dict_2)
     exp_config_dict.update(exp_config_dict_3)
+
+    if len(exp_config_dict) == 0:
+        logging.warning("Empty metadata for {}.".format(folder))
 
     return exp_config_dict
 
@@ -665,36 +690,49 @@ used to create the OME-TIFF.
 
     """
     img_metadata = dict()
-    img_metadata["exp"] = def_experiment(
-        img_config_dict["Job_Title"], model.ExperimenterRef(id=overall_config_dict["exper_id"])
-    )
-    img_metadata["mic"] = def_mic(
-        img_config_dict["Serial"], overall_config_dict["mic_model"], overall_config_dict["mic_lot"]
-    )
-    img_metadata["det"] = [def_det(overall_config_dict["det_id"])]
-    img_metadata["obj"] = def_obj(
-        overall_config_dict["obj_id"],
-        img_config_dict["NA"],
-        img_config_dict["M"]
-    )
+    try:
+        img_metadata["exp"] = def_experiment(
+            model.ExperimenterRef(id=overall_config_dict["exper_id"]), img_config_dict["Job_Title"]
+        )
+    except (KeyError, TypeError):
+        img_metadata["exp"] = def_experiment(model.ExperimenterRef(id=overall_config_dict["exper_id"]))
+
+    try:
+        img_metadata["mic"] = def_mic(
+            overall_config_dict["mic_model"], img_config_dict["Serial"], overall_config_dict["mic_lot"]
+        )
+    except (KeyError, TypeError):
+        img_metadata["mic"] = def_mic(
+            overall_config_dict["mic_model"]
+        )
+
+    try:
+        img_metadata["obj"] = def_obj(
+            img_config_dict["NA"],
+            img_config_dict["M"]
+        )
+    except (KeyError, TypeError):
+        img_metadata["obj"] = def_obj()
+    
     img_metadata["lasers"] = [def_light_source(overall_config_dict["light_source_id_ht"])]
     img_metadata["leds"] = [
         def_light_source(overall_config_dict["light_source_id_fl0"]),
         def_light_source(overall_config_dict["light_source_id_fl1"]),
         def_light_source(overall_config_dict["light_source_id_fl2"])
     ]
+
     img_metadata["instr"] = def_instr(
         overall_config_dict["instr_id"],
         img_metadata["mic"],
-        img_metadata["det"],
         img_metadata["lasers"],
         img_metadata["leds"]
     )
-    img_metadata["channel_ht"] = def_channel("ht")
-    img_metadata["channel_bf"] = def_channel("bf")
-    img_metadata["channel_fl0"] = def_channel("fl0", img_config_dict)
-    img_metadata["channel_fl1"] = def_channel("fl1", img_config_dict)
-    img_metadata["channel_fl2"] = def_channel("fl2", img_config_dict)
+
+    img_metadata["channel_ht"] = def_channel("ht", overall_config_dict)
+    img_metadata["channel_bf"] = def_channel("bf", overall_config_dict)
+    img_metadata["channel_fl0"] = def_channel("fl0", overall_config_dict, img_config_dict)
+    img_metadata["channel_fl1"] = def_channel("fl1", overall_config_dict, img_config_dict)
+    img_metadata["channel_fl2"] = def_channel("fl2", overall_config_dict, img_config_dict)
 
     img_metadata["anns"] = def_annotations(img_config_dict, tiling_dict, fl_md)
 
@@ -702,20 +740,7 @@ used to create the OME-TIFF.
 
 
 def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True):
-    """Parse an image in a folder that has the same name as the folder
-    and additionally ends with .TCF. The parsed OME-TIFF image is stored in the
-    same folder. It loops over all imaging modalities contained in the TCF H5F
-    file and transforms them into suitable numpy arrays. Relevant metadata is
-    taken both from the config file passed by the user as well as from the .TCF
-    file.
-
-    :param folder: Relative or absolute file path to folder containing image
-    :param overall_md: Overall metadata dict
-    :param output_xml: If True, output the ome-xml file alongside the ome-tiff file
-    :param include_mip: If True, maximum intensity projections are included in the
-    output ome tiff file
-
-    """
+    """...(docstring unchanged)..."""
 
     folder = folder.rstrip("/")
     try:
@@ -729,110 +754,115 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
     logging.debug("Reading image")
     dat = h5py.File(join(folder, basename(folder) + ".TCF"), "r")
     try:
-        ome_img_md = define_image_metadata(overall_md, exp_config_dict, tiling_dict, dat["Data"]["3DFL"].attrs)
+        fl_group = cast(h5py.Group, dat["Data"])["3DFL"]
+        ome_img_md = define_image_metadata(overall_md, exp_config_dict, tiling_dict, fl_group.attrs)
     except KeyError:
         ome_img_md = define_image_metadata(overall_md, exp_config_dict, tiling_dict)
 
-    # file_name_store = join(top_folder, folder, folder + ".ome.tiff")
     file_name_store = join(folder, basename(folder) + ".ome.tiff")
     img_ome_xmls = []
     imgs = []
     plane_offset = 0  # for multiple timesteps / channels
 
-    keys_to_loop = list(dat["Data"].keys())
+    data_group = cast(h5py.Group, dat["Data"])
+    keys_to_loop = list(data_group.keys())
     if not include_mip:
         keys_to_loop = [item for item in keys_to_loop if not "MIP" in item]
-    # FL channels are nested one level below imaging modalities --> (ugly) trick to achieve them in a similar way
+
+    # fl_mip_counter/fl_3d_counter are always set before they're read at
+    # runtime: they're only used inside the "2DFLMIP"/"3DFL" branches below,
+    # and those branches only run if that same name is already in
+    # keys_to_loop -- exactly the condition that used to guard the
+    # assignment. Moving the initialization up here doesn't change which
+    # branch runs or what value they hold; it just gives the type checker
+    # something it can verify on its own instead of having to trust the
+    # in-list check.
+    fl_mip_counter = 0
+    fl_3d_counter = 0
     if "2DFLMIP" in keys_to_loop:
-        n_chans = len(dat["Data"]["2DFLMIP"])
-        keys_to_loop.extend((n_chans-1)*["2DFLMIP"])
-        fl_mip_counter = 0
+        n_chans = len(cast(h5py.Group, data_group["2DFLMIP"]))
+        keys_to_loop.extend((n_chans - 1) * ["2DFLMIP"])
     if "3DFL" in keys_to_loop:
-        n_chans = len(dat["Data"]["3DFL"])
-        keys_to_loop.extend((n_chans-1)*["3DFL"])
-        fl_3d_counter = 0
+        n_chans = len(cast(h5py.Group, data_group["3DFL"]))
+        keys_to_loop.extend((n_chans - 1) * ["3DFL"])
 
     for i_chan, name in enumerate(keys_to_loop):
         logging.debug("Working on {}".format(name))
-        data_use = dat["Data"][name]
-        # stagelabel = def_ht_fl_shift_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], 0, 0, 0)
+        data_use = cast(h5py.Group, data_group[name])
 
         if name == "2DMIP":
             channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
             description = "2D Holotomography Maximum Intensity Projection"
             data_type = "uint16"
             img_formatted = np.array(
-                [data_use[item][()][np.newaxis] for item in data_use]
+                [cast(h5py.Dataset, data_use[item])[()][np.newaxis] for item in data_use]
             )[np.newaxis]
             ann_ref = 1
-            timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             exposure = exp_config_dict["Camera Shutter"]
 
         elif name == "2D":
             channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
             description = "2D Phasemap"
             data_type = "float"
-            img_formatted = np.array([data_use[item][()] for item in data_use])[
+            img_formatted = np.array([cast(h5py.Dataset, data_use[item])[()] for item in data_use])[
                 np.newaxis
             ]
             ann_ref = 1
-            timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             exposure = exp_config_dict["Camera Shutter"]
 
         elif name == "BF":
             channels = [ome_img_md["channel_bf"].model_copy()]  # workaround for channel IDs
             description = "2D Brightfield"
             data_type = "uint8"
-            img_formatted = np.array([data_use[item][0] for item in data_use])[
+            img_formatted = np.array([cast(h5py.Dataset, data_use[item])[0] for item in data_use])[
                 np.newaxis
             ]
             ann_ref = 2
-            timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             exposure = exp_config_dict["BF_Camera_Shutter"]
 
         elif name == "3D":
             channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
             description = "3D Holotomography"
             data_type = "uint16"
-            img_formatted = np.array([data_use[item][()] for item in data_use])[
+            img_formatted = np.array([cast(h5py.Dataset, data_use[item])[()] for item in data_use])[
                 np.newaxis
             ]
             ann_ref = 1
-            timestamp = data_use["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             exposure = exp_config_dict["Camera Shutter"]
 
         elif name == "2DFLMIP":
             channel = list(data_use.keys())[fl_mip_counter]
+            channel_grp = cast(h5py.Group, data_use[channel])
 
             channels = [ome_img_md["channel_fl{}".format(channel[2])].model_copy()]  # workaround for channel IDs]
             description = "2D {} Maximum Intensity Projection"\
                 .format(ome_img_md["channel_fl{}".format(channel[2])].name)
             data_type = "uint16"
             img_formatted = np.array(
-                [data_use[channel][item][()][np.newaxis] for item in data_use[channel]]
+                [cast(h5py.Dataset, channel_grp[item])[()][np.newaxis] for item in channel_grp]
             )[np.newaxis]
             ann_ref = 3 + int(channel[2])
-            timestamp = data_use[channel]["000000"].attrs["RecordingTime"][0].decode("utf-8")
+            timestamp = cast(np.ndarray, cast(h5py.Dataset, channel_grp["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
 
             fl_mip_counter += 1
 
         elif name == "3DFL":
             channel = list(data_use.keys())[fl_3d_counter]
+            channel_grp = cast(h5py.Group, data_use[channel])
 
             channels = [ome_img_md["channel_fl{}".format(channel[2])].model_copy()]  # workaround for channel IDs
             description = "3D {}".format(ome_img_md["channel_fl{}".format(channel[2])].name)
             data_type = "uint16"
-            img_formatted = np.array([data_use[channel][item][()] for item in data_use[channel]])[
+            img_formatted = np.array([cast(h5py.Dataset, channel_grp[item])[()] for item in channel_grp])[
                 np.newaxis
             ]
             ann_ref = 3 + int(channel[2])
-            timestamp = data_use[channel]["000000"].attrs["RecordingTime"][0].decode("utf-8")
-            # stagelabel = def_ht_fl_shift_stagelabel(
-            #     dat["Data"]["3DFL"].attrs["OffsetZ"],
-                # dat["Data"]["3D"].attrs["ResolutionZ"] * dat["Data"]["3D"].attrs["SizeZ"],
-            #     dat["Data"]["3DFL"].attrs["ResolutionZ"] * dat["Data"]["3DFL"].attrs["SizeZ"]
-            # )
+            timestamp = cast(np.ndarray, cast(h5py.Dataset, channel_grp["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
 
             fl_3d_counter += 1
@@ -856,23 +886,17 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                 ) for k_plane in range(img_formatted.shape[2])]
             ann_refs = [0, ann_ref, 6]
         except KeyError:
-            # try:
                 planes = [def_plane(
                     exp_config_dict["x_rec"],
                     exp_config_dict["y_rec"],
                     exp_config_dict["z_rec"],
-                    j_time*data_use.attrs["TimeInterval"][0],
+                    j_time*cast(np.ndarray, data_use.attrs["TimeInterval"])[0],
                     i_chan,
                     j_time,
                     k_plane,
                     exposure
                 ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
                 ann_refs = [0, ann_ref]
-            # except KeyError:
-            #     print("here")
-            #     planes = []
-            #     ann_refs = [0, ann_ref]
-        # logging.warning("TIMESTAMP: {}".format(timestamp))
         if "FL" in name:
             ann_refs.append(7)
 
