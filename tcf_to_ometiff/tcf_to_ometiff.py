@@ -351,8 +351,8 @@ def def_annotations(img_metadata, tiling_info, fl_md):
     if "Images FL3D" not in img_metadata or int(img_metadata["Images FL3D"]) > 0:
         colors_dict = {0: "blue", 1: "green", 2: "red"}
         for i in range(3):
-            if img_metadata["FLCH{}_Enable".format(i)] == "true":
-                try:
+            try:
+                if img_metadata["FLCH{}_Enable".format(i)] == "true":
                     ann_fl.append(
                         model.MapAnnotation(
                             id="Annotation:{}".format(i+3),
@@ -375,8 +375,8 @@ def def_annotations(img_metadata, tiling_info, fl_md):
                             ])
                         )
                 )
-                except (KeyError, TypeError):
-                    pass
+            except (KeyError, TypeError):
+                pass
         ann_fl.append(
             model.MapAnnotation(
                 id="Annotation:7",
