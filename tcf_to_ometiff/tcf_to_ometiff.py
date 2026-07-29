@@ -348,7 +348,7 @@ def def_annotations(img_metadata, tiling_info, fl_md):
             pass
 
     ann_fl = []
-    if "Images FL3D" not in img_metadata or int(img_metadata["Images FL3D"]) > 0:
+    if "Images FL3D" not in img_metadata or int(img_metadata["Images FL3D"]) > 0:  # works for old TomoStudio
         colors_dict = {0: "blue", 1: "green", 2: "red"}
         for i in range(3):
             try:
@@ -377,27 +377,31 @@ def def_annotations(img_metadata, tiling_info, fl_md):
                 )
             except (KeyError, TypeError):
                 pass
-        ann_fl.append(
-            model.MapAnnotation(
-                id="Annotation:7",
-                namespace="fluorescence",
-                description="3D fluorescence image shift with respect to HT",
-                value=model.Map(ms=[
-                    model.Map.M(
-                        k="Offset",
-                        value=np.round(fl_md["OffsetZ"][0], 3)
-                    ),
-                    model.Map.M(
-                        k="Fluorescence image height",
-                        value=fl_md["ResolutionZ"][0] * fl_md["SizeZ"][0]
-                    ),
-                    model.Map.M(
-                        k="Shift",
-                        value=np.round(fl_md["OffsetZ"] - fl_md["ResolutionZ"] * fl_md["SizeZ"]/2, 2)[0]
-                    )
-                ])
+
+        try:
+            ann_fl.append(
+                model.MapAnnotation(
+                    id="Annotation:7",
+                    namespace="fluorescence",
+                    description="3D fluorescence image shift with respect to HT",
+                    value=model.Map(ms=[
+                        model.Map.M(
+                            k="Offset",
+                            value=np.round(fl_md["OffsetZ"][0], 3)
+                        ),
+                        model.Map.M(
+                            k="Fluorescence image height",
+                            value=fl_md["ResolutionZ"][0] * fl_md["SizeZ"][0]
+                        ),
+                        model.Map.M(
+                            k="Shift",
+                            value=np.round(fl_md["OffsetZ"] - fl_md["ResolutionZ"] * fl_md["SizeZ"]/2, 2)[0]
+                        )
+                    ])
+                )
             )
-        )
+        except (TypeError):
+            pass
     anns.extend(ann_fl)
 
     if len(tiling_info) > 0:
