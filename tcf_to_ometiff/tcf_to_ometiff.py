@@ -908,7 +908,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                     k_plane,
                     exposure
                 ) for k_plane in range(img_formatted.shape[2])]
-            ann_refs = [0, ann_ref, 6]
+            ann_refs = [item for item in [0, ann_ref, 6] if item in available_annotation_ids]
         except KeyError:
                 try:
                     planes = [def_plane(
@@ -921,7 +921,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                         k_plane,
                         exposure
                     ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
-                    ann_refs = [0, ann_ref]
+                    ann_refs = [item for item in [0, ann_ref] if item in available_annotation_ids]
                 except KeyError:  # Metadata files missing, as well as TimeInterval field in TCF for HT-X
                     planes = [def_plane(
                         None,
@@ -933,7 +933,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                         k_plane,
                         exposure
                     ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
-                    ann_refs = [0, ann_ref]
+                    ann_refs = []
         if "FL" in name:
             ann_refs.append(7)
 
