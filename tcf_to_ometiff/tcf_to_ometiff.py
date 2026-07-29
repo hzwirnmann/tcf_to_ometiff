@@ -964,6 +964,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
         img_ome_xmls.append(xml)
         imgs.append(img_formatted)
 
+    print(ome_img_md["anns"])    
     ome_xmls = model.OME(
         creator="tcf_to_ometiff by Henning Zwirnmann v{}".format(__version__),
         images=img_ome_xmls,
