@@ -921,7 +921,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                         None,
                         None,
                         None,
-                        j_time*cast(np.ndarray, data_use.attrs["TimeInterval"])[0],
+                        None,
                         i_chan,
                         j_time,
                         k_plane,
