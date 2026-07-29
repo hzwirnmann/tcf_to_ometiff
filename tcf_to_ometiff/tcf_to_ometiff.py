@@ -799,7 +799,10 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             )[np.newaxis]
             ann_ref = 1
             timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
-            exposure = exp_config_dict["Camera Shutter"]
+            try:
+                exposure = exp_config_dict["Camera Shutter"]
+            except KeyError:
+                exposure = None
 
         elif name == "2D":
             channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
@@ -810,7 +813,10 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             ]
             ann_ref = 1
             timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
-            exposure = exp_config_dict["Camera Shutter"]
+            try:
+                exposure = exp_config_dict["Camera Shutter"]
+            except KeyError:
+                exposure = None
 
         elif name == "BF":
             channels = [ome_img_md["channel_bf"].model_copy()]  # workaround for channel IDs
@@ -821,7 +827,10 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             ]
             ann_ref = 2
             timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
-            exposure = exp_config_dict["BF_Camera_Shutter"]
+            try:
+                exposure = exp_config_dict["BF_Camera_Shutter"]
+            except KeyError:
+                exposure = None
 
         elif name == "3D":
             channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
@@ -832,7 +841,10 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             ]
             ann_ref = 1
             timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
-            exposure = exp_config_dict["Camera Shutter"]
+            try:
+                exposure = exp_config_dict["Camera Shutter"]
+            except KeyError:
+                exposure = None
 
         elif name == "2DFLMIP":
             channel = list(data_use.keys())[fl_mip_counter]
@@ -847,7 +859,10 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             )[np.newaxis]
             ann_ref = 3 + int(channel[2])
             timestamp = cast(np.ndarray, cast(h5py.Dataset, channel_grp["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
-            exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
+            try:
+                exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
+            except KeyError:
+                exposure = None
 
             fl_mip_counter += 1
 
@@ -863,7 +878,10 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             ]
             ann_ref = 3 + int(channel[2])
             timestamp = cast(np.ndarray, cast(h5py.Dataset, channel_grp["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
-            exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
+            try:
+                exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
+            except KeyError:
+                exposure = None
 
             fl_3d_counter += 1
 
