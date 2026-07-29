@@ -497,6 +497,11 @@ def build_ome_xml(
 
     tiffdata = [model.TiffData(plane_count=n_planes, ifd=offset)]
 
+    try:
+        time_increment = data_use.attrs["TimeInterval"][0]
+    except KeyError:
+        time_increment = None
+
     pixels = model.Pixels(
         dimension_order=model.Pixels_DimensionOrder.XYZTC,
         size_c=len_c,
@@ -509,7 +514,7 @@ def build_ome_xml(
         physical_size_y=round(data_use.attrs["ResolutionY"][0], 2),
         physical_size_z=physical_size_z,
         tiff_data_blocks=tiffdata,
-        time_increment=data_use.attrs["TimeInterval"][0],
+        time_increment=time_increment,
         channels=channels,
         planes=planes
     )
