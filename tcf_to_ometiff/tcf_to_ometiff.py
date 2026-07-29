@@ -916,7 +916,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                         exposure
                     ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
                     ann_refs = [0, ann_ref]
-                except KeyError:
+                except KeyError:  # Metadata files missing, as well as TimeInterval field in TCF for HT-X
                     planes = [def_plane(
                         None,
                         None,
@@ -933,7 +933,10 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
 
         tzinfo = datetime.now().astimezone().tzinfo
         dt = datetime.strptime(timestamp[:-4], '%Y-%m-%d %H:%M:%S').replace(tzinfo=tzinfo)
-        stagelabel = def_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], exp_config_dict["z_rec"])
+        try:
+            stagelabel = def_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], exp_config_dict["z_rec"])
+        except KeyError:
+            stagelabel = None
 
         try:
             xml, plane_offset = build_ome_xml(
