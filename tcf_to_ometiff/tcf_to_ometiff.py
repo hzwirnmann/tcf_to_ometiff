@@ -900,6 +900,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             continue
 
         channels[0].id = "Channel:{}".format(i_chan)
+        print(img_formatted.shape)
 
         try:
             planes = [def_plane(
