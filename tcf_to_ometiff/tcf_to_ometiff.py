@@ -904,17 +904,30 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                 ) for k_plane in range(img_formatted.shape[2])]
             ann_refs = [0, ann_ref, 6]
         except KeyError:
-                planes = [def_plane(
-                    exp_config_dict["x_rec"],
-                    exp_config_dict["y_rec"],
-                    exp_config_dict["z_rec"],
-                    j_time*cast(np.ndarray, data_use.attrs["TimeInterval"])[0],
-                    i_chan,
-                    j_time,
-                    k_plane,
-                    exposure
-                ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
-                ann_refs = [0, ann_ref]
+                try:
+                    planes = [def_plane(
+                        exp_config_dict["x_rec"],
+                        exp_config_dict["y_rec"],
+                        exp_config_dict["z_rec"],
+                        j_time*cast(np.ndarray, data_use.attrs["TimeInterval"])[0],
+                        i_chan,
+                        j_time,
+                        k_plane,
+                        exposure
+                    ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
+                    ann_refs = [0, ann_ref]
+                except KeyError:
+                    planes = [def_plane(
+                        None,
+                        None,
+                        None,
+                        j_time*cast(np.ndarray, data_use.attrs["TimeInterval"])[0],
+                        i_chan,
+                        j_time,
+                        k_plane,
+                        exposure
+                    ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
+                    ann_refs = [0, ann_ref]
         if "FL" in name:
             ann_refs.append(7)
 
