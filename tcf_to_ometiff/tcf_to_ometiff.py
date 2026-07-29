@@ -791,6 +791,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
         n_chans = len(cast(h5py.Group, data_group["3DFL"]))
         keys_to_loop.extend((n_chans - 1) * ["3DFL"])
 
+    available_annotation_ids = [int(item.id.split(":")[-1]) for item in ome_img_md["anns"]]
     for i_chan, name in enumerate(keys_to_loop):
         logging.debug("Working on {}".format(name))
         data_use = cast(h5py.Group, data_group[name])
@@ -802,7 +803,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             img_formatted = np.array(
                 [cast(h5py.Dataset, data_use[item])[()][np.newaxis] for item in data_use]
             )[np.newaxis]
-            ann_ref = 1
+            ann_ref = 1 if 1 in [int(item.id.split(":")[-1]) for item in ome_img_md["anns"]] else None
             timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             try:
                 exposure = exp_config_dict["Camera Shutter"]
@@ -816,7 +817,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             img_formatted = np.array([cast(h5py.Dataset, data_use[item])[()] for item in data_use])[
                 np.newaxis
             ]
-            ann_ref = 1
+            ann_ref = 1 if 1 in available_annotation_ids else None
             timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             try:
                 exposure = exp_config_dict["Camera Shutter"]
@@ -830,7 +831,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             img_formatted = np.array([cast(h5py.Dataset, data_use[item])[0] for item in data_use])[
                 np.newaxis
             ]
-            ann_ref = 2
+            ann_ref = 2 if 2 in available_annotation_ids else None
             timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             try:
                 exposure = exp_config_dict["BF_Camera_Shutter"]
@@ -844,7 +845,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             img_formatted = np.array([cast(h5py.Dataset, data_use[item])[()] for item in data_use])[
                 np.newaxis
             ]
-            ann_ref = 1
+            ann_ref = 1 if 1 in available_annotation_ids else None
             timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             try:
                 exposure = exp_config_dict["Camera Shutter"]
@@ -862,7 +863,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             img_formatted = np.array(
                 [cast(h5py.Dataset, channel_grp[item])[()][np.newaxis] for item in channel_grp]
             )[np.newaxis]
-            ann_ref = 3 + int(channel[2])
+            ann_ref = 3 + int(channel[2]) if 3 + int(channel[2]) in available_annotation_ids else None
             timestamp = cast(np.ndarray, cast(h5py.Dataset, channel_grp["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             try:
                 exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
@@ -881,7 +882,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             img_formatted = np.array([cast(h5py.Dataset, channel_grp[item])[()] for item in channel_grp])[
                 np.newaxis
             ]
-            ann_ref = 3 + int(channel[2])
+            ann_ref = 3 + int(channel[2]) if 3 + int(channel[2]) in available_annotation_ids else None
             timestamp = cast(np.ndarray, cast(h5py.Dataset, channel_grp["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             try:
                 exposure = exp_config_dict["FLCH{}_Camera_Shutter".format(channel[2])]
@@ -964,7 +965,6 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
         img_ome_xmls.append(xml)
         imgs.append(img_formatted)
 
-    print(ome_img_md["anns"])    
     ome_xmls = model.OME(
         creator="tcf_to_ometiff by Henning Zwirnmann v{}".format(__version__),
         images=img_ome_xmls,
@@ -972,7 +972,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
         experimenters=[overall_md["exper"]],
         experimenter_groups=[overall_md["exper_group"]],
         instruments=[ome_img_md["instr"]],
-        structured_annotations=ome_img_md["anns"] if ome_img_md["anns"] else None
+        structured_annotations=ome_img_md["anns"]
     )
 
     logging.debug("Writing file {}".format(file_name_store))
