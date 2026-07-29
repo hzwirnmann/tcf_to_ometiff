@@ -832,7 +832,8 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             channels = [ome_img_md["channel_bf"].model_copy()]  # workaround for channel IDs
             description = "2D Brightfield"
             data_type = "uint8"
-            img_formatted = np.array([cast(h5py.Dataset, data_use[item])[()] for item in data_use])[
+            print([cast(h5py.Dataset, data_use[item]) for item in data_use])
+            img_formatted = np.array([cast(h5py.Dataset, data_use[item]) for item in data_use])[
                 np.newaxis
             ]
             ann_ref = 2 if 2 in available_annotation_ids else None
