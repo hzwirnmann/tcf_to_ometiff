@@ -817,7 +817,10 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             try:
                 img_tcf_md[item] = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs[item])[0]
             except KeyError:
-                channel = list(data_use.keys())[fl_mip_counter]
+                if name == "2DFLMIP":
+                    channel = list(data_use.keys())[fl_mip_counter]
+                else:
+                    channel = list(data_use.keys())[fl_3d_counter]
                 channel_grp = cast(h5py.Group, data_use[channel])
                 img_tcf_md[item] = cast(np.ndarray, cast(h5py.Dataset, channel_grp["000000"]).attrs[item])[0]
 
