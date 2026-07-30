@@ -749,7 +749,20 @@ used to create the OME-TIFF.
 
 
 def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True):
-    """...(docstring unchanged)..."""
+    """Parse an image in a folder that has the same name as the folder
+    and additionally ends with .TCF. The parsed OME-TIFF image is stored in the
+    same folder. It loops over all imaging modalities contained in the TCF H5F
+    file and transforms them into suitable numpy arrays. Relevant metadata is
+    taken both from the config file passed by the user as well as from the .TCF
+    file.
+
+    :param folder: Relative or absolute file path to folder containing image
+    :param overall_md: Overall metadata dict
+    :param output_xml: If True, output the ome-xml file alongside the ome-tiff file
+    :param include_mip: If True, maximum intensity projections are included in the
+    output ome tiff file
+
+    """
 
     folder = folder.rstrip("/")
     try:
@@ -799,6 +812,9 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
     for i_chan, name in enumerate(keys_to_loop):
         logging.debug("Working on {}".format(name))
         data_use = cast(h5py.Group, data_group[name])
+        img_tcf_md = {}
+        for item in ["RecordingTime", "PositionX", "PositionY", "PositionZ", "PositionC"]:
+            img_tcf_md[item] = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
 
         if name == "2DMIP":
             channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
@@ -837,7 +853,6 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             ][
                 np.newaxis
             ]
-            print(img_formatted)
             ann_ref = 2 if 2 in available_annotation_ids else None
             timestamp = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
             try:
@@ -903,7 +918,6 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             continue
 
         channels[0].id = "Channel:{}".format(i_chan)
-        print(img_formatted.shape)
 
         try:
             planes = [def_plane(
@@ -932,9 +946,9 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                     ann_refs = [item for item in [0, ann_ref] if item in available_annotation_ids]
                 except KeyError:  # Metadata files missing, as well as TimeInterval field in TCF for HT-X
                     planes = [def_plane(
-                        None,
-                        None,
-                        None,
+                        img_tcf_md["PositionX"],
+                        img_tcf_md["PositionY"],
+                        img_tcf_md["PositionZ"],
                         None,
                         i_chan,
                         j_time,
@@ -946,6 +960,9 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             ann_refs.append(7)
 
         tzinfo = datetime.now().astimezone().tzinfo
+        print(img_tcf_md)
+        print(exp_config_dict)
+
         dt = datetime.strptime(timestamp[:-4], '%Y-%m-%d %H:%M:%S').replace(tzinfo=tzinfo)
         try:
             stagelabel = def_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], exp_config_dict["z_rec"])
