@@ -814,7 +814,12 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
         data_use = cast(h5py.Group, data_group[name])
         img_tcf_md = {}
         for item in ["RecordingTime", "PositionX", "PositionY", "PositionZ", "PositionC"]:
-            img_tcf_md[item] = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs["RecordingTime"])[0].decode("utf-8")
+            try:
+                img_tcf_md[item] = cast(np.ndarray, cast(h5py.Dataset, data_use["000000"]).attrs[item])[0].decode("utf-8")
+            except KeyError:
+                channel = list(data_use.keys())[fl_mip_counter]
+                channel_grp = cast(h5py.Group, data_use[channel])
+                img_tcf_md[item] = cast(np.ndarray, cast(h5py.Dataset, channel_grp["000000"]).attrs[item])[0].decode("utf-8")
 
         if name == "2DMIP":
             channels = [ome_img_md["channel_ht"].model_copy()]  # workaround for channel IDs
