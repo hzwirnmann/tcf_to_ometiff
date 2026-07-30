@@ -969,7 +969,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
 
         tzinfo = datetime.now().astimezone().tzinfo
         print(img_tcf_md)
-        print(exp_config_dict)
+        # print(exp_config_dict)
 
         dt = datetime.strptime(timestamp[:-4], '%Y-%m-%d %H:%M:%S').replace(tzinfo=tzinfo)
         try:
