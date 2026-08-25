@@ -1,6 +1,12 @@
 # Change Log
 
-## Version 0.5.7 /July 29, 2026)
+## Version 0.5.8 (August 25, 2026)
+
+- Added the resolution of resolution to 3 decimals (0.095 instead of 0.1)
+- Changed Tiling_Timedelta to Tiling_TimedeltaSec to include unit name; added total number of rows and columns in annotation
+- Added stagelabel for TCF files that cannot read it from position.txt
+
+## Version 0.5.7 (July 29, 2026)
 
  - Added possibility to parse images without accompanying metadata files (config.dat, JobParameter.tcp, position.txt)
 
