@@ -72,14 +72,15 @@ def def_light_source(light_source_id):
         )
 
 
-def def_instr(instr_id, microscope, lasers, leds):
+def def_instr(instr_id, microscope, lasers, leds, obj):
     """Create ome-types Instrument for use in OME-XML.
 
     :param instr_id: str: ID of the instrument
     :param microscope: ome_types.model.Microscope
     :param lasers: list of ome_types.model.Laser
     :param leds: list of ome_types.model.LightEmittingDiode
-    :return: ome-types Instrument
+    :param obj: ome-types.model.Objective
+    :return: ome-types.model.Instrument
     """
 
     return model.Instrument(
@@ -87,7 +88,8 @@ def def_instr(instr_id, microscope, lasers, leds):
         microscope=microscope,
         detectors=[model.Detector(type=model.Detector_Type.CMOS)],
         lasers=lasers,
-        light_emitting_diodes=leds
+        light_emitting_diodes=leds,
+        objectives=[obj]
     )
 
 
@@ -149,8 +151,7 @@ def def_channel(image_name, overall_md, img_md=None):
             illumination_type=model.Channel_IlluminationType.TRANSMITTED,
             name="Holotomography",
             light_source_settings=model.LightSourceSettings(
-                id=overall_md["light_source_id_ht"],
-                wavelength=532
+                id=overall_md["light_source_id_ht"]
             ),
             samples_per_pixel=1,
         )
@@ -163,8 +164,7 @@ def def_channel(image_name, overall_md, img_md=None):
             illumination_type=model.Channel_IlluminationType.TRANSMITTED,
             name="Brightfield",
             light_source_settings=model.LightSourceSettings(
-                id=overall_md["light_source_id_ht"],
-                wavelength=532
+                id=overall_md["light_source_id_ht"]
             ),
             samples_per_pixel=1,
         )
@@ -519,7 +519,6 @@ def build_ome_xml(
         physical_size_z=physical_size_z,
         tiff_data_blocks=tiffdata,
         time_increment=timestep_size_sec,
-        time_increment_unit=model.UnitsTime.SECOND,
         channels=channels,
         planes=planes
     )
@@ -735,7 +734,8 @@ used to create the OME-TIFF.
         overall_config_dict["instr_id"],
         img_metadata["mic"],
         img_metadata["lasers"],
-        img_metadata["leds"]
+        img_metadata["leds"],
+        img_metadata["obj"]
     )
 
     img_metadata["channel_ht"] = def_channel("ht", overall_config_dict)
