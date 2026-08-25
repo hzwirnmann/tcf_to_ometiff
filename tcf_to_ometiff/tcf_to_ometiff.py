@@ -468,10 +468,11 @@ def build_ome_xml(
     experiment,
     experimenter,
     instrument,
-    ht_fl_shift,
+    position,
     data_type,
     ann_ids,
-    planes
+    planes,
+    timestep_size_sec
 ):
     """Create OME-XML file from given ome-types metadata
 
@@ -483,10 +484,12 @@ def build_ome_xml(
     :param experiment: ome-types Experiment the image was part of
     :param experimenter: ome-types Experimenter who took the image
     :param instrument: ome-types Instrument the image was taken with
-    :param ht_fl_shift: ome-types Stagelabel to report the shift between HT and FL images
+    # :param ht_fl_shift: ome-types Stagelabel to report the shift between HT and FL images
+    :param position: ome-types Stagelabel to report the stage XY and objective Z position
     :param data_type: Python data type of the image data
     :param ann_ids: IDs of annotations with additional image metadata
     :param planes: list of ome-types Planes in the image
+    :param timestep_size_sec: float: timestep size between two snapshots in seconds
     :return: ome-types Image with relevant metadata
     :return: int to give the image plane offset for the next image in a multidimensional array
     (with t and channel components)
@@ -503,11 +506,6 @@ def build_ome_xml(
 
     tiffdata = [model.TiffData(plane_count=n_planes, ifd=offset)]
 
-    try:
-        time_increment = data_use.attrs["TimeInterval"][0]
-    except KeyError:
-        time_increment = None
-
     pixels = model.Pixels(
         dimension_order=model.Pixels_DimensionOrder.XYZTC,
         size_c=len_c,
@@ -520,7 +518,8 @@ def build_ome_xml(
         physical_size_y=round(data_use.attrs["ResolutionY"][0], 3),
         physical_size_z=physical_size_z,
         tiff_data_blocks=tiffdata,
-        time_increment=time_increment,
+        time_increment=timestep_size_sec,
+        time_increment_unit=model.UnitsTime.SECOND,
         channels=channels,
         planes=planes
     )
@@ -534,7 +533,7 @@ def build_ome_xml(
         experimenter_ref=model.ExperimenterRef(id=experimenter.id),
         instrument_ref=model.InstrumentRef(id=instrument.id),
         annotation_refs=[model.AnnotationRef(id=i) for i in ann_ids],
-        stage_label=ht_fl_shift
+        stage_label=position
     )
 
     return image, offset + n_planes
@@ -941,6 +940,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                     exposure
                 ) for k_plane in range(img_formatted.shape[2])]
             ann_refs = [item for item in [0, ann_ref, 6] if item in available_annotation_ids]
+            timestep_size_sec = tiling_dict["tile_timestep_size_sec"]
         except KeyError:
                 try:
                     planes = [def_plane(
@@ -954,6 +954,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                         exposure
                     ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
                     ann_refs = [item for item in [0, ann_ref] if item in available_annotation_ids]
+                    timestep_size_sec = cast(np.ndarray, data_use.attrs["TimeInterval"])[0]
                 except KeyError:  # Metadata files missing, as well as TimeInterval field in TCF for HT-X
                     planes = [def_plane(
                         img_tcf_md["PositionX"],
@@ -966,6 +967,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                         exposure
                     ) for j_time, k_plane in np.ndindex(img_formatted.shape[1:3])]
                     ann_refs = []
+                    timestep_size_sec = None
         if "FL" in name:
             ann_refs.append(7)
 
@@ -990,7 +992,8 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                 stagelabel,
                 data_type,
                 ["Annotation:{}".format(item) for item in ann_refs],
-                planes
+                planes,
+                timestep_size_sec
             )
         except Exception as e:
             raise Exception("Exception during xml building: {}".format(e))
