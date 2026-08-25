@@ -414,10 +414,12 @@ def def_annotations(img_metadata, tiling_info, fl_md):
                 model.Map.M(k="Tiling_TotalTilesInImage", value=tiling_info["tile_total_images"]),
                 model.Map.M(k="Tiling_NumberInImage", value=tiling_info["tile_number"]),
                 model.Map.M(k="Tiling_Row", value=tiling_info["tile_row"]),
+                model.Map.M(k="Tiling_Rows", value=tiling_info["tile_rows"]),
                 model.Map.M(k="Tiling_Column", value=tiling_info["tile_column"]),
+                model.Map.M(k="Tiling_Columns", value=tiling_info["tile_columns"]),
                 model.Map.M(k="Tiling_TotalTimesteps", value=tiling_info["tile_total_timesteps"]),
                 model.Map.M(k="Tiling_Timestep", value=tiling_info["tile_timestep"]),
-                model.Map.M(k="Tiling_Timedelta", value=tiling_info["tile_timestep_size"]),
+                model.Map.M(k="Tiling_TimedeltaSec", value=tiling_info["tile_timestep_size_sec"]),
             ])
         )
         anns.append(ann_tiling)
@@ -491,7 +493,7 @@ def build_ome_xml(
     """
     try:
         len_z = data_use.attrs["SizeZ"][0]
-        physical_size_z = round(data_use.attrs["ResolutionZ"][0], 2)
+        physical_size_z = round(data_use.attrs["ResolutionZ"][0], 3)
     except KeyError:
         len_z = 1
         physical_size_z = None
@@ -514,8 +516,8 @@ def build_ome_xml(
         size_y=data_use.attrs["SizeY"][0],
         size_z=len_z,
         type=data_type,
-        physical_size_x=round(data_use.attrs["ResolutionX"][0], 2),
-        physical_size_y=round(data_use.attrs["ResolutionY"][0], 2),
+        physical_size_x=round(data_use.attrs["ResolutionX"][0], 3),
+        physical_size_y=round(data_use.attrs["ResolutionY"][0], 3),
         physical_size_z=physical_size_z,
         tiff_data_blocks=tiffdata,
         time_increment=time_increment,
@@ -932,7 +934,7 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
                     exp_config_dict["x_rec"],
                     exp_config_dict["y_rec"],
                     exp_config_dict["z_rec"],
-                    tiling_dict["tile_timestep"]*tiling_dict["tile_timestep_size"],
+                    tiling_dict["tile_timestep"]*tiling_dict["tile_timestep_size_sec"],
                     i_chan,
                     tiling_dict["tile_timestep"],
                     k_plane,
@@ -968,14 +970,12 @@ def transform_tcf(folder, overall_md, output_xml=False, include_mip: bool = True
             ann_refs.append(7)
 
         tzinfo = datetime.now().astimezone().tzinfo
-        print(img_tcf_md)
-        # print(exp_config_dict)
 
         dt = datetime.strptime(timestamp[:-4], '%Y-%m-%d %H:%M:%S').replace(tzinfo=tzinfo)
         try:
             stagelabel = def_stagelabel(exp_config_dict["x_rec"], exp_config_dict["y_rec"], exp_config_dict["z_rec"])
         except KeyError:
-            stagelabel = None
+            stagelabel = def_stagelabel(img_tcf_md["PositionX"], img_tcf_md["PositionY"], img_tcf_md["PositionZ"])
 
         try:
             xml, plane_offset = build_ome_xml(
@@ -1044,11 +1044,9 @@ def transform_folder(top_folder, basic_config_path, output_xml=False,
     logging.info("Traversing folders in {}".format(top_folder))
     folders = [d for d in listdir(top_folder) if isdir(join(top_folder, d))]
     for folder in folders:
-        print(folder)
         logging.info("Reading folder {}".format(folder))
         try:
             transform_tcf(join(top_folder, folder), overall_md, output_xml, include_mip)
         except Exception as e:
-            print(e)
             logging.info(e)
             continue
